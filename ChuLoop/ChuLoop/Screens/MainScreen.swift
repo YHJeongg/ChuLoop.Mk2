@@ -7,9 +7,14 @@ import SwiftUI
 
 struct MainScreen: View {
     var body: some View {
-        Text("홈 화면")
-            .font(.largeTitle)
-            .padding()
+        MainNavigationView(title: "타임라인") {
+            VStack {
+                Text("타임라인 테스트")
+                    .padding()
+            }
+        } onAddButtonTapped: {
+            print("NavigationView Button Test")
+        }
     }
 }
 

@@ -3,11 +3,19 @@
 //  ChuLoop
 //
 
+
 import SwiftUI
 
 struct MyPageScreen: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        MyPageNavigationView(title: "My Page", content: {
+            // MyPage의 콘텐츠
+            VStack {
+                Text("MyPage Test")
+                    .font(.title)
+                    .padding()
+            }
+        })
     }
 }
 
