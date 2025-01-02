@@ -17,6 +17,7 @@ struct TimelineItem: Identifiable {
 
 struct MainScreen: View {
     @State private var searchText: String = "" // 검색어 상태
+    @State private var showSheet: Bool = false
     @State private var items: [TimelineItem] = [
         TimelineItem(
             image: "MainTest",
@@ -61,12 +62,15 @@ struct MainScreen: View {
                     ScrollView {
                         VStack(spacing: 20) {
                             ForEach($items) { $item in
-                                TimelineCard(item: $item)
+                                TimelineCard(item: $item, showSheet: $showSheet)
                             }
                         }
                         .padding()
                     }
                 }
+            }
+            .sheet(isPresented: $showSheet) {
+                MainSheetScreen()
             }
         } onAddButtonTapped: {
             print("NavigationView Button Test")
@@ -74,33 +78,9 @@ struct MainScreen: View {
     }
 }
 
-struct SearchBar: View {
-    @Binding var searchText: String
-    
-    var body: some View {
-        HStack {
-            TextField("검색", text: $searchText)
-                .padding(.vertical, 10)
-                .padding(.horizontal, 15)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(Color.gray.opacity(0.1))
-                )
-                .overlay(
-                    HStack {
-                        Spacer()
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
-                            .padding(.trailing, 10)
-                    }
-                )
-        }
-        .frame(height: 40)
-    }
-}
-
 struct TimelineCard: View {
     @Binding var item: TimelineItem
+    @Binding var showSheet: Bool
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -110,6 +90,9 @@ struct TimelineCard: View {
                 .frame(height: 200)
                 .clipped()
                 .cornerRadius(10)
+                .onTapGesture {
+                    showSheet.toggle()
+                }
             
             VStack(alignment: .leading, spacing: 10) {
                 Text(item.title)
@@ -153,6 +136,31 @@ struct TimelineCard: View {
         .background(Color.white)
         .cornerRadius(15)
         .shadow(color: Color.gray.opacity(0.2), radius: 5, x: 0, y: 2)
+    }
+}
+
+struct SearchBar: View {
+    @Binding var searchText: String
+    
+    var body: some View {
+        HStack {
+            TextField("검색", text: $searchText)
+                .padding(.vertical, 10)
+                .padding(.horizontal, 15)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.gray.opacity(0.1))
+                )
+                .overlay(
+                    HStack {
+                        Spacer()
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                            .padding(.trailing, 10)
+                    }
+                )
+        }
+        .frame(height: 40)
     }
 }
 
