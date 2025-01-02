@@ -49,7 +49,7 @@ struct MainScreen: View {
                     VStack {
                         Spacer()
                         
-                        Text("타임라인이 비어있네요")
+                        Text("타임라인이 비어있어요\n방문했던 맛집을 추가해 주세요")
                             .font(.title2)
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
