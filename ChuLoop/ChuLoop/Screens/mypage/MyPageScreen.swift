@@ -16,7 +16,23 @@ struct MyPageScreen: View {
     var body: some View {
         MyPageNavigationView(title: "My Page", content: {
             List(items, id: \.0) { item, iconName, iconColor in
-                if item == "개인정보 처리방침" {
+                if item == "하트 게시물 모아 보기" {
+                    NavigationLink(destination: HeartScreen()) {
+                        HStack {
+                            Image(systemName: iconName)
+                                .font(.system(size: 20))
+                                .foregroundColor(iconColor)
+                            
+                            Text(item)
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(.black)
+                                .padding(.leading, 10)
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(.vertical, 10)
+                    .listRowSeparator(.hidden)
+                } else if item == "개인정보 처리방침" {
                     NavigationLink(destination: PrivacyPolicyScreen()) {
                         HStack {
                             Image(systemName: iconName)
