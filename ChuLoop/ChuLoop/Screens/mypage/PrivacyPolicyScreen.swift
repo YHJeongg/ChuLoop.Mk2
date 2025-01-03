@@ -14,7 +14,7 @@ struct PrivacyPolicyScreen: View {
                     .padding()
                     .background(Color.white)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 15)
+                        RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.gray, lineWidth: 1)
                     )
                     .padding(.horizontal)
@@ -24,7 +24,7 @@ struct PrivacyPolicyScreen: View {
 
                 Spacer()
             }
-            .padding(.top)
+//            .padding(.top)
         }
         .navigationTitle("개인정보 처리방침")
     }
