@@ -76,13 +76,6 @@ struct MainScreen: View {
         } onAddButtonTapped: {
             isAddButtonTapped = true
         }
-        NavigationLink(value: isAddButtonTapped) {
-            EmptyView()
-        }
-        .navigationDestination(for: Bool.self) { _ in
-            MainAddScreen() // 상태가 true일 때 MainAddScreen으로 이동
-        }
-        .navigationTitle("타임라인")
     }
 }
 

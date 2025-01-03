@@ -12,25 +12,33 @@ struct MainTabView: View {
                 .tabItem {
                     Label("홈", systemImage: "house.fill")
                 }
+                .onAppear {
+                    print("MainScreen loaded")
+                }
+
             
             VisitScreen()
                 .tabItem {
-                    Label("방문할 맛집", systemImage: "list.bullet")
+                    Image(systemName: "list.bullet")
+                    Text("방문할 맛집")
                 }
             
             MapScreen()
                 .tabItem {
-                    Label("지도로 보기", systemImage: "map.fill")
+                    Image(systemName: "map.fill")
+                    Text("지도로 보기")
                 }
             
             ShareScreen()
                 .tabItem {
-                    Label("맛집 공유", systemImage: "square.and.arrow.up.fill")
+                    Image(systemName: "square.and.arrow.up.fill")
+                    Text("맛집 공유")
                 }
             
             MyPageScreen()
                 .tabItem {
-                    Label("마이페이지", systemImage: "person.fill")
+                    Image(systemName: "person.fill")
+                    Text("마이페이지")
                 }
         }
     }
