@@ -16,22 +16,39 @@ struct MyPageScreen: View {
     var body: some View {
         MyPageNavigationView(title: "My Page", content: {
             List(items, id: \.0) { item, iconName, iconColor in
-                NavigationLink(destination: Text("\(item) 화면")) {
-                    HStack {
-                        // 아이콘 색상을 동적으로 설정
-                        Image(systemName: iconName)
-                            .font(.system(size: 20))
-                            .foregroundColor(iconColor) // 각 항목에 맞는 아이콘 색상 설정
-                        
-                        Text(item)
-                            .font(.system(size: 20, weight: .medium))
-                            .foregroundColor(.black)
-                            .padding(.leading, 10) // 텍스트와 이미지 간의 여백
+                if item == "개인정보 처리방침" {
+                    NavigationLink(destination: PrivacyPolicyScreen()) {
+                        HStack {
+                            Image(systemName: iconName)
+                                .font(.system(size: 20))
+                                .foregroundColor(iconColor)
+                            
+                            Text(item)
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(.black)
+                                .padding(.leading, 10)
+                        }
                     }
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(.vertical, 10)
+                    .listRowSeparator(.hidden)
+                } else {
+                    NavigationLink(destination: Text("\(item) 화면")) {
+                        HStack {
+                            Image(systemName: iconName)
+                                .font(.system(size: 20))
+                                .foregroundColor(iconColor)
+                            
+                            Text(item)
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(.black)
+                                .padding(.leading, 10)
+                        }
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(.vertical, 10)
+                    .listRowSeparator(.hidden)
                 }
-                .buttonStyle(PlainButtonStyle()) // 기본 NavigationLink 스타일 제거
-                .padding(.vertical, 10) // 항목 간 간격
-                .listRowSeparator(.hidden)
             }
             .scrollContentBackground(.hidden)
         })
@@ -43,4 +60,3 @@ struct MyPageScreen_Previews: PreviewProvider {
         MyPageScreen()
     }
 }
-
