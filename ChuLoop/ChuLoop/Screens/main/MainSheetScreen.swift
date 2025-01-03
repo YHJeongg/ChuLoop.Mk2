@@ -17,17 +17,17 @@ struct MainSheetScreen: View {
                     Image(systemName: "xmark")
                         .font(.title)
                         .foregroundColor(.black)
-                        .padding()
+//                        .padding()
                 }
 
-                Spacer()
+//                Spacer()
                 
                 Text("가게 이름")
                     .font(.title)
                     .fontWeight(.bold)
                     .lineLimit(1)
                 
-                Spacer()
+//                Spacer()
             }
             .padding(.horizontal)
             

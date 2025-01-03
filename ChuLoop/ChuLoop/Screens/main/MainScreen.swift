@@ -18,6 +18,7 @@ struct TimelineItem: Identifiable {
 struct MainScreen: View {
     @State private var searchText: String = "" // 검색어 상태
     @State private var showSheet: Bool = false
+    @State private var isAddButtonTapped: Bool = false
     @State private var items: [TimelineItem] = [
         TimelineItem(
             image: "MainTest",
@@ -73,7 +74,18 @@ struct MainScreen: View {
                 MainSheetScreen()
             }
         } onAddButtonTapped: {
-            print("NavigationView Button Test")
+            isAddButtonTapped = true
+        }
+//        NavigationLink(value: isAddButtonTapped) {
+//            EmptyView()
+//        }
+//        .navigationDestination(for: Bool.self) { _ in
+//            MainAddScreen() // 상태가 true일 때 MainAddScreen으로 이동
+//        }
+//        .navigationTitle("타임라인")
+        .navigationTitle("타임라인")
+        .navigationDestination(isPresented: $isAddButtonTapped) { // 상태에 따라 화면 이동
+            MainAddScreen() // 상태가 true일 때 MainAddScreen으로 이동
         }
     }
 }
