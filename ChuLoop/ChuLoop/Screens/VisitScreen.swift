@@ -19,16 +19,10 @@ struct VisitScreen: View {
         MainNavigationView(title: "방문할 맛집") {
             VStack(spacing: 0) {
                 // 검색창
-                HStack {
-                    TextField("검색", text: $searchText)
-                        .padding(10)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
-                        )
-                        .padding(.horizontal)
-                }
-                .padding(.vertical, 15)
+                SearchBar(searchText: $searchText)
+                    .padding(.horizontal)
+                    .padding(.top)
+                Spacer()
 
                 // 리스트 또는 빈 화면
                 if visitPlaces.isEmpty {

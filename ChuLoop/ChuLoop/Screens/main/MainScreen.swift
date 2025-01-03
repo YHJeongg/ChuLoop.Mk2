@@ -76,17 +76,13 @@ struct MainScreen: View {
         } onAddButtonTapped: {
             isAddButtonTapped = true
         }
-//        NavigationLink(value: isAddButtonTapped) {
-//            EmptyView()
-//        }
-//        .navigationDestination(for: Bool.self) { _ in
-//            MainAddScreen() // 상태가 true일 때 MainAddScreen으로 이동
-//        }
-//        .navigationTitle("타임라인")
-        .navigationTitle("타임라인")
-        .navigationDestination(isPresented: $isAddButtonTapped) { // 상태에 따라 화면 이동
+        NavigationLink(value: isAddButtonTapped) {
+            EmptyView()
+        }
+        .navigationDestination(for: Bool.self) { _ in
             MainAddScreen() // 상태가 true일 때 MainAddScreen으로 이동
         }
+        .navigationTitle("타임라인")
     }
 }
 
