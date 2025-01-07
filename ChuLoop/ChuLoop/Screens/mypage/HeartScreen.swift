@@ -1,9 +1,6 @@
 //
 //  HeartScreen.swift
 //  ChuLoop
-//
-//  Created by Jeong Yun Hyeon on 1/3/25.
-//
 
 import SwiftUI
 

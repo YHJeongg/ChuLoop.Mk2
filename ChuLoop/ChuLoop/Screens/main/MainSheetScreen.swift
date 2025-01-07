@@ -17,24 +17,18 @@ struct MainSheetScreen: View {
                     Image(systemName: "xmark")
                         .font(.title)
                         .foregroundColor(.black)
-//                        .padding()
                 }
-
-//                Spacer()
                 
                 Text("가게 이름")
                     .font(.title)
                     .fontWeight(.bold)
                     .lineLimit(1)
-                
-//                Spacer()
             }
             .padding(.horizontal)
             
             Image("MainTest")
                 .resizable()
                 .scaledToFit() // 비율을 유지하며 크기 조정
-//                .frame(width: 100, height: 100)
             
             Text("호롤롤로 / 3일전")
                 .font(.subheadline)
@@ -44,7 +38,6 @@ struct MainSheetScreen: View {
             Text("리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 ...")
                 .lineLimit(4)
                 .font(.body)
-//                .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             Button(action: {
@@ -58,6 +51,22 @@ struct MainSheetScreen: View {
             }
         }
         .padding()
+        .cornerRadius(10)
+        .padding()
+        .background(BlurView())
+    }
+}
+
+// 추가: 배경을 흐리게 하는 블러 효과
+struct BlurView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIVisualEffectView {
+        let blurEffect = UIBlurEffect(style: .dark) // 어두운 블러 효과
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        return blurView
+    }
+    
+    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
+        // 아무것도 하지 않음, 블러는 업데이트 필요 없음
     }
 }
 
