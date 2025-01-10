@@ -11,7 +11,7 @@ struct LoginScreen: View {
             VStack(spacing: 20) {
                 // 로고 및 hook 내용 텍스트
                 Text("ChuLoop")
-                    .font(.system(size: 60, weight: .bold))
+                    .font(.CookieBlack44)
                     .multilineTextAlignment(.center)
                     .padding(.top, 180)
                 
@@ -23,7 +23,7 @@ struct LoginScreen: View {
                         .navigationBarBackButtonHidden(true),
                     label: {
                         Text("Google 계정으로 로그인")
-                            .font(.system(size: 16))
+                            .font(.Cookie16)
                             .foregroundColor(.black)
                             .frame(maxWidth: .infinity)
                             .padding()
@@ -36,7 +36,7 @@ struct LoginScreen: View {
                 
                 // 네이버 로그인 버튼
                 Text("네이버 계정으로 로그인")
-                    .font(.system(size: 16))
+                    .font(.Cookie16)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -45,7 +45,7 @@ struct LoginScreen: View {
                 
                 // 카카오 로그인 버튼
                 Text("카카오 계정으로 로그인")
-                    .font(.system(size: 16))
+                    .font(.Cookie16)
                     .foregroundColor(.black)
                     .frame(maxWidth: .infinity)
                     .padding()
@@ -54,7 +54,7 @@ struct LoginScreen: View {
                 
                 // Apple 로그인 버튼
                 Text("애플 계정으로 로그인")
-                    .font(.system(size: 16))
+                    .font(.Cookie16)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()

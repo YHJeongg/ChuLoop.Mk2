@@ -31,14 +31,14 @@ struct NoticeScreen: View {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
                     Text(notice.title)
-                        .font(.headline)
+                        .font(.CookieBold16)
                     Spacer()
                     Text(notice.date)
-                        .font(.subheadline)
+                        .font(.Cookie12)
                         .foregroundColor(.gray)
                 }
                 Text(notice.content)
-                    .font(.body)
+                    .font(.Cookie14)
                     .foregroundColor(.black)
                     .lineLimit(2)
             }

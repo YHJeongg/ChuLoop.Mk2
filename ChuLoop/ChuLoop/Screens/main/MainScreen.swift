@@ -51,7 +51,7 @@ struct MainScreen: View {
                         Spacer()
                         
                         Text("타임라인이 비어있어요\n방문했던 맛집을 추가해 주세요")
-                            .font(.title2)
+                            .font(.Cookie18)
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
                             .padding()
@@ -72,7 +72,10 @@ struct MainScreen: View {
             }
             .sheet(isPresented: $showSheet) {
                 MainSheetScreen()
+                    .clearModalBackground()
+//                    .presentationBackground(.ultraThinMaterial)
             }
+
         } onAddButtonTapped: {
             isAddButtonTapped = true
         }
@@ -97,16 +100,16 @@ struct TimelineCard: View {
             
             VStack(alignment: .leading, spacing: 10) {
                 Text(item.title)
-                    .font(.headline)
+                    .font(.CookieBold18)
                     .lineLimit(1)
-                
+        
                 Text(item.location)
-                    .font(.subheadline)
+                    .font(.Cookie12)
                     .foregroundColor(.gray)
                 
                 HStack {
                     Text("\(item.date)")
-                        .font(.caption)
+                        .font(.Cookie14)
                         .foregroundColor(.gray)
                     
                     Spacer()
@@ -123,8 +126,8 @@ struct TimelineCard: View {
                 
                 HStack {
                     Text("커뮤니티에 공유하기")
-                        .font(.caption)
-                        .foregroundColor(.gray)
+                        .font(.Cookie14)
+                        .foregroundColor(.black)
                     
                     Spacer()
                     
@@ -146,6 +149,7 @@ struct SearchBar: View {
     var body: some View {
         HStack {
             TextField("검색", text: $searchText)
+                .font(.Cookie14)
                 .padding(.vertical, 10)
                 .padding(.horizontal, 15)
                 .background(

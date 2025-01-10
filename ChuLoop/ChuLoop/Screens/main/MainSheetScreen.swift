@@ -6,71 +6,99 @@
 import SwiftUI
 
 struct MainSheetScreen: View {
-    @Environment(\.dismiss) var dismiss  // dismiss 환경 객체 추가
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        VStack(spacing: 20) {
-            HStack {
-                Button(action: {
-                    dismiss()  // 버튼 클릭 시 sheet 닫기
-                }) {
-                    Image(systemName: "xmark")
-                        .font(.title)
-                        .foregroundColor(.black)
+        ZStack {
+            VStack(spacing: 20) {
+                HStack {
+                    Button(action: {
+                        dismiss()
+                    }) {
+                        Image(systemName: "xmark")
+                            .font(.title)
+                            .foregroundColor(.white)
+                    }
+                    
+                    Spacer()
+                    
+                    Text("가게 이름")
+                        .font(.CookieBold20)
+                        .fontWeight(.bold)
+                        .lineLimit(1)
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Text("1 / 10")
+                        .font(.Cookie16)
+                        .foregroundColor(.white)
                 }
+                .padding()
                 
-                Text("가게 이름")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .lineLimit(1)
+                Image("MainTest")
+                    .resizable()
+                    .scaledToFit()
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("호롤롤로 / 3일전")
+                        .font(.Cookie18)
+                        .foregroundColor(.white)
+                    
+                    Text("리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 ...")
+                        .lineLimit(4)
+                        .font(.Cookie16)
+                        .foregroundColor(.white)
+                    
+                    Button(action: {
+                        print("더보기 버튼 클릭")
+                    }) {
+                        Text("더보기")
+                            .font(.CookieBold14)
+                            .foregroundColor(.blue)
+                    }
+                }
+                .padding()
+                
+                Spacer()
             }
-            .padding(.horizontal)
-            
-            Image("MainTest")
-                .resizable()
-                .scaledToFit() // 비율을 유지하며 크기 조정
-            
-            Text("호롤롤로 / 3일전")
-                .font(.subheadline)
-                .foregroundColor(.gray)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            Text("리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 ...")
-                .lineLimit(4)
-                .font(.body)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            Button(action: {
-                // "더보기" 버튼 클릭 동작
-                print("더보기 버튼 클릭")
-            }) {
-                Text("더보기")
-                    .font(.headline)
-                    .foregroundColor(.blue)
-                    .frame(maxWidth: .infinity, alignment: .leading)  // 왼쪽 정렬
-            }
+            .padding()
         }
-        .padding()
-        .cornerRadius(10)
-        .padding()
-        .background(BlurView())
+        .background(Color.black.opacity(0.8))
     }
 }
 
-// 추가: 배경을 흐리게 하는 블러 효과
-struct BlurView: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIVisualEffectView {
-        let blurEffect = UIBlurEffect(style: .dark) // 어두운 블러 효과
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        return blurView
+struct ClearBackgroundView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        DispatchQueue.main.async {
+            view.superview?.superview?.backgroundColor = .clear
+        }
+        return view
     }
     
-    func updateUIView(_ uiView: UIVisualEffectView, context: Context) {
-        // 아무것도 하지 않음, 블러는 업데이트 필요 없음
+    func updateUIView(_ uiView: UIView, context: Context) {}
+}
+
+struct ClearBackgroundViewModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 16.4, *) {
+            content
+                .presentationBackground(.clear)
+        } else {
+            content
+                .background(ClearBackgroundView())
+        }
     }
 }
 
-struct SheetView_Previews: PreviewProvider {
+extension View {
+    func clearModalBackground()->some View {
+        self.modifier(ClearBackgroundViewModifier())
+    }
+}
+
+struct MainSheetScreen_Previews: PreviewProvider {
     static var previews: some View {
         MainSheetScreen()
     }

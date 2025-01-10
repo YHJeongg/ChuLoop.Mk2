@@ -10,10 +10,8 @@ struct MainTabView: View {
         TabView {
             MainScreen()
                 .tabItem {
-                    Label("홈", systemImage: "house.fill")
-                }
-                .onAppear {
-                    print("MainScreen loaded")
+                    Image(systemName: "house.fill")
+                    Text("홈")
                 }
 
             

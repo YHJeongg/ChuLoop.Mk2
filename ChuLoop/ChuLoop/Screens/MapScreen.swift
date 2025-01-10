@@ -38,7 +38,7 @@ struct MapScreen: View {
                                 .foregroundColor(.red)
                                 .font(.title)
                             Text(restaurant.name)
-                                .font(.caption)
+                                .font(.Cookie12)
                                 .foregroundColor(.black)
                         }
                     }
@@ -55,6 +55,7 @@ struct MapScreen: View {
                             }
                         }) {
                             Text("전체보기")
+                                .font(.Cookie16)
                                 .padding()
                                 .background(Color.white)
                                 .foregroundColor(.black)
@@ -75,6 +76,7 @@ struct MapScreen: View {
                                     print("가보고 싶은 맛집")
                                 }) {
                                     Text("가보고 싶은 맛집")
+                                        .font(.Cookie16)
                                         .padding()
                                         .background(Color.red)
                                         .foregroundColor(.white)
@@ -84,6 +86,7 @@ struct MapScreen: View {
                                     print("방문한 맛집")
                                 }) {
                                     Text("방문한 맛집")
+                                        .font(.Cookie16)
                                         .padding()
                                         .background(Color.blue)
                                         .foregroundColor(.white)

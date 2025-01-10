@@ -26,12 +26,15 @@ struct VisitScreen: View {
 
                 // 리스트 또는 빈 화면
                 if visitPlaces.isEmpty {
-                    Spacer()
-                    Text("방문할 맛집 리스트가 비어있어요\n방문하고싶은 맛집을 추가해 주세요")
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.gray)
-                        .padding()
-                    Spacer()
+                    VStack {
+                        Spacer()
+                        Text("방문할 맛집 리스트가 비어있어요\n방문하고싶은 맛집을 추가해 주세요")
+                            .font(.Cookie18)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.gray)
+                            .padding()
+                        Spacer()
+                    }
                 } else {
                     ScrollView {
                         ForEach(visitPlaces, id: \.id) { place in
@@ -45,15 +48,15 @@ struct VisitScreen: View {
                                 VStack(alignment: .leading, spacing: 5) {
                                     HStack {
                                         Text(place.name)
-                                            .font(.headline)
+                                            .font(.CookieBold14)
                                             .lineLimit(1)
                                         Spacer()
                                         Text(place.category)
-                                            .font(.footnote)
+                                            .font(.Cookie10)
                                             .foregroundColor(.gray)
                                     }
                                     Text(place.address)
-                                        .font(.subheadline)
+                                        .font(.Cookie12)
                                         .foregroundColor(.gray)
                                         .lineLimit(2)
                                     
@@ -61,7 +64,7 @@ struct VisitScreen: View {
                                         print("\(place.name) 리뷰 쓰기 버튼 눌림")
                                     }) {
                                         Text("리뷰쓰기")
-                                            .font(.subheadline)
+                                            .font(.Cookie14)
                                             .foregroundColor(.white)
                                             .padding(.horizontal, 10)
                                             .padding(.vertical, 5)

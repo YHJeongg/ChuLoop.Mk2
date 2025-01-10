@@ -24,7 +24,7 @@ struct MyPageScreen: View {
                                 .foregroundColor(iconColor)
                             
                             Text(item)
-                                .font(.system(size: 20, weight: .medium))
+                                .font(.CookieBold18)
                                 .foregroundColor(.black)
                                 .padding(.leading, 10)
                         }
@@ -40,7 +40,7 @@ struct MyPageScreen: View {
                                 .foregroundColor(iconColor)
                             
                             Text(item)
-                                .font(.system(size: 20, weight: .medium))
+                                .font(.CookieBold18)
                                 .foregroundColor(.black)
                                 .padding(.leading, 10)
                         }
@@ -56,7 +56,7 @@ struct MyPageScreen: View {
                                 .foregroundColor(iconColor)
                             
                             Text(item)
-                                .font(.system(size: 20, weight: .medium))
+                                .font(.CookieBold18)
                                 .foregroundColor(.black)
                                 .padding(.leading, 10)
                         }
@@ -72,7 +72,7 @@ struct MyPageScreen: View {
                                 .foregroundColor(iconColor)
                             
                             Text(item)
-                                .font(.system(size: 20, weight: .medium))
+                                .font(.CookieBold18)
                                 .foregroundColor(.black)
                                 .padding(.leading, 10)
                         }

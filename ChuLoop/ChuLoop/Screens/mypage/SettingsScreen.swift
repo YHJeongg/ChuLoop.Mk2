@@ -20,14 +20,14 @@ struct SettingsScreen: View {
                 
                 TextField("사용자 이름", text: $username)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .font(.system(size: 18))
+                    .font(.Cookie16)
                     .frame(maxWidth: .infinity)
                 
                 Button(action: {
                     print("이름 변경 버튼 클릭됨")
                 }) {
                     Text("변경")
-                        .font(.system(size: 16, weight: .bold))
+                        .font(.Cookie16)
                         .foregroundColor(.white)
                         .padding(.vertical, 8)
                         .padding(.horizontal, 16)
@@ -41,33 +41,33 @@ struct SettingsScreen: View {
             List {
                 HStack {
                     Text("이메일:")
-                        .font(.system(size: 18, weight: .medium))
+                        .font(.Cookie16)
                         .foregroundColor(.black)
                     Spacer()
                     Text("example@example.com")
-                        .font(.system(size: 18))
+                        .font(.Cookie16)
                         .foregroundColor(.gray)
                 }
                 .padding(.vertical, 8)
                 
                 HStack {
                     Text("연동된 소셜 계정:")
-                        .font(.system(size: 18, weight: .medium))
+                        .font(.Cookie16)
                         .foregroundColor(.black)
                     Spacer()
                     Text("Google")
-                        .font(.system(size: 18))
+                        .font(.Cookie16)
                         .foregroundColor(.gray)
                 }
                 .padding(.vertical, 8)
                 
                 HStack {
                     Text("앱버전:")
-                        .font(.system(size: 18, weight: .medium))
+                        .font(.Cookie16)
                         .foregroundColor(.black)
                     Spacer()
                     Text("1.0.0")
-                        .font(.system(size: 18))
+                        .font(.Cookie16)
                         .foregroundColor(.gray)
                 }
                 .padding(.vertical, 8)
@@ -76,7 +76,7 @@ struct SettingsScreen: View {
                     print("로그아웃 버튼 클릭됨")
                 }) {
                     Text("로그아웃")
-                        .font(.system(size: 18, weight: .medium))
+                        .font(.Cookie16)
                         .foregroundColor(.red)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 8)
@@ -87,7 +87,7 @@ struct SettingsScreen: View {
                     print("탈퇴하기 버튼 클릭됨")
                 }) {
                     Text("탈퇴하기")
-                        .font(.system(size: 18, weight: .medium))
+                        .font(.Cookie16)
                         .foregroundColor(.red)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 8)

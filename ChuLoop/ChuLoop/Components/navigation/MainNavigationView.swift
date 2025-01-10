@@ -26,7 +26,7 @@ struct MainNavigationView<Content: View>: View {
             .toolbar { // SwiftUI toolbar 유지
                 ToolbarItem(placement: .navigationBarLeading) {
                     Text(title)
-                        .font(.system(size: 20, weight: .bold))
+                        .font(.CookieBold20)
                         .foregroundColor(.black)
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
