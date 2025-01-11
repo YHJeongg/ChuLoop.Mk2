@@ -73,6 +73,8 @@ struct MainScreen: View {
             .sheet(isPresented: $showSheet) {
                 MainSheetScreen()
                     .clearModalBackground()
+                    .presentationDragIndicator(.visible)
+                    .presentationCornerRadius(25)
 //                    .presentationBackground(.ultraThinMaterial)
             }
 

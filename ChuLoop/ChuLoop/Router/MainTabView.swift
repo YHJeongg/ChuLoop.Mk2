@@ -12,6 +12,7 @@ struct MainTabView: View {
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("홈")
+                        .font(.Cookie10)
                 }
 
             
@@ -19,6 +20,7 @@ struct MainTabView: View {
                 .tabItem {
                     Image(systemName: "list.bullet")
                     Text("방문할 맛집")
+                        .font(.Cookie10)
                 }
             
             MapScreen()
