@@ -6,6 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		9558C4D47D83E00AF987192C /* Pods_ChuLoop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFBBA4BDFD2E85A45EC45283 /* Pods_ChuLoop.framework */; };
+		BB96E738BB89B64231351D66 /* Pods_ChuLoop_ChuLoopUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31DB81D287ABF5482BC9C860 /* Pods_ChuLoop_ChuLoopUITests.framework */; };
+		E2DABEC5EB424C18F6C7C379 /* Pods_ChuLoopTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56FE1DEB2FAAA7D1C8CDA5F0 /* Pods_ChuLoopTests.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		16E1EA642CE477C300B3CD97 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +33,15 @@
 		16E1EA532CE477C100B3CD97 /* ChuLoop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChuLoop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16E1EA632CE477C300B3CD97 /* ChuLoopTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChuLoopTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		16E1EA6D2CE477C300B3CD97 /* ChuLoopUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChuLoopUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1BF2A5758D5486F5F3329F89 /* Pods-ChuLoopTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChuLoopTests.debug.xcconfig"; path = "Target Support Files/Pods-ChuLoopTests/Pods-ChuLoopTests.debug.xcconfig"; sourceTree = "<group>"; };
+		31DB81D287ABF5482BC9C860 /* Pods_ChuLoop_ChuLoopUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChuLoop_ChuLoopUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		56FE1DEB2FAAA7D1C8CDA5F0 /* Pods_ChuLoopTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChuLoopTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F4353A6F71BCF0C94261AA6 /* Pods-ChuLoop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChuLoop.release.xcconfig"; path = "Target Support Files/Pods-ChuLoop/Pods-ChuLoop.release.xcconfig"; sourceTree = "<group>"; };
+		9A6645AE98543B2F157B7490 /* Pods-ChuLoop-ChuLoopUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChuLoop-ChuLoopUITests.release.xcconfig"; path = "Target Support Files/Pods-ChuLoop-ChuLoopUITests/Pods-ChuLoop-ChuLoopUITests.release.xcconfig"; sourceTree = "<group>"; };
+		A38AA98A2CA6F67DE71B35A2 /* Pods-ChuLoop-ChuLoopUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChuLoop-ChuLoopUITests.debug.xcconfig"; path = "Target Support Files/Pods-ChuLoop-ChuLoopUITests/Pods-ChuLoop-ChuLoopUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B3F00D022FEE8B33599A830A /* Pods-ChuLoop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChuLoop.debug.xcconfig"; path = "Target Support Files/Pods-ChuLoop/Pods-ChuLoop.debug.xcconfig"; sourceTree = "<group>"; };
+		CBB7EDC418B736D84F16819C /* Pods-ChuLoopTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChuLoopTests.release.xcconfig"; path = "Target Support Files/Pods-ChuLoopTests/Pods-ChuLoopTests.release.xcconfig"; sourceTree = "<group>"; };
+		EFBBA4BDFD2E85A45EC45283 /* Pods_ChuLoop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ChuLoop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -65,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9558C4D47D83E00AF987192C /* Pods_ChuLoop.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2DABEC5EB424C18F6C7C379 /* Pods_ChuLoopTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB96E738BB89B64231351D66 /* Pods_ChuLoop_ChuLoopUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +110,8 @@
 				16E1EA662CE477C300B3CD97 /* ChuLoopTests */,
 				16E1EA702CE477C300B3CD97 /* ChuLoopUITests */,
 				16E1EA542CE477C100B3CD97 /* Products */,
+				C5B25218A1E8565BA402B495 /* Pods */,
+				BDDBA5CA5263DF9A5199C2EE /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -105,6 +125,29 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		BDDBA5CA5263DF9A5199C2EE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EFBBA4BDFD2E85A45EC45283 /* Pods_ChuLoop.framework */,
+				31DB81D287ABF5482BC9C860 /* Pods_ChuLoop_ChuLoopUITests.framework */,
+				56FE1DEB2FAAA7D1C8CDA5F0 /* Pods_ChuLoopTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C5B25218A1E8565BA402B495 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B3F00D022FEE8B33599A830A /* Pods-ChuLoop.debug.xcconfig */,
+				8F4353A6F71BCF0C94261AA6 /* Pods-ChuLoop.release.xcconfig */,
+				A38AA98A2CA6F67DE71B35A2 /* Pods-ChuLoop-ChuLoopUITests.debug.xcconfig */,
+				9A6645AE98543B2F157B7490 /* Pods-ChuLoop-ChuLoopUITests.release.xcconfig */,
+				1BF2A5758D5486F5F3329F89 /* Pods-ChuLoopTests.debug.xcconfig */,
+				CBB7EDC418B736D84F16819C /* Pods-ChuLoopTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -112,9 +155,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16E1EA772CE477C300B3CD97 /* Build configuration list for PBXNativeTarget "ChuLoop" */;
 			buildPhases = (
+				90E8547663616F1F2C22C14F /* [CP] Check Pods Manifest.lock */,
 				16E1EA4F2CE477C100B3CD97 /* Sources */,
 				16E1EA502CE477C100B3CD97 /* Frameworks */,
 				16E1EA512CE477C100B3CD97 /* Resources */,
+				68C57585593DF56FF9C368CD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -124,8 +169,6 @@
 				16E1EA552CE477C100B3CD97 /* ChuLoop */,
 			);
 			name = ChuLoop;
-			packageProductDependencies = (
-			);
 			productName = ChuLoop;
 			productReference = 16E1EA532CE477C100B3CD97 /* ChuLoop.app */;
 			productType = "com.apple.product-type.application";
@@ -134,6 +177,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16E1EA7A2CE477C300B3CD97 /* Build configuration list for PBXNativeTarget "ChuLoopTests" */;
 			buildPhases = (
+				1B4623AE41E50F3B50B273DE /* [CP] Check Pods Manifest.lock */,
 				16E1EA5F2CE477C300B3CD97 /* Sources */,
 				16E1EA602CE477C300B3CD97 /* Frameworks */,
 				16E1EA612CE477C300B3CD97 /* Resources */,
@@ -147,8 +191,6 @@
 				16E1EA662CE477C300B3CD97 /* ChuLoopTests */,
 			);
 			name = ChuLoopTests;
-			packageProductDependencies = (
-			);
 			productName = ChuLoopTests;
 			productReference = 16E1EA632CE477C300B3CD97 /* ChuLoopTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -157,9 +199,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 16E1EA7D2CE477C300B3CD97 /* Build configuration list for PBXNativeTarget "ChuLoopUITests" */;
 			buildPhases = (
+				0D72A11474B248F28B08DB7B /* [CP] Check Pods Manifest.lock */,
 				16E1EA692CE477C300B3CD97 /* Sources */,
 				16E1EA6A2CE477C300B3CD97 /* Frameworks */,
 				16E1EA6B2CE477C300B3CD97 /* Resources */,
+				7EE87E5D8D14F25EEB472000 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -170,8 +214,6 @@
 				16E1EA702CE477C300B3CD97 /* ChuLoopUITests */,
 			);
 			name = ChuLoopUITests;
-			packageProductDependencies = (
-			);
 			productName = ChuLoopUITests;
 			productReference = 16E1EA6D2CE477C300B3CD97 /* ChuLoopUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -243,6 +285,109 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0D72A11474B248F28B08DB7B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChuLoop-ChuLoopUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1B4623AE41E50F3B50B273DE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChuLoopTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		68C57585593DF56FF9C368CD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChuLoop/Pods-ChuLoop-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChuLoop/Pods-ChuLoop-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChuLoop/Pods-ChuLoop-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7EE87E5D8D14F25EEB472000 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChuLoop-ChuLoopUITests/Pods-ChuLoop-ChuLoopUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ChuLoop-ChuLoopUITests/Pods-ChuLoop-ChuLoopUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChuLoop-ChuLoopUITests/Pods-ChuLoop-ChuLoopUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		90E8547663616F1F2C22C14F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ChuLoop-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		16E1EA4F2CE477C100B3CD97 /* Sources */ = {
@@ -403,6 +548,7 @@
 		};
 		16E1EA782CE477C300B3CD97 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B3F00D022FEE8B33599A830A /* Pods-ChuLoop.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -432,6 +578,7 @@
 		};
 		16E1EA792CE477C300B3CD97 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8F4353A6F71BCF0C94261AA6 /* Pods-ChuLoop.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -461,6 +608,7 @@
 		};
 		16E1EA7B2CE477C300B3CD97 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1BF2A5758D5486F5F3329F89 /* Pods-ChuLoopTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -479,6 +627,7 @@
 		};
 		16E1EA7C2CE477C300B3CD97 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CBB7EDC418B736D84F16819C /* Pods-ChuLoopTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -497,6 +646,7 @@
 		};
 		16E1EA7E2CE477C300B3CD97 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A38AA98A2CA6F67DE71B35A2 /* Pods-ChuLoop-ChuLoopUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -513,6 +663,7 @@
 		};
 		16E1EA7F2CE477C300B3CD97 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9A6645AE98543B2F157B7490 /* Pods-ChuLoop-ChuLoopUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
