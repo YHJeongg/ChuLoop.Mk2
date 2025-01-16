@@ -12,15 +12,15 @@ class Storage {
     
     private let userDefaults = UserDefaults.standard
     
-    func saveAccessToken(_ token: String) {
-        userDefaults.set(token, forKey: "AccessToken")
+    func saveAccessToken(token: Any, key: String) {
+        userDefaults.set(token, forKey: key)
     }
     
-    func getAccessToken() -> String? {
-        return userDefaults.string(forKey: "AccessToken")
+    func getAccessToken(key: String) -> String? {
+        return userDefaults.string(forKey: key)
     }
     
-    func removeAccessToken() {
-        userDefaults.removeObject(forKey: "AccessToken")
+    func removeAccessToken(key: String) {
+        userDefaults.removeObject(forKey: key)
     }
 }
