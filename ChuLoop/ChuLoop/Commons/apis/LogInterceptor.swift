@@ -2,13 +2,10 @@
 //  LogInterceptor.swift
 //  ChuLoop
 //
-//  Created by Anna Kim on 1/11/25.
-//
 
-import Foundation
 import Alamofire
 
-class LogInterceptor: EventMonitor {
+final class LogInterceptor: EventMonitor {
     func requestDidFinish(_ request: Request) {
         print("Request: \(request)")
     }

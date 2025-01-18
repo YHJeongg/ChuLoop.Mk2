@@ -2,13 +2,10 @@
 //  interceptor.swift
 //  ChuLoop
 //
-//  Created by Anna Kim on 1/11/25.
-//
 
-import Foundation
 import Alamofire
 
-class CustomInterceptor: RequestInterceptor {
+final class CustomInterceptor: RequestInterceptor {
     private let storage = Storage.shared
     
     func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {

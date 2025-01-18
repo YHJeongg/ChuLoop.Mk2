@@ -429,6 +429,8 @@
 /* Begin XCBuildConfiguration section */
 		16E1EA752CE477C300B3CD97 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 16E1EA552CE477C100B3CD97 /* ChuLoop */;
+			baseConfigurationReferenceRelativePath = Commons/Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -492,6 +494,8 @@
 		};
 		16E1EA762CE477C300B3CD97 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 16E1EA552CE477C100B3CD97 /* ChuLoop */;
+			baseConfigurationReferenceRelativePath = Commons/Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -548,13 +552,14 @@
 		};
 		16E1EA782CE477C300B3CD97 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B3F00D022FEE8B33599A830A /* Pods-ChuLoop.debug.xcconfig */;
+			baseConfigurationReference = 8F4353A6F71BCF0C94261AA6 /* Pods-ChuLoop.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ChuLoop/Preview Content\"";
+				DEVELOPMENT_TEAM = 498J9TKTSM;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -569,7 +574,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.swiftlec.ChuLoop;
+				PRODUCT_BUNDLE_IDENTIFIER = com.develop.chuloop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -586,6 +591,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"ChuLoop/Preview Content\"";
+				DEVELOPMENT_TEAM = 498J9TKTSM;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -600,7 +606,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.swiftlec.ChuLoop;
+				PRODUCT_BUNDLE_IDENTIFIER = com.develop.chuloop;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
