@@ -2,8 +2,6 @@
 //  LogInterceptor.swift
 //  ChuLoop
 //
-//  Created by Anna Kim on 1/11/25.
-//
 
 import Foundation
 
