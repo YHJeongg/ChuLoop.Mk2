@@ -6,6 +6,8 @@
 import SwiftUI
 
 struct LoginScreen: View {
+    @StateObject private var loginController = LoginController()
+    
     var body: some View {
         NavigationView {
             VStack(alignment: .center, spacing: 20) {
@@ -14,7 +16,9 @@ struct LoginScreen: View {
                     .font(.CookieBlack44)
                     .padding(.top, 180)
                 Spacer()
-                
+                // 상태 표시 (임시)
+                // 로그인 메시지
+
                 // Google 로그인 버튼
                 Button(action: {
                     GoogleOAuth().signIn()

@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 //
 //  ResponseVO.swift
 //  ChuLoop
@@ -7,7 +5,7 @@
 
 import SwiftUI
 
->>>>>>> refs/remotes/origin/main
+
 struct ResponseVO: Decodable {
     var status: Int?
     var code: String?
