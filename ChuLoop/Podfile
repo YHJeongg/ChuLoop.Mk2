@@ -16,6 +16,14 @@ target 'ChuLoop' do
     # Pods for testing
   end
 
+  # Alamofire
   pod 'Alamofire' , '5.10.2'
+
+  # Google Login
+  pod 'GoogleSignIn'
+  pod 'GoogleSignInSwiftSupport'
+
+  # Naver Login
+  pod 'naveridlogin-sdk-ios'
 
 end
