@@ -65,15 +65,11 @@
 		};
 		16E1EA662CE477C300B3CD97 /* ChuLoopTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = ChuLoopTests;
 			sourceTree = "<group>";
 		};
 		16E1EA702CE477C300B3CD97 /* ChuLoopUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = ChuLoopUITests;
 			sourceTree = "<group>";
 		};

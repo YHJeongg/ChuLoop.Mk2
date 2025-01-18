@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 //
 //  ResponseVO.swift
 //  ChuLoop
@@ -7,7 +6,7 @@
 
 import SwiftUI
 
->>>>>>> 71cfe8ca8441e8eab59f598d7ae5bc4165593668
+
 struct ResponseVO: Decodable {
     var status: Int?
     var code: String?

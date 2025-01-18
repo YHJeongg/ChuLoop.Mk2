@@ -2,8 +2,6 @@
 //  Storage.swift
 //  ChuLoop
 //
-//  Created by Anna Kim on 1/11/25.
-//
 
 import Foundation
 
@@ -12,15 +10,15 @@ class Storage {
     
     private let userDefaults = UserDefaults.standard
     
-    func saveAccessToken(token: Any, key: String) {
-        userDefaults.set(token, forKey: key)
+    func saveAccessToken(_ token: String) {
+        userDefaults.set(token, forKey: "AccessToken")
     }
     
-    func getAccessToken(key: String) -> String? {
-        return userDefaults.string(forKey: key)
+    func getAccessToken() -> String? {
+        return userDefaults.string(forKey: "AccessToken")
     }
     
-    func removeAccessToken(key: String) {
-        userDefaults.removeObject(forKey: key)
+    func removeAccessToken() {
+        userDefaults.removeObject(forKey: "AccessToken")
     }
 }
