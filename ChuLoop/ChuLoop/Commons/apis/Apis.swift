@@ -6,8 +6,8 @@
 //
 
 enum ApisV1: String {
-    case googleLogin = "/auth-google"
-    case naverLogin = "/auth-naver"
-    case kakaoLogin = "/auth-kakao"
-    case appleLogin = "/auth-apple"
+    case googleLogin = "/auth/google"
+    case naverLogin = "/auth/naver"
+    case kakaoLogin = "/auth/kakao"
+    case appleLogin = "/auth/apple"
 }
