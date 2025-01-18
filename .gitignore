@@ -170,4 +170,6 @@ $RECYCLE.BIN/
 #           - AS PER https://guides.cocoapods.org/using/using-cocoapods.html NEVER IGNORE THE LOCK FILE
 Pods/
 
+*.xcconfig
+
 # End of https://www.toptal.com/developers/gitignore/api/cocoapods
