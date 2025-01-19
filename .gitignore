@@ -171,5 +171,6 @@ $RECYCLE.BIN/
 Pods/
 
 *.xcconfig
+Secrets.xcconfig
 
 # End of https://www.toptal.com/developers/gitignore/api/cocoapods
