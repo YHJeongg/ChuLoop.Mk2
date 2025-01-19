@@ -16,7 +16,7 @@ class HTTP {
             "Content-Type": "application/json",
             "Accept": "application/json"
         ]
-        config.protocolClasses = [LogInterceptor.self, CustomInterceptor.self]
+        config.protocolClasses = [LogInterceptor.self]
         self.session = URLSession(configuration: config)
     }
     
@@ -57,6 +57,7 @@ class HTTP {
             }
             
             let decodedResponse = try JSONDecoder().decode(ResponseVO.self, from: data)
+            print("resquest api decoded response : \(decodedResponse)")
             return ResponseVO(
                 status: decodedResponse.status ?? httpResponse.statusCode,
                 code: decodedResponse.code,
