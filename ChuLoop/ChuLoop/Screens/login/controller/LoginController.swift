@@ -10,7 +10,7 @@ class LoginController: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var loginMessage: String = ""
     @Published var navigateToMain: Bool = false
-    @Published var oauthUserData = GoogleUserDataVO()
+    @Published var oauthUserData = UserDataModel()
     
     private let authService = AuthSerivce()
     

@@ -7,7 +7,6 @@ import SwiftUI
 import GoogleSignIn
 
 class GoogleOAuth: ObservableObject {
-    @Published var oauthUserData = GoogleUserDataVO()
     @Published var errorMessage: String?
     @Published var givenName: String?
     @Published private var loginController = LoginController()
@@ -19,8 +18,7 @@ class GoogleOAuth: ObservableObject {
                 return
             }
             
-            let data: GoogleUserDataVO = GoogleUserDataVO(accessToken: user.accessToken.tokenString)
-//            oauthUserData.accessToken = user.accessToken.tokenString
+            let data: UserDataModel = UserDataModel(accessToken: user.accessToken.tokenString)
 
             loginController.loginWithGoogle(data: data)
             
