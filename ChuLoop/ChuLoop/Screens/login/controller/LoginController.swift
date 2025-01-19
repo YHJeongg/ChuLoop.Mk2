@@ -2,9 +2,9 @@
 //  LoginController.swift
 //  ChuLoop
 //
-//  Created by Anna Kim on 1/13/25.
-//
+
 import SwiftUI
+import Security
 
 class LoginController: ObservableObject {
     @Published var isLoading: Bool = false
@@ -20,11 +20,6 @@ class LoginController: ObservableObject {
             isLoading = true
             loginMessage = "로그인 중..."
             
-            // 데이터 모델(간단한건 안만들어도 됨)
-            // 임시데이터
-//            let loginData: LoginModel = LoginModel(email: "abcd@gmail.com", firstName: "anna", lastName: "kim", photos: "url.com", socialType: "google")
-            
-            
             // api 수행
             let response = await authService.googleLogin(data: data)
             
@@ -34,22 +29,31 @@ class LoginController: ObservableObject {
 
                 if let responseData = response.data,
                    let accessTokenData = responseData["accessToken"] as? String {
-                    print("accessTokenData : \(accessTokenData)")
-                    /**
-                     keychain 만들어서 accessToken 로컬 저장해야됨
-                     참고: https://jangsh9611.tistory.com/49
-                     */
+                    
+                    // Keychain에 액세스 토큰 저장
+                    if let accessToken = accessTokenData.data(using: .utf8) {
+                        KeychainHelper.shared.save(accessToken, service: "com.chuloop.auth", account: "accessToken")
+                    }
 
+                    if let refreshTokenData = responseData["refreshToken"] as? String {
+                        // Keychain에 리프레시 토큰 저장
+                        if let refreshToken = refreshTokenData.data(using: .utf8) {
+                            KeychainHelper.shared.save(refreshToken, service: "com.chuloop.auth", account: "refreshToken")
+                        }
+                    }
+                    
                 } else {
                     print("Failed to extract access token")
                 }
                 
+                print("navigationnnnn : \(self.navigateToMain)")
             } else {
                 loginMessage = "로그인 실패: \(response.message ?? "알 수 없는 오류")"
             }
             isLoading = false
         }
     }
+
     
     
 }

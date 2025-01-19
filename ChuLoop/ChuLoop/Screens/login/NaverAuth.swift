@@ -35,7 +35,7 @@ final public class NaverAuth: NSObject {
 public extension NaverAuth {
     func login() {
         guard !isValidAccessTokenExpireTimeNow else {
-            retreiveInfo()
+//            retreiveInfo()
             return
         }
         
@@ -72,44 +72,44 @@ private extension NaverAuth {
     }
 }
  
-// MARK: - Private method
-private extension NaverAuth {
-    func retreiveInfo() {
-        guard isValidAccessTokenExpireTimeNow,
-            let tokenType = NaverThirdPartyLoginConnection.getSharedInstance().tokenType,
-            let accessToken = NaverThirdPartyLoginConnection.getSharedInstance().accessToken else {
-            NaverThirdPartyLoginConnection.getSharedInstance().requestAccessTokenWithRefreshToken()
-            return
-        }
-        
-        Task {
-            do {
-                var urlRequest = URLRequest(url: URL(string: "https://openapi.naver.com/v1/nid/me")!)
-                urlRequest.httpMethod = "GET"
-                urlRequest.allHTTPHeaderFields = ["Authorization": "\(tokenType) \(accessToken)"]
-                let (data, _) = try await URLSession.shared.data(for: urlRequest)
-                let response = try JSONDecoder().decode(NaverUserDataVO.self, from: data)
-                
-                print(response)
-
-            } catch {
-                await NaverThirdPartyLoginConnection.getSharedInstance().requestAccessTokenWithRefreshToken()
-            }
-        }
-    }
-}
+//// MARK: - Private method
+//private extension NaverAuth {
+//    func retreiveInfo() {
+//        guard isValidAccessTokenExpireTimeNow,
+//            let tokenType = NaverThirdPartyLoginConnection.getSharedInstance().tokenType,
+//            let accessToken = NaverThirdPartyLoginConnection.getSharedInstance().accessToken else {
+//            NaverThirdPartyLoginConnection.getSharedInstance().requestAccessTokenWithRefreshToken()
+//            return
+//        }
+//        
+//        Task {
+//            do {
+//                var urlRequest = URLRequest(url: URL(string: "https://openapi.naver.com/v1/nid/me")!)
+//                urlRequest.httpMethod = "GET"
+//                urlRequest.allHTTPHeaderFields = ["Authorization": "\(tokenType) \(accessToken)"]
+//                let (data, _) = try await URLSession.shared.data(for: urlRequest)
+//                let response = try JSONDecoder().decode(.self, from: data)
+//                
+//                print(response)
+//
+//            } catch {
+//                await NaverThirdPartyLoginConnection.getSharedInstance().requestAccessTokenWithRefreshToken()
+//            }
+//        }
+//    }
+//}
 
 // MARK: - Delegate
 extension NaverAuth: NaverThirdPartyLoginConnectionDelegate {
     // Required
     public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
         // 토큰 발급 성공시
-        retreiveInfo()
+//        retreiveInfo()
     }
     
     public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
         // 토큰 갱신시
-        retreiveInfo()
+//        retreiveInfo()
     }
     
     public func oauth20ConnectionDidFinishDeleteToken() {

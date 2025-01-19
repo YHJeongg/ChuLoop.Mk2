@@ -6,17 +6,23 @@
 import SwiftUI
 
 struct LoginScreen: View {
-    @StateObject private var loginController = LoginController()
+    @StateObject private var loginController = GoogleOAuth()
+
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(alignment: .center, spacing: 20) {
                 // 로고 및 hook 내용 텍스트
                 Text("ChuLoop")
                     .font(.CookieBlack44)
                     .padding(.top, 180)
                 Spacer()
-
+                if !loginController.loginMessage.isEmpty {
+                    Text(loginController.loginMessage)
+                        .font(.footnote)
+                        .foregroundColor(.red)
+                        .multilineTextAlignment(.center)
+                }
                 // Google 로그인 버튼
                 Button(action: {
                     GoogleOAuth().signIn()
@@ -39,10 +45,19 @@ struct LoginScreen: View {
                     }
                 }
                 .disabled(loginController.isLoading) // 로딩 중일 때 버튼 비활성화
-                                // NavigationDestination 정의
+//                                 NavigationDestination 정의
                 .navigationDestination(isPresented: $loginController.navigateToMain) {
                     MainTabView().navigationBarBackButtonHidden(true)
                 }
+                
+//                    MainTabView().navigationBarBackButtonHidden(true)
+//                .background(
+//                    NavigationLink(
+//                        destination: MainTabView(),
+//                        isActive: $loginController.navigateToMain,
+//                        label: { EmptyView() }
+//                    )
+//                )
                 
                 // 네이버 로그인 버튼
                 Button(action: {

@@ -7,7 +7,16 @@ import Foundation
 
 final class LogInterceptor: URLProtocol {
     private static let handledKey = "LogInterceptorHandled"
-    private let accessToken = Constants.ACCESS_TOKEN // 토큰을 저장 (예: Access Token)
+//    private let accessToken = Constants.ACCESS_TOKEN // 토큰을 저장 (예: Access Token)
+    
+    // Keychain에서 Access Token을 가져오는 메서드
+    private func getAccessToken() -> String? {
+        if let accessToken = KeychainHelper.shared.read(service: "com.chuloop.auth", account: "accessToken") {
+            return String(data: accessToken, encoding: .utf8)
+        }
+        print("Access Token not found in Keychain")
+        return nil
+    }
     
     // URLProtocol이 요청을 처리할지 결정하는 메서드
     override class func canInit(with request: URLRequest) -> Bool {
@@ -37,8 +46,14 @@ final class LogInterceptor: URLProtocol {
             newRequest.httpBody = data
         }
         
+        if let accessToken = getAccessToken() {
+            newRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        } else {
+            print("Access Token is missing")
+        }
+        
         // Access Token 추가
-        newRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+//        newRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
     
         logRequest(newRequest as URLRequest)
