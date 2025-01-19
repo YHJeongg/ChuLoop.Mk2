@@ -10,28 +10,31 @@ class LoginController: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var loginMessage: String = ""
     @Published var navigateToMain: Bool = false
+    @Published var oauthUserData = GoogleUserDataVO()
     
     private let authService = AuthSerivce()
     
     // 로그인 api
-    func loginWithGoogle() {
+    func loginWithGoogle<T: Encodable>(data: T?) {
         Task { @MainActor in
             isLoading = true
             loginMessage = "로그인 중..."
             
             // 데이터 모델(간단한건 안만들어도 됨)
             // 임시데이터
-            let loginData: LoginModel = LoginModel(email: "abcd@gmail.com", firstName: "anna", lastName: "kim", photos: "url.com", socialType: "google")
+//            let loginData: LoginModel = LoginModel(email: "abcd@gmail.com", firstName: "anna", lastName: "kim", photos: "url.com", socialType: "google")
             
             
             // api 수행
-            let response = await authService.googleLogin(data: loginData)
+            let response = await authService.googleLogin(data: data)
             
             if response.success {
                 loginMessage = "로그인 성공!"
                 navigateToMain = true
+
                 if let responseData = response.data,
                    let accessTokenData = responseData["accessToken"] as? String {
+                    print("accessTokenData : \(accessTokenData)")
                     /**
                      keychain 만들어서 accessToken 로컬 저장해야됨
                      참고: https://jangsh9611.tistory.com/49

@@ -6,6 +6,7 @@
 import SwiftUI
 
 struct LoginScreen: View {
+    @StateObject private var loginController = LoginController()
 
     var body: some View {
         NavigationView {
@@ -36,6 +37,11 @@ struct LoginScreen: View {
                             .foregroundColor(.black)
                             .padding(.leading, 16)
                     }
+                }
+                .disabled(loginController.isLoading) // 로딩 중일 때 버튼 비활성화
+                                // NavigationDestination 정의
+                .navigationDestination(isPresented: $loginController.navigateToMain) {
+                    MainTabView().navigationBarBackButtonHidden(true)
                 }
                 
                 // 네이버 로그인 버튼

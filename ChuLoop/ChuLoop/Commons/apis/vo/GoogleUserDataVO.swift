@@ -6,19 +6,10 @@
 import SwiftUI
 
 struct GoogleUserDataVO: Codable {
-    var oauthId: String
-    var oauthEmail: String
-    var oauthFirstName: String
-    var oauthLastName: String
-    var oauthImage: URL?
-    var oauthSocialType: String = "google"
+    var accessToken: String
     
-    init(oauthId: String = "", oauthEmail: String = "", oauthFirstName: String = "", oauthLastName: String = "", oauthImage: URL? = nil) {
-        self.oauthId = oauthId
-        self.oauthEmail = oauthEmail
-        self.oauthFirstName = oauthFirstName
-        self.oauthLastName = oauthLastName
-        self.oauthImage = oauthImage
+    init(accessToken: String = "") {
+        self.accessToken = accessToken
     }
 }
 

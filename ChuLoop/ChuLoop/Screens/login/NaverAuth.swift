@@ -10,16 +10,20 @@ final public class NaverAuth: NSObject {
     public static let shared = NaverAuth()
     
     static func configure() {
-        let naverUrlSchema = Bundle.main.infoDictionary?["NAVER_URL_SCHEMA"] as! String
-        let naverClientId = Bundle.main.infoDictionary?["NAVER_CLIENT_ID"] as! String
-        let naverClientSecret = Bundle.main.infoDictionary?["NAVER_CLIENT_SECRET"] as! String
+//        guard
+//            let naverUrlSchema = Bundle.main.infoDictionary?["NAVER_URL_SCHEMA"] as? String,
+//            let naverClientId = Bundle.main.infoDictionary?["NAVER_CLIENT_ID"] as? String,
+//            let naverClientSecret = Bundle.main.infoDictionary?["NAVER_CLIENT_SECRET"] as? String
+//        else {
+//            fatalError("Missing or invalid configuration in Info.plist")
+//        }
         
         NaverThirdPartyLoginConnection.getSharedInstance().isInAppOauthEnable = true
         NaverThirdPartyLoginConnection.getSharedInstance().isNaverAppOauthEnable = true
         
-        NaverThirdPartyLoginConnection.getSharedInstance().serviceUrlScheme = naverUrlSchema //  URL 스키마 값
-        NaverThirdPartyLoginConnection.getSharedInstance().consumerKey = naverClientId // Naver Developers 내 어플리케이션에있는 Client ID
-        NaverThirdPartyLoginConnection.getSharedInstance().consumerSecret = naverClientSecret // Naver Developers 내 어플리케이션에 있는 Client Secret
+        NaverThirdPartyLoginConnection.getSharedInstance().serviceUrlScheme = "com.develop.chuloop" //  URL 스키마 값
+        NaverThirdPartyLoginConnection.getSharedInstance().consumerKey = "hGqAHHJS3_gwygOC14vE" // Naver Developers 내 어플리케이션에있는 Client ID
+        NaverThirdPartyLoginConnection.getSharedInstance().consumerSecret = "mn0sY7eU2d" // Naver Developers 내 어플리케이션에 있는 Client Secret
         NaverThirdPartyLoginConnection.getSharedInstance().appName = "ChuLoop" // 앱 이름
         NaverThirdPartyLoginConnection.getSharedInstance().delegate = NaverAuth.shared
     }
