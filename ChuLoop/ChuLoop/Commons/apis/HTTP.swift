@@ -23,7 +23,7 @@ class HTTP {
             "Content-Type": "application/json",
             "Accept": "application/json"
         ]
-        config.protocolClasses = [LogInterceptor.self, CustomInterceptor.self]
+        config.protocolClasses = [LogInterceptor.self]
         self.session = URLSession(configuration: config)
     }
     

@@ -38,5 +38,10 @@
 		<string>CookieRun-Bold.ttf</string>
 		<string>CookieRun-Black.ttf</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+		<dict>
+			<key>NSAllowsArbitraryLoads</key>
+			<true/>
+		</dict>
 </dict>
 </plist>
