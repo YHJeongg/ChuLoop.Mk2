@@ -17,4 +17,14 @@ final class AuthSerivce {
             return result
         }
     }
+    
+    func naverLogin<T: Encodable>(data: T?) async -> ResponseVO {
+        do {
+            let result = await HTTP.shared.post(
+                endpoint: ApisV1.naverLogin.rawValue,
+                body: data
+            )
+            return result
+        }
+    }
 }

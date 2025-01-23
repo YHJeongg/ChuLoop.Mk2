@@ -39,6 +39,8 @@ class NaverLoginController: NSObject, ObservableObject {
         }
         isLoading = true
         instance.requestThirdPartyLogin()
+        
+        self.handleNaverLoginSuccess()
     }
     
     func signOut() {
@@ -55,7 +57,7 @@ class NaverLoginController: NSObject, ObservableObject {
         // 유저 데이터를 생성하여 서버로 전달
         let data = UserDataModel(accessToken: accessToken)
         loginController.loginWithGoogle(data: data) // 로그인 처리
-        
+
         if loginController.navigateToMain {
             self.loginMessage = "네이버 로그인 성공!"
         } else {

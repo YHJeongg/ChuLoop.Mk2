@@ -21,7 +21,7 @@ class LoginController: ObservableObject {
             loginMessage = "로그인 중..."
             
             // api 수행
-            let response = await authService.googleLogin(data: data)
+            let response = await authService.naverLogin(data: data)
             
             if response.success {
                 loginMessage = "로그인 성공!"
@@ -53,7 +53,4 @@ class LoginController: ObservableObject {
             isLoading = false
         }
     }
-
-    
-    
 }

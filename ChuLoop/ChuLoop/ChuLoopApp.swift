@@ -11,6 +11,7 @@ import NaverThirdPartyLogin
 struct ChuLoopApp: App {
     init() {
         configNavigationBarAppearance()
+        NaverLoginController().configure()
     }
     
     var body: some Scene {
