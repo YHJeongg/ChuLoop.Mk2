@@ -6,7 +6,7 @@
 import SwiftUI
 
 struct LoginScreen: View {
-    @StateObject private var loginController = GoogleOAuth()
+    @StateObject private var loginController = LoginController()
 
 
     var body: some View {
@@ -25,7 +25,7 @@ struct LoginScreen: View {
                 }
                 // Google 로그인 버튼
                 Button(action: {
-                    GoogleOAuth().signIn()
+                    GoogleLoginController().signIn()
                 }) {
                     ZStack(alignment: .leading) {
                         HStack(alignment: .center) {
@@ -50,18 +50,9 @@ struct LoginScreen: View {
                     MainTabView().navigationBarBackButtonHidden(true)
                 }
                 
-//                    MainTabView().navigationBarBackButtonHidden(true)
-//                .background(
-//                    NavigationLink(
-//                        destination: MainTabView(),
-//                        isActive: $loginController.navigateToMain,
-//                        label: { EmptyView() }
-//                    )
-//                )
-                
                 // 네이버 로그인 버튼
                 Button(action: {
-                    NaverAuth.shared.login()
+                    NaverLoginController().signIn()
                 }) {
                     ZStack(alignment: .leading) {
                         HStack(alignment: .center) {
@@ -77,9 +68,6 @@ struct LoginScreen: View {
                             .foregroundColor(.white)
                             .padding(.leading, 16)
                     }
-                }
-                .onAppear {
-                    NaverAuth.configure() // 네이버 로그인 설정
                 }
                 
                 // 카카오 로그인 버튼
