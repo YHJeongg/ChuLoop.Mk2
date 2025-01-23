@@ -69,6 +69,9 @@ struct LoginScreen: View {
                             .padding(.leading, 16)
                     }
                 }
+                .navigationDestination(isPresented: $loginController.navigateToMain) {
+                    MainTabView().navigationBarBackButtonHidden(true)
+                }
                 
                 // 카카오 로그인 버튼
                 Button(action: {

@@ -23,7 +23,7 @@ class GoogleLoginController: ObservableObject {
             
             let data: UserDataModel = UserDataModel(accessToken: user.accessToken.tokenString)
 
-            loginController.loginWithGoogle(data: data)
+            loginController.login(service: .google, data: data)
             
         } else {
             self.errorMessage = "error: Not Logged In"
