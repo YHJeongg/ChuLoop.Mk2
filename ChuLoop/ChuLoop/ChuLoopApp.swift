@@ -6,12 +6,15 @@
 import SwiftUI
 import GoogleSignIn
 import NaverThirdPartyLogin
+import KakaoSDKAuth
+import KakaoSDKCommon
 
 @main
 struct ChuLoopApp: App {
     init() {
         configNavigationBarAppearance()
         NaverLoginController().configure()
+        KakaoLoginController().configure()
     }
     
     var body: some Scene {
@@ -25,6 +28,11 @@ struct ChuLoopApp: App {
                         .getSharedInstance()
                         .receiveAccessToken(url)
                 })
+                .onOpenURL { url in
+                    if (AuthApi.isKakaoTalkLoginUrl(url)) {
+                        _ = AuthController.handleOpenUrl(url: url)
+                    }
+                }
         }
     }
 }

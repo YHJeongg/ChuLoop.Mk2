@@ -30,6 +30,17 @@ PODS:
     - AppAuth/Core (~> 1.7)
     - GTMSessionFetcher/Core (< 4.0, >= 3.3)
   - GTMSessionFetcher/Core (3.5.0)
+  - KakaoSDKAuth (2.21.1):
+    - KakaoSDKCommon (= 2.21.1)
+  - KakaoSDKCommon (2.21.1):
+    - KakaoSDKCommon/Common (= 2.21.1)
+    - KakaoSDKCommon/Network (= 2.21.1)
+  - KakaoSDKCommon/Common (2.21.1)
+  - KakaoSDKCommon/Network (2.21.1):
+    - Alamofire (~> 5.1)
+    - KakaoSDKCommon/Common (= 2.21.1)
+  - KakaoSDKUser (2.21.1):
+    - KakaoSDKAuth (= 2.21.1)
   - naveridlogin-sdk-ios (4.2.3)
   - PromisesObjC (2.4.0)
 
@@ -37,6 +48,9 @@ DEPENDENCIES:
   - Alamofire (= 5.10.2)
   - GoogleSignIn
   - GoogleSignInSwiftSupport
+  - KakaoSDKAuth
+  - KakaoSDKCommon
+  - KakaoSDKUser
   - naveridlogin-sdk-ios
 
 SPEC REPOS:
@@ -49,6 +63,9 @@ SPEC REPOS:
     - GoogleUtilities
     - GTMAppAuth
     - GTMSessionFetcher
+    - KakaoSDKAuth
+    - KakaoSDKCommon
+    - KakaoSDKUser
     - naveridlogin-sdk-ios
     - PromisesObjC
 
@@ -61,9 +78,12 @@ SPEC CHECKSUMS:
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   GTMAppAuth: f69bd07d68cd3b766125f7e072c45d7340dea0de
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
+  KakaoSDKAuth: 28343159dd60ee9bbb61ff25d45d9769fcef6b8c
+  KakaoSDKCommon: 7938fce8e5ba3e73490f1928e55b20b510a0685b
+  KakaoSDKUser: 35608bb49bbc644f507561d8b8a33dec1c5eb360
   naveridlogin-sdk-ios: d9d46d02119d303023d7000cd5963864d5bb89e5
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
 
-PODFILE CHECKSUM: d158a52c49eed5a671dbf0d46dd543f878f20a0d
+PODFILE CHECKSUM: c36891e3627d020ad36aaef2ed3a84eee9d036b5
 
 COCOAPODS: 1.16.2

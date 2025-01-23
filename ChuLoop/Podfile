@@ -26,4 +26,9 @@ target 'ChuLoop' do
   # Naver Login
   pod 'naveridlogin-sdk-ios'
 
+  # KaKao Login
+  pod 'KakaoSDKAuth'
+  pod 'KakaoSDKCommon'
+  pod 'KakaoSDKUser'
+
 end

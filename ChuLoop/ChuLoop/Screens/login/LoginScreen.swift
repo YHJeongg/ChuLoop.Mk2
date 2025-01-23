@@ -75,7 +75,7 @@ struct LoginScreen: View {
                 
                 // 카카오 로그인 버튼
                 Button(action: {
-                    print("카카오")
+                    KakaoLoginController().signIn()
                 }) {
                     ZStack(alignment: .leading) {
                         HStack(alignment: .center) {

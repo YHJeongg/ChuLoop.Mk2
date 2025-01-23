@@ -553,7 +553,7 @@
 		};
 		16E1EA782CE477C300B3CD97 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8F4353A6F71BCF0C94261AA6 /* Pods-ChuLoop.release.xcconfig */;
+			baseConfigurationReference = B3F00D022FEE8B33599A830A /* Pods-ChuLoop.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

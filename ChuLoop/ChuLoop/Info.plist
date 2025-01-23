@@ -24,6 +24,16 @@
 				<string>$(NAVER_URL_SCHEMA)</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>kakaologin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(KAKAO_APP_KEY)</string>
+			</array>
+		</dict>
 	</array>
 	<key>GIDClientID</key>
 	<string>$(GOOGLE_CLIENT_ID)</string>
@@ -31,17 +41,21 @@
 	<array>
 		<string>naversearchapp</string>
 		<string>naversearchthirdlogin</string>
+		<string>kakaokompassauth</string>
+		<string>kakaolink</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>UIAppFonts</key>
 	<array>
 		<string>CookieRun.ttf</string>
 		<string>CookieRun-Bold.ttf</string>
 		<string>CookieRun-Black.ttf</string>
 	</array>
-	<key>NSAppTransportSecurity</key>
-		<dict>
-			<key>NSAllowsArbitraryLoads</key>
-			<true/>
-		</dict>
+    <key>KAKAO_APP_KEY</key>
+    <string>${KAKAO_APP_KEY}</string>
 </dict>
 </plist>

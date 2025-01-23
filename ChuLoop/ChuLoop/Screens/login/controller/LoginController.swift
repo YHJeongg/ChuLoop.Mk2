@@ -9,6 +9,7 @@ import Security
 enum LoginService {
     case google
     case naver
+    case kakao
 }
 
 class LoginController: ObservableObject {
@@ -34,6 +35,8 @@ class LoginController: ObservableObject {
                 response = await authService.googleLogin(data: data)
             case .naver:
                 response = await authService.naverLogin(data: data)
+            case .kakao:
+                response = await authService.kakaoLogin(data: data)
             }
             
             if response.success {
