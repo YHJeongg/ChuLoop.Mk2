@@ -10,6 +10,7 @@ enum LoginService {
     case google
     case naver
     case kakao
+    case apple
 }
 
 class LoginController: ObservableObject {
@@ -37,11 +38,13 @@ class LoginController: ObservableObject {
                 response = await authService.naverLogin(data: data)
             case .kakao:
                 response = await authService.kakaoLogin(data: data)
+            case .apple:
+                response = await authService.appleLogin(data: data)
             }
             
             if response.success {
                 loginMessage = "로그인 성공!"
-                navigateToMain = true
+                self.navigateToMain = true
                 
                 if let responseData = response.data,
                    let accessTokenData = responseData["accessToken"] as? String {

@@ -6,9 +6,8 @@
 import SwiftUI
 
 struct LoginScreen: View {
-    @StateObject private var loginController = LoginController()
-
-
+    @EnvironmentObject private var loginController: LoginController 
+    
     var body: some View {
         NavigationStack {
             VStack(alignment: .center, spacing: 20) {
@@ -23,101 +22,57 @@ struct LoginScreen: View {
                         .foregroundColor(.red)
                         .multilineTextAlignment(.center)
                 }
-                // Google 로그인 버튼
-                Button(action: {
-                    GoogleLoginController().signIn()
-                }) {
-                    ZStack(alignment: .leading) {
-                        HStack(alignment: .center) {
-                            Text("Google 계정으로 로그인")
-                                .font(.Cookie16)
-                                .foregroundColor(.black)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .stroke(Color.gray, lineWidth: 1)
-                                )
-                        }
-                        Image(systemName: "g.circle")
-                            .foregroundColor(.black)
-                            .padding(.leading, 16)
-                    }
-                }
-                .disabled(loginController.isLoading) // 로딩 중일 때 버튼 비활성화
-//                                 NavigationDestination 정의
-                .navigationDestination(isPresented: $loginController.navigateToMain) {
-                    MainTabView().navigationBarBackButtonHidden(true)
-                }
                 
-                // 네이버 로그인 버튼
-                Button(action: {
-                    NaverLoginController().signIn()
-                }) {
-                    ZStack(alignment: .leading) {
-                        HStack(alignment: .center) {
-                            Text("네이버 계정으로 로그인")
-                                .font(.Cookie16)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.green)
-                                .cornerRadius(10)
-                        }
-                        Image(systemName: "n.square.fill")
-                            .foregroundColor(.white)
-                            .padding(.leading, 16)
+                SocialLoginButton(
+                    title: "Google 계정으로 로그인",
+                    backgroundColor: .white,
+                    borderColor: .gray,
+                    iconName: "g.circle",
+                    textColor: .black,
+                    action: {
+                        GoogleLoginController(loginController: loginController).signIn()
                     }
-                }
-                .navigationDestination(isPresented: $loginController.navigateToMain) {
-                    MainTabView().navigationBarBackButtonHidden(true)
-                }
+                )
                 
-                // 카카오 로그인 버튼
-                Button(action: {
-                    KakaoLoginController().signIn()
-                }) {
-                    ZStack(alignment: .leading) {
-                        HStack(alignment: .center) {
-                            Text("카카오 계정으로 로그인")
-                                .font(.Cookie16)
-                                .foregroundColor(.black)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.yellow)
-                                .cornerRadius(10)
-                        }
-                        Image(systemName: "message.fill")
-                            .foregroundColor(.black)
-                            .padding(.leading, 16)
+                SocialLoginButton(
+                    title: "네이버 계정으로 로그인",
+                    backgroundColor: .green,
+                    iconName: "n.square.fill",
+                    textColor: .white,
+                    action: {
+                        NaverLoginController().signIn()
                     }
-                }
+                )
                 
-                // 애플 로그인 버튼
-                Button(action: {
-                    print("애플")
-                }) {
-                    ZStack(alignment: .leading) {
-                        HStack(alignment: .center) {
-                            Text("애플 계정으로 로그인")
-                                .font(.Cookie16)
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.black)
-                                .cornerRadius(10)
-                        }
-                        Image(systemName: "applelogo")
-                            .foregroundColor(.white)
-                            .padding(.leading, 16)
+                SocialLoginButton(
+                    title: "카카오 계정으로 로그인",
+                    backgroundColor: .yellow,
+                    iconName: "message.fill",
+                    textColor: .black,
+                    action: {
+                        KakaoLoginController().signIn()
                     }
-                }
+                )
+                
+                SocialLoginButton(
+                    title: "애플 계정으로 로그인",
+                    backgroundColor: .black,
+                    iconName: "applelogo",
+                    textColor: .white,
+                    action: {
+                        AppleLoginController().signIn()
+                    }
+                )
             }
             .padding(.horizontal, 30)
             .padding(.bottom, 30) // 하단 여백 추가
+            .navigationDestination(isPresented: $loginController.navigateToMain) {
+                MainTabView().navigationBarBackButtonHidden(true)
+            }
         }
     }
 }
+
 
 struct LoginScreen_Previews: PreviewProvider {
     static var previews: some View {

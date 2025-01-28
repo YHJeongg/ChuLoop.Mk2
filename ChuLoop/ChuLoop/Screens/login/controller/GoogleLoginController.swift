@@ -14,6 +14,10 @@ class GoogleLoginController: ObservableObject {
     
     private let authService = AuthSerivce()
     
+    init(loginController: LoginController) {
+        self.loginController = loginController
+    }
+    
     func checkUserInfo() {
         if GIDSignIn.sharedInstance.currentUser != nil {
             let user = GIDSignIn.sharedInstance.currentUser
