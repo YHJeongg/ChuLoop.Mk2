@@ -37,4 +37,14 @@ final class AuthSerivce {
             return result
         }
     }
+    
+    func appleLogin<T: Encodable>(data: T?) async -> ResponseVO {
+        do {
+            let result = await HTTP.shared.post(
+                endpoint: ApisV1.appleLogin.rawValue,
+                body: data
+            )
+            return result
+        }
+    }
 }

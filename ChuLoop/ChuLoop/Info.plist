@@ -57,5 +57,11 @@
 	</array>
     <key>KAKAO_APP_KEY</key>
     <string>${KAKAO_APP_KEY}</string>
+    <key>NAVER_URL_SCHEMA</key>
+    <string>${NAVER_URL_SCHEMA}</string>
+    <key>NAVER_CLIENT_ID</key>
+    <string>${NAVER_CLIENT_ID}</string>
+    <key>NAVER_CLIENT_SECRET</key>
+    <string>${NAVER_CLIENT_SECRET}</string>
 </dict>
 </plist>

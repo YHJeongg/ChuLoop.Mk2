@@ -11,6 +11,8 @@ import KakaoSDKCommon
 
 @main
 struct ChuLoopApp: App {
+    @StateObject private var loginController = LoginController()
+    
     init() {
         configNavigationBarAppearance()
         NaverLoginController().configure()
@@ -20,6 +22,7 @@ struct ChuLoopApp: App {
     var body: some Scene {
         WindowGroup {
             LoginScreen()
+                .environmentObject(loginController) 
                 .onOpenURL { url in
                     GIDSignIn.sharedInstance.handle(url)
                 }
