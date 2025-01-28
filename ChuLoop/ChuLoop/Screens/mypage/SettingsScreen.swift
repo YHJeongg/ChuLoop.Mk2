@@ -6,6 +6,8 @@
 import SwiftUI
 
 struct SettingsScreen: View {
+    @EnvironmentObject var appState: AppState // 전역 상태 객체
+
     @State private var username: String = "사용자 이름"
     
     var body: some View {
@@ -74,6 +76,7 @@ struct SettingsScreen: View {
                 
                 Button(action: {
                     print("로그아웃 버튼 클릭됨")
+                    appState.logout()
                 }) {
                     Text("로그아웃")
                         .font(.Cookie16)
@@ -81,7 +84,10 @@ struct SettingsScreen: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 8)
                 }
-                .buttonStyle(PlainButtonStyle())
+                .buttonStyle(PlainButtonStyle()
+                
+                )
+               
                 
                 Button(action: {
                     print("탈퇴하기 버튼 클릭됨")
