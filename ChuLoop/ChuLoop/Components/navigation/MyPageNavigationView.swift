@@ -15,7 +15,7 @@ struct MyPageNavigationView<Content: View>: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 content()
             }

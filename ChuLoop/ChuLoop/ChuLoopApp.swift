@@ -24,22 +24,23 @@ struct ChuLoopApp: App {
     var body: some Scene {
         WindowGroup {
             
-            LoginScreen()
-                .environmentObject(loginController)
-                .onOpenURL { url in
-                    GIDSignIn.sharedInstance.handle(url)
-                }
-                .onOpenURL(perform: { url in
-                    NaverThirdPartyLoginConnection
-                        .getSharedInstance()
-                        .receiveAccessToken(url)
-                })
-                .onOpenURL { url in
-                    if (AuthApi.isKakaoTalkLoginUrl(url)) {
-                        _ = AuthController.handleOpenUrl(url: url)
-                        
-                    }
-                }
+//            LoginScreen()
+//                .environmentObject(loginController)
+//                .onOpenURL { url in
+//                    GIDSignIn.sharedInstance.handle(url)
+//                }
+//                .onOpenURL(perform: { url in
+//                    NaverThirdPartyLoginConnection
+//                        .getSharedInstance()
+//                        .receiveAccessToken(url)
+//                })
+//                .onOpenURL { url in
+//                    if (AuthApi.isKakaoTalkLoginUrl(url)) {
+//                        _ = AuthController.handleOpenUrl(url: url)
+//                        
+//                    }
+//                }
+            MainTabView()
         }
     }
 }

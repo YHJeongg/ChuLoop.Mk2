@@ -5,17 +5,22 @@
 import SwiftUI
 
 struct MainAddScreen: View {
-    @State private var restaurantName: String = ""
-    @State private var address: String = ""
-    @State private var review: String = ""
-    @State private var selectedDate = Date()
-    @State private var rating: Int = 2
-    @State private var selectedCategory: String = "한식"
+    @ObservedObject var controller = MainAddScreenController()
+    @ObservedObject var mainController = MainScreenController()
     
-    let categories = ["한식", "일식", "중식", "양식", "아시안", "기타"]
-
+    //    @State private var restaurantName: String = ""
+    //    @State private var address: String = ""
+    //    @State private var review: String = ""
+    //    @State private var selectedDate = Date()
+    //    @State private var rating: Int = 0
+    //    @State private var selectedCategory: String = "한식"
+    
+    let category1 = ["한식", "일식", "중식", "양식"]
+    let category2 = ["아시안", "기타"]
+    
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     // 이미지 업로드 버튼
@@ -23,68 +28,66 @@ struct MainAddScreen: View {
                         Button(action: {
                             // 이미지 업로드 로직
                         }) {
-                            Image(systemName: "camera")
-                                .resizable()
+                            ImageView(imageName: "camera", width: 50, height: 40)
                                 .frame(width: 50, height: 50)
                                 .padding()
                                 .background(Color.white)
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1))
+                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.natural80, lineWidth: 2))
                         }
                     }
                     
                     // 맛집 이름 텍스트필드
-                    TextField("맛집 이름", text: $restaurantName)
+                    TextField("맛집 이름", text: $controller.restaurantName)
+                        .font(.Cookie16)
                         .padding()
                         .background(Color.white)
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1))
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.natural60, lineWidth: 1))
                     
-                    // 카테고리 선택
-                    VStack(alignment: .leading, spacing: 10) {
-                        ForEach(categories.chunked(into: 4), id: \.self) { row in
-                            HStack {
-                                ForEach(row, id: \.self) { category in
-                                    Button(action: {
-                                        selectedCategory = category
-                                    }) {
-                                        Text("# \(category)")
-                                            .padding(.horizontal)
-                                            .padding(.vertical, 8)
-                                            .background(selectedCategory == category ? Color.black : Color.white)
-                                            .foregroundColor(selectedCategory == category ? .white : .black)
-                                            .cornerRadius(15)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 15)
-                                                    .stroke(Color.black, lineWidth: 1)
-                                            )
-                                    }
-                                }
+                    // 카테고리 선택 1
+                    HStack(spacing: 10) {
+                        ForEach(category1, id: \.self) { category in
+                            Button(action: {
+                                controller.selectedCategory = category
+                            }) {
+                                TextView(category: category, selectedCategory: controller.selectedCategory)
+                            }
+                        }
+                    }
+                    
+                    // 카테고리 선택 2
+                    HStack(spacing: 10) {
+                        ForEach(category2, id: \.self) { category in
+                            Button(action: {
+                                controller.selectedCategory = category
+                            }) {
+                                TextView(category: category, selectedCategory: controller.selectedCategory)
                             }
                         }
                     }
                     
                     // 주소 입력
-                    TextField("주소", text: $address)
+                    TextField("주소", text: $controller.address)
                         .padding()
                         .background(Color.white)
                         .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1))
                     
                     // 날짜 선택
-                    DatePicker("날짜", selection: $selectedDate, displayedComponents: .date)
+                    DatePicker("날짜", selection: $controller.selectedDate, displayedComponents: .date)
                         .datePickerStyle(CompactDatePickerStyle())
                         .labelsHidden()
                         .padding()
                         .background(Color.white)
                         .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1))
-
+                    
                     // 별점
                     HStack {
-                        Text("평점 \(rating).0")
+                        Text("평점 \(controller.rating).0")
                         HStack(spacing: 5) {
                             ForEach(1...5, id: \.self) { star in
-                                Image(systemName: star <= rating ? "star.fill" : "star")
-                                    .foregroundColor(star <= rating ? .red : .gray)
+                                Image(systemName: star <= controller.rating ? "star.fill" : "star")
+                                    .foregroundColor(star <= controller.rating ? .red : .gray)
                                     .onTapGesture {
-                                        rating = star
+                                        controller.rating = star
                                     }
                             }
                         }
@@ -94,22 +97,38 @@ struct MainAddScreen: View {
                     VStack(alignment: .leading) {
                         Text("리뷰")
                             .font(.headline)
-                        TextEditor(text: $review)
-                            .frame(height: 100)
-                            .padding()
-                            .background(Color.white)
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1))
-                            .overlay(
-                                VStack {
-                                    if review.isEmpty {
+                        
+                        ZStack {
+                            TextEditor(text: $controller.review, selection: $controller.reviewSelection)
+                                .foregroundColor(Color.gray)
+                                .font(.custom("HelveticaNeue", size: 13))
+                                .frame(height: 100)
+                                .padding()
+                                .background(Color.white)
+                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1))
+                            
+                            VStack {
+                                // 왼쪽 상단 플레이스홀더
+                                if controller.review.isEmpty {
+                                    HStack {
                                         Text("식사 후 느꼈던 점을 적어보세요.")
                                             .foregroundColor(.gray)
-                                            .padding(.horizontal, 8)
-                                            .padding(.vertical, 12)
+                                            .padding(.leading, 14)
+                                            .padding(.top, 12)
+                                        Spacer()
                                     }
-                                    Spacer()
                                 }
-                            )
+                                Spacer()
+                                // 오른쪽 하단 텍스트
+                                HStack {
+                                    Spacer()
+                                    Text("최대 200자 입력 가능")
+                                        .foregroundColor(.gray)
+                                        .padding(.trailing, 14)
+                                        .padding(.bottom, 8)
+                                }
+                            }
+                        }
                     }
                     
                     // 저장 버튼
@@ -117,6 +136,7 @@ struct MainAddScreen: View {
                         Spacer()
                         Button(action: {
                             // 저장 로직
+                            controller.submit()
                         }) {
                             Text("저장하기")
                                 .padding(.horizontal, 20)
@@ -129,24 +149,60 @@ struct MainAddScreen: View {
                 }
                 .padding()
             }
-            .navigationTitle("맛집 리뷰 작성")
+            .navigationBarBackButtonHidden(true)
+            //            .navigationTitle("맛집 리뷰 작성")
             .navigationBarTitleDisplayMode(.inline)
-            .background(Color.white)
+            .toolbar {
+                // 커스텀 뒤로가기 버튼
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: {
+                        mainController.goBack() // 뒤로 가기
+                    }) {
+                        ImageView(imageName: "closes", width: 16, height: 16)
+                    }
+                }
+                // 타이틀
+                ToolbarItem(placement: .principal) {
+                    Text("맛집 리뷰 작성")
+                        .font(Font.Cookie20)
+                        .foregroundColor(.black)
+                }
+            }
         }
     }
 }
 
-extension Array {
-    func chunked(into size: Int) -> [[Element]] {
-        var chunks: [[Element]] = []
-        for index in stride(from: 0, to: count, by: size) {
-            let chunk = Array(self[index..<Swift.min(index + size, count)])
-            chunks.append(chunk)
-        }
-        return chunks
-    }
-}
+//extension Array {
+//    func chunked(into size: Int) -> [[Element]] {
+//        var chunks: [[Element]] = []
+//        for index in stride(from: 0, to: count, by: size) {
+//            let chunk = Array(self[index..<Swift.min(index + size, count)])
+//            chunks.append(chunk)
+//        }
+//        return chunks
+//    }
+//}
 
 #Preview {
     MainAddScreen()
+}
+
+
+
+struct TextView: View {
+    let category: String
+    var selectedCategory: String
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(selectedCategory == category ? Color.natural80 : Color.white) // 배경 색 적용
+                .stroke(selectedCategory == category ? Color.natural80 : Color.natural50, lineWidth: 1)
+            Text("# \(category)")
+                .font(.Cookie16)
+                .foregroundColor(selectedCategory == category ? .natural10 : .natural90)
+                .padding(10)
+        }
+        .fixedSize()
+    }
 }

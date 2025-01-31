@@ -5,21 +5,23 @@
 
 import SwiftUI
 
-import SwiftUI
-
-struct MainNavigationView<Content: View>: View {
+struct MainNavigationView<Content: View, SecondPage: View>: View {
     let title: String
     let content: () -> Content
     let onAddButtonTapped: (() -> Void)?
+    @Binding var isSecondPage: Bool
+    let secondPage: (() -> SecondPage)?
     
-    init(title: String, @ViewBuilder content: @escaping () -> Content, onAddButtonTapped: (() -> Void)? = nil) {
+    init(title: String, @ViewBuilder content: @escaping () -> Content, onAddButtonTapped: (() -> Void)? = nil,  isSecondPage: Binding<Bool>, @ViewBuilder secondPage: @escaping () -> SecondPage) {
         self.title = title
         self.content = content
         self.onAddButtonTapped = onAddButtonTapped
+        self._isSecondPage = isSecondPage
+        self.secondPage = secondPage
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 content()
             }
@@ -43,6 +45,15 @@ struct MainNavigationView<Content: View>: View {
                     }
                 }
             }
+            
+            .navigationDestination(isPresented: $isSecondPage) {
+                if let secondPage = secondPage {
+                    secondPage() // `secondPage` 클로저 호출
+                }
+                
+            }
+            
+            
         }
     }
 }

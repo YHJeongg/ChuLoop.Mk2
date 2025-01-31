@@ -29,7 +29,7 @@ struct MapScreen: View {
     @State private var showOptions = false
 
     var body: some View {
-        MainNavigationView(title: "맛집지도") {
+        MainNavigationView(title: "맛집지도",content: {
             ZStack {
                 Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: restaurants) { restaurant in
                     MapAnnotation(coordinate: restaurant.coordinate) {
@@ -99,9 +99,11 @@ struct MapScreen: View {
                     }
                 }
             }
-        } onAddButtonTapped: {
+        }, onAddButtonTapped: {
             print("NavigationView Button Test")
-        }
+        }, isSecondPage: $showOptions, secondPage: {
+            MainAddScreen()
+        })
     }
 }
 

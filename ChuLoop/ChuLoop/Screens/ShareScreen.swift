@@ -26,9 +26,11 @@ struct ShareScreen: View {
             isShared: true
         )
     ]
+    @State private var isSecondPage: Bool = false
+    
     
     var body: some View {
-        MainNavigationView(title: "맛집 커뮤니티") {
+        MainNavigationView(title: "맛집 커뮤니티", content: {
             VStack {
                 SearchBar(searchText: $searchText)
                     .padding(.horizontal)
@@ -61,7 +63,9 @@ struct ShareScreen: View {
             .sheet(isPresented: $showSheet) {
                 MainSheetScreen()
             }
-        }
+        },
+                           isSecondPage: $isSecondPage, secondPage:{MainAddScreen()}
+        )
     }
 }
 

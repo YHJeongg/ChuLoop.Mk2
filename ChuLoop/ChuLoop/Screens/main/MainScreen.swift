@@ -16,9 +16,11 @@ struct TimelineItem: Identifiable {
 }
 
 struct MainScreen: View {
+    @StateObject private var controller = MainScreenController() // Controller 인스턴스
+    @State private var isSecondPage: Bool = false
+    
     @State private var searchText: String = "" // 검색어 상태
     @State private var showSheet: Bool = false
-    @State private var isAddButtonTapped: Bool = false
     @State private var items: [TimelineItem] = [
         TimelineItem(
             image: "MainTest",
@@ -39,14 +41,17 @@ struct MainScreen: View {
     ]
     
     var body: some View {
-        MainNavigationView(title: "타임라인") {
+        
+        MainNavigationView(title: "타임라인",
+                           content: {
             VStack {
-                // 검색바 추가
+                // Search bar
                 SearchBar(searchText: $searchText)
                     .padding(.horizontal)
                     .padding(.top)
                 
                 if items.isEmpty {
+                    // Empty state UI
                     VStack {
                         Spacer()
                         
@@ -60,6 +65,7 @@ struct MainScreen: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
+                    // Display list of timeline items
                     ScrollView {
                         VStack(spacing: 20) {
                             ForEach($items) { $item in
@@ -75,14 +81,19 @@ struct MainScreen: View {
                     .clearModalBackground()
                     .presentationDragIndicator(.visible)
                     .presentationCornerRadius(25)
-//                    .presentationBackground(.ultraThinMaterial)
             }
-
-        } onAddButtonTapped: {
-            isAddButtonTapped = true
-        }
+            
+            
+        }, onAddButtonTapped: {
+            controller.goToAddScreen()
+        }, isSecondPage: $controller.isNavigatingToAddScreen, secondPage: {
+            MainAddScreen(mainController: controller) // ✅ 기존 컨트롤러를 전달 (뒤로가기용)
+        })
+        
+        
     }
 }
+
 
 struct TimelineCard: View {
     @Binding var item: TimelineItem
@@ -104,7 +115,7 @@ struct TimelineCard: View {
                 Text(item.title)
                     .font(.CookieBold18)
                     .lineLimit(1)
-        
+                
                 Text(item.location)
                     .font(.Cookie12)
                     .foregroundColor(.gray)

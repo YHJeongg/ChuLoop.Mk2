@@ -14,9 +14,10 @@ struct VisitScreen: View {
     ]
     
     @State private var searchText: String = ""
+    @State private var isSecondPage: Bool = false
     
     var body: some View {
-        MainNavigationView(title: "방문할 맛집") {
+        MainNavigationView(title: "방문할 맛집", content: {
             VStack(spacing: 0) {
                 // 검색창
                 SearchBar(searchText: $searchText)
@@ -85,9 +86,12 @@ struct VisitScreen: View {
                     }
                 }
             }
-        } onAddButtonTapped: {
+        }, onAddButtonTapped: {
             print("NavigationView Button Test")
-        }
+        }, isSecondPage: $isSecondPage, secondPage: {
+            
+        })
+         
     }
 }
 
