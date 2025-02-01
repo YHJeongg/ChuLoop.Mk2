@@ -37,7 +37,7 @@ struct HeartScreen: View {
                     Spacer()
                     
                     Text("하트 게시물이 없어요\n하트를 눌러서 맛집을 추가해보세요")
-                        .font(.Cookie18)
+                        .font(.bodyMedium)
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.center)
                         .padding()

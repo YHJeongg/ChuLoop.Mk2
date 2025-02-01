@@ -41,7 +41,7 @@ struct ShareScreen: View {
                         Spacer()
                         
                         Text("공유된 맛집이 없어요\n타임라인에 올린 맛집을 함께 공유해보세요")
-                            .font(.Cookie18)
+                            .font(.bodyMedium)
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
                             .padding()

@@ -27,7 +27,7 @@ struct MyPageNavigationView<Content: View>: View {
                             .foregroundColor(.black)
                         
                         Text("임시닉네임") // 아이디
-                            .font(.CookieBold18)
+                            .font(.bodyMediumBold)
                             .foregroundColor(.black)
                     }
                 }

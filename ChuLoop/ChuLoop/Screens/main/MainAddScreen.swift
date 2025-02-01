@@ -8,16 +8,8 @@ struct MainAddScreen: View {
     @ObservedObject var controller = MainAddScreenController()
     @ObservedObject var mainController = MainScreenController()
     
-    //    @State private var restaurantName: String = ""
-    //    @State private var address: String = ""
-    //    @State private var review: String = ""
-    //    @State private var selectedDate = Date()
-    //    @State private var rating: Int = 0
-    //    @State private var selectedCategory: String = "한식"
-    
     let category1 = ["한식", "일식", "중식", "양식"]
     let category2 = ["아시안", "기타"]
-    
     
     var body: some View {
         NavigationStack {
@@ -38,7 +30,7 @@ struct MainAddScreen: View {
                     
                     // 맛집 이름 텍스트필드
                     TextField("맛집 이름", text: $controller.restaurantName)
-                        .font(.Cookie16)
+                        .font(.bodyNormal)
                         .padding()
                         .background(Color.white)
                         .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.natural60, lineWidth: 1))
@@ -80,12 +72,14 @@ struct MainAddScreen: View {
                         .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1))
                     
                     // 별점
-                    HStack {
-                        Text("평점 \(controller.rating).0")
+                    VStack(alignment: .leading) {
+                        HStack(spacing: 3) {
+                            Text("평점")
+                            Text("\(controller.rating).0")
+                        }
                         HStack(spacing: 5) {
                             ForEach(1...5, id: \.self) { star in
-                                Image(systemName: star <= controller.rating ? "star.fill" : "star")
-                                    .foregroundColor(star <= controller.rating ? .red : .gray)
+                                ImageView(imageName: star <= controller.rating ? "star-fill" : "star", width: 24, height: 24)
                                     .onTapGesture {
                                         controller.rating = star
                                     }
@@ -97,7 +91,6 @@ struct MainAddScreen: View {
                     VStack(alignment: .leading) {
                         Text("리뷰")
                             .font(.headline)
-                        
                         ZStack {
                             TextEditor(text: $controller.review, selection: $controller.reviewSelection)
                                 .foregroundColor(Color.gray)
@@ -139,16 +132,19 @@ struct MainAddScreen: View {
                             controller.submit()
                         }) {
                             Text("저장하기")
+                                .font(.heading4)
                                 .padding(.horizontal, 20)
                                 .padding(.vertical, 10)
-                                .background(Color.blue)
+                                .background(Color.primary900)
                                 .foregroundColor(.white)
-                                .cornerRadius(10)
+                                .cornerRadius(12)
                         }
                     }
                 }
-                .padding()
+                .padding(.horizontal, 24)
+                .padding(.vertical, 28)
             }
+            .background(Color.primary50.ignoresSafeArea()) // 🔹 전체 배경색 변경
             .navigationBarBackButtonHidden(true)
             //            .navigationTitle("맛집 리뷰 작성")
             .navigationBarTitleDisplayMode(.inline)
@@ -164,10 +160,12 @@ struct MainAddScreen: View {
                 // 타이틀
                 ToolbarItem(placement: .principal) {
                     Text("맛집 리뷰 작성")
-                        .font(Font.Cookie20)
+                        .font(Font.bodyLargeBold)
                         .foregroundColor(.black)
                 }
             }
+            .toolbarBackground(Color.mobileGray, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
     }
 }
@@ -199,7 +197,7 @@ struct TextView: View {
                 .fill(selectedCategory == category ? Color.natural80 : Color.white) // 배경 색 적용
                 .stroke(selectedCategory == category ? Color.natural80 : Color.natural50, lineWidth: 1)
             Text("# \(category)")
-                .font(.Cookie16)
+                .font(.bodyNormal)
                 .foregroundColor(selectedCategory == category ? .natural10 : .natural90)
                 .padding(10)
         }

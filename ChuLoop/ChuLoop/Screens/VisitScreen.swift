@@ -30,7 +30,7 @@ struct VisitScreen: View {
                     VStack {
                         Spacer()
                         Text("방문할 맛집 리스트가 비어있어요\n방문하고싶은 맛집을 추가해 주세요")
-                            .font(.Cookie18)
+                            .font(.bodyMedium)
                             .multilineTextAlignment(.center)
                             .foregroundColor(.gray)
                             .padding()

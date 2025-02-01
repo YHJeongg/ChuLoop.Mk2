@@ -23,7 +23,7 @@ struct MainSheetScreen: View {
                     Spacer()
                     
                     Text("가게 이름")
-                        .font(.CookieBold20)
+                        .font(.bodyLargeBold)
                         .fontWeight(.bold)
                         .lineLimit(1)
                         .foregroundColor(.white)
@@ -31,7 +31,7 @@ struct MainSheetScreen: View {
                     Spacer()
                     
                     Text("1 / 10")
-                        .font(.Cookie16)
+                        .font(.bodyMedium)
                         .foregroundColor(.white)
                 }
                 .padding()
@@ -42,19 +42,19 @@ struct MainSheetScreen: View {
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("호롤롤로 / 3일전")
-                        .font(.Cookie18)
+                        .font(.bodyMedium)
                         .foregroundColor(.white)
                     
                     Text("리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 리뷰 내용 ...")
                         .lineLimit(4)
-                        .font(.Cookie16)
+                        .font(.bodyNormal)
                         .foregroundColor(.white)
                     
                     Button(action: {
                         print("더보기 버튼 클릭")
                     }) {
                         Text("더보기")
-                            .font(.CookieBold14)
+                            .font(.bodySmallBold)
                             .foregroundColor(.blue)
                     }
                 }

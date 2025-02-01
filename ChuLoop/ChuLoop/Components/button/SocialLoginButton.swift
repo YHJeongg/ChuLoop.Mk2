@@ -33,7 +33,7 @@ struct SocialLoginButton: View {
                         .padding(.leading, 0)
 
                     Text(title)
-                        .font(.Cookie16)
+                        .font(.bodyNormal)
                         .foregroundColor(textColor)
                         .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center) // 텍스트 중앙 정렬

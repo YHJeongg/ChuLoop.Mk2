@@ -56,7 +56,7 @@ struct MainScreen: View {
                         Spacer()
                         
                         Text("타임라인이 비어있어요\n방문했던 맛집을 추가해 주세요")
-                            .font(.Cookie18)
+                            .font(.bodyMedium)
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
                             .padding()
@@ -113,16 +113,16 @@ struct TimelineCard: View {
             
             VStack(alignment: .leading, spacing: 10) {
                 Text(item.title)
-                    .font(.CookieBold18)
+                    .font(.bodyMediumBold)
                     .lineLimit(1)
                 
                 Text(item.location)
-                    .font(.Cookie12)
+                    .font(.bodyXSmall)
                     .foregroundColor(.gray)
                 
                 HStack {
                     Text("\(item.date)")
-                        .font(.Cookie14)
+                        .font(.bodySmall)
                         .foregroundColor(.gray)
                     
                     Spacer()
@@ -139,7 +139,7 @@ struct TimelineCard: View {
                 
                 HStack {
                     Text("커뮤니티에 공유하기")
-                        .font(.Cookie14)
+                        .font(.bodySmall)
                         .foregroundColor(.black)
                     
                     Spacer()
@@ -162,7 +162,7 @@ struct SearchBar: View {
     var body: some View {
         HStack {
             TextField("검색", text: $searchText)
-                .font(.Cookie14)
+                .font(.bodySmall)
                 .padding(.vertical, 10)
                 .padding(.horizontal, 15)
                 .background(

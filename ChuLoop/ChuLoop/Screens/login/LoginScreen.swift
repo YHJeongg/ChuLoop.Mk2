@@ -13,7 +13,7 @@ struct LoginScreen: View {
             VStack(alignment: .center, spacing: 20) {
                 // 로고 및 hook 내용 텍스트
                 Text("ChuLoop")
-                    .font(.CookieBlack44)
+                    .font(.heading1)
                     .padding(.top, 180)
                 Spacer()
                 if !loginController.loginMessage.isEmpty {
