@@ -7,6 +7,7 @@ import SwiftUI
 struct MainAddScreen: View {
     @ObservedObject var controller = MainAddScreenController()
     @ObservedObject var mainController = MainScreenController()
+   
     
     let category1 = ["한식", "일식", "중식", "양식"]
     let category2 = ["아시안", "기타"]
@@ -29,11 +30,7 @@ struct MainAddScreen: View {
                     }
                     
                     // 맛집 이름 텍스트필드
-                    TextField("맛집 이름", text: $controller.restaurantName)
-                        .font(.bodyNormal)
-                        .padding()
-                        .background(Color.white)
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.natural60, lineWidth: 1))
+                    CTextField(placeholder: "맛집 이름", text: $controller.restaurantName, textIsEmpty: $controller.titleEmpty, errorText: "맛집 이름을 적어주세요")
                     
                     // 카테고리 선택 1
                     HStack(spacing: 10) {
@@ -41,7 +38,7 @@ struct MainAddScreen: View {
                             Button(action: {
                                 controller.selectedCategory = category
                             }) {
-                                TextView(category: category, selectedCategory: controller.selectedCategory)
+                                CategoryButton(category: category, selectedCategory: controller.selectedCategory)
                             }
                         }
                     }
@@ -52,17 +49,13 @@ struct MainAddScreen: View {
                             Button(action: {
                                 controller.selectedCategory = category
                             }) {
-                                TextView(category: category, selectedCategory: controller.selectedCategory)
+                                CategoryButton(category: category, selectedCategory: controller.selectedCategory)
                             }
                         }
                     }
                     
                     // 주소 입력
-                    TextField("주소", text: $controller.address)
-                        .padding()
-                        .background(Color.white)
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1))
-                    
+                    CTextField(placeholder: "주소", text: $controller.address, textIsEmpty: $controller.addressEmpty, errorText: "주소를 입력해 주세요")
                     // 날짜 선택
                     DatePicker("날짜", selection: $controller.selectedDate, displayedComponents: .date)
                         .datePickerStyle(CompactDatePickerStyle())
@@ -75,7 +68,9 @@ struct MainAddScreen: View {
                     VStack(alignment: .leading) {
                         HStack(spacing: 3) {
                             Text("평점")
+                                .font(.bodyNormal)
                             Text("\(controller.rating).0")
+                                .font(.bodySmall)
                         }
                         HStack(spacing: 5) {
                             ForEach(1...5, id: \.self) { star in
@@ -88,41 +83,12 @@ struct MainAddScreen: View {
                     }
                     
                     // 리뷰 작성
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 15) {
                         Text("리뷰")
-                            .font(.headline)
-                        ZStack {
-                            TextEditor(text: $controller.review, selection: $controller.reviewSelection)
-                                .foregroundColor(Color.gray)
-                                .font(.custom("HelveticaNeue", size: 13))
-                                .frame(height: 100)
-                                .padding()
-                                .background(Color.white)
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1))
-                            
-                            VStack {
-                                // 왼쪽 상단 플레이스홀더
-                                if controller.review.isEmpty {
-                                    HStack {
-                                        Text("식사 후 느꼈던 점을 적어보세요.")
-                                            .foregroundColor(.gray)
-                                            .padding(.leading, 14)
-                                            .padding(.top, 12)
-                                        Spacer()
-                                    }
-                                }
-                                Spacer()
-                                // 오른쪽 하단 텍스트
-                                HStack {
-                                    Spacer()
-                                    Text("최대 200자 입력 가능")
-                                        .foregroundColor(.gray)
-                                        .padding(.trailing, 14)
-                                        .padding(.bottom, 8)
-                                }
-                            }
-                        }
+                            .font(.bodyNormal)
+                        CTextEditor(placeholder: "식사 후 느꼈던 점을 적어보세요.", text: $controller.review, textIsEmpty: $controller.reviewEmpty, errorText: "리뷰를 적어주세요.")
                     }
+                    
                     
                     // 저장 버튼
                     HStack {
@@ -130,6 +96,7 @@ struct MainAddScreen: View {
                         Button(action: {
                             // 저장 로직
                             controller.submit()
+                            
                         }) {
                             Text("저장하기")
                                 .font(.heading4)
@@ -146,7 +113,6 @@ struct MainAddScreen: View {
             }
             .background(Color.primary50.ignoresSafeArea()) // 🔹 전체 배경색 변경
             .navigationBarBackButtonHidden(true)
-            //            .navigationTitle("맛집 리뷰 작성")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 // 커스텀 뒤로가기 버튼
@@ -170,24 +136,12 @@ struct MainAddScreen: View {
     }
 }
 
-//extension Array {
-//    func chunked(into size: Int) -> [[Element]] {
-//        var chunks: [[Element]] = []
-//        for index in stride(from: 0, to: count, by: size) {
-//            let chunk = Array(self[index..<Swift.min(index + size, count)])
-//            chunks.append(chunk)
-//        }
-//        return chunks
-//    }
-//}
-
 #Preview {
     MainAddScreen()
 }
 
 
-
-struct TextView: View {
+struct CategoryButton: View {
     let category: String
     var selectedCategory: String
     
