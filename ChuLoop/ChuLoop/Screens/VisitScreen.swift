@@ -49,15 +49,15 @@ struct VisitScreen: View {
                                 VStack(alignment: .leading, spacing: 5) {
                                     HStack {
                                         Text(place.name)
-                                            .font(.CookieBold14)
+                                            .font(.bodySmallBold)
                                             .lineLimit(1)
                                         Spacer()
                                         Text(place.category)
-                                            .font(.Cookie10)
+                                            .font(.bodyXXSmall)
                                             .foregroundColor(.gray)
                                     }
                                     Text(place.address)
-                                        .font(.Cookie12)
+                                        .font(.bodyXSmall)
                                         .foregroundColor(.gray)
                                         .lineLimit(2)
                                     
@@ -65,7 +65,7 @@ struct VisitScreen: View {
                                         print("\(place.name) 리뷰 쓰기 버튼 눌림")
                                     }) {
                                         Text("리뷰쓰기")
-                                            .font(.Cookie14)
+                                            .font(.bodySmall)
                                             .foregroundColor(.white)
                                             .padding(.horizontal, 10)
                                             .padding(.vertical, 5)
