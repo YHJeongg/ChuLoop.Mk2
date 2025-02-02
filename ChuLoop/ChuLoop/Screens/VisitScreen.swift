@@ -88,8 +88,6 @@ struct VisitScreen: View {
             }
         }, onAddButtonTapped: {
             print("NavigationView Button Test")
-        }, isSecondPage: $isSecondPage, secondPage: {
-            
         })
          
     }

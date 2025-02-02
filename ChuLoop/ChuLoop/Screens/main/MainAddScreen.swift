@@ -108,7 +108,7 @@ struct MainAddScreen: View {
             .background(Color.primary50.ignoresSafeArea()) // 🔹 전체 배경색 변경
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar(.hidden, for: .tabBar) // ✅ TabView를 숨김
+            
             .toolbar {
                 // 커스텀 뒤로가기 버튼
                 ToolbarItem(placement: .topBarTrailing) {
@@ -160,6 +160,7 @@ struct MainAddScreen: View {
             }
             
         }
+//        .toolbar(.hidden, for: .tabBar) // ✅ TabView를 숨김
     }
 }
 

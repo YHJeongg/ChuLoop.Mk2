@@ -63,8 +63,7 @@ struct ShareScreen: View {
             .sheet(isPresented: $showSheet) {
                 MainSheetScreen()
             }
-        },
-                           isSecondPage: $isSecondPage, secondPage:{}
+        }
         )
     }
 }

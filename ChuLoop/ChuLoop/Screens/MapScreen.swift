@@ -101,8 +101,6 @@ struct MapScreen: View {
             }
         }, onAddButtonTapped: {
             print("NavigationView Button Test")
-        }, isSecondPage: $showOptions, secondPage: {
-            
         })
     }
 }

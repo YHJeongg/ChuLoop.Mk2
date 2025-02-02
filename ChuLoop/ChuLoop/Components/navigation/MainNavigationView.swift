@@ -5,32 +5,23 @@
 
 import SwiftUI
 
-struct MainNavigationView<Content: View, SecondPage: View>: View {
+struct MainNavigationView<Content: View>: View {
     let title: String
     let content: () -> Content
     let onAddButtonTapped: (() -> Void)?
-    @Binding var isSecondPage: Bool
-    let secondPage: (() -> SecondPage)?
     
-    init(title: String, @ViewBuilder content: @escaping () -> Content, onAddButtonTapped: (() -> Void)? = nil,  isSecondPage: Binding<Bool>, @ViewBuilder secondPage: @escaping () -> SecondPage) {
+    
+    init(title: String, @ViewBuilder content: @escaping () -> Content, onAddButtonTapped: (() -> Void)? = nil) {
         self.title = title
         self.content = content
         self.onAddButtonTapped = onAddButtonTapped
-        self._isSecondPage = isSecondPage
-        self.secondPage = secondPage
     }
     
     var body: some View {
         NavigationStack {
-//            VStack {
+            ZStack {
                 content()
-//                    .navigationDestination(isPresented: $isSecondPage) {
-//                        if let secondPage = secondPage {
-//                            secondPage() // `secondPage` 클로저 호출
-//                        }
-//                        
-//                    }
-//            }
+            }
             
             .toolbar { // SwiftUI toolbar 유지
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -52,9 +43,10 @@ struct MainNavigationView<Content: View, SecondPage: View>: View {
                     }
                 }
             }
-            
-
-            
+            .toolbarBackground(Color.primary300, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Color.white, for: .tabBar)
+            .toolbarBackground(.visible, for: .tabBar)
             
         }
     }
