@@ -42,53 +42,62 @@ struct MainScreen: View {
     
     var body: some View {
         
-        MainNavigationView(title: "타임라인",
-                           content: {
-            VStack {
-                // Search bar
-                SearchBar(searchText: $searchText)
-                    .padding(.horizontal)
-                    .padding(.top)
-                
-                if items.isEmpty {
-                    // Empty state UI
-                    VStack {
-                        Spacer()
-                        
-                        Text("타임라인이 비어있어요\n방문했던 맛집을 추가해 주세요")
-                            .font(.bodyMedium)
-                            .foregroundColor(.gray)
-                            .multilineTextAlignment(.center)
-                            .padding()
-                        
-                        Spacer()
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else {
-                    // Display list of timeline items
-                    ScrollView {
-                        VStack(spacing: 20) {
-                            ForEach($items) { $item in
-                                TimelineCard(item: $item, showSheet: $showSheet)
-                            }
+       
+            MainNavigationView(title: "타임라인",
+                               content: {
+                VStack {
+                    // Search bar
+                    SearchBar(searchText: $searchText)
+                        .padding(.horizontal)
+                        .padding(.top)
+                    
+                    if items.isEmpty {
+                        // Empty state UI
+                        VStack {
+                            Spacer()
+                            
+                            Text("타임라인이 비어있어요\n방문했던 맛집을 추가해 주세요")
+                                .font(.bodyMedium)
+                                .foregroundColor(.gray)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                            
+                            Spacer()
                         }
-                        .padding()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else {
+                        // Display list of timeline items
+                        ScrollView {
+                            VStack(spacing: 20) {
+                                ForEach($items) { $item in
+                                    TimelineCard(item: $item, showSheet: $showSheet)
+                                }
+                            }
+                            .padding()
+                        }
                     }
                 }
+                .navigationDestination(isPresented: $controller.isNavigatingToAddScreen) {
+                    MainAddScreen(mainController: controller)
+                    
+                }
+                .sheet(isPresented: $showSheet) {
+                    MainSheetScreen()
+                        .clearModalBackground()
+                        .presentationDragIndicator(.visible)
+                        .presentationCornerRadius(25)
+                }
+                
+                
+            }, onAddButtonTapped: {
+                controller.goToAddScreen()
             }
-            .sheet(isPresented: $showSheet) {
-                MainSheetScreen()
-                    .clearModalBackground()
-                    .presentationDragIndicator(.visible)
-                    .presentationCornerRadius(25)
-            }
-            
-            
-        }, onAddButtonTapped: {
-            controller.goToAddScreen()
-        }, isSecondPage: $controller.isNavigatingToAddScreen, secondPage: {
-            MainAddScreen(mainController: controller) // ✅ 기존 컨트롤러를 전달 (뒤로가기용)
-        })
+                                                              , isSecondPage: $controller.isNavigatingToAddScreen, secondPage: {
+                                               MainAddScreen(mainController: controller) // ✅ 기존 컨트롤러를 전달 (뒤로가기용)
+                                           }
+            )
+       
+           
         
         
     }

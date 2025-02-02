@@ -7,6 +7,7 @@ import SwiftUI
 
 struct MainTabView: View {
     var body: some View {
+        
         TabView {
             MainScreen()
                 .tabItem {
@@ -14,7 +15,7 @@ struct MainTabView: View {
                     Text("홈")
                         .font(.bodyXXSmall)
                 }
-
+            
             
             VisitScreen()
                 .tabItem {
@@ -45,6 +46,7 @@ struct MainTabView: View {
                 }
         }
     }
+    
 }
 
 struct MainTabView_Previews: PreviewProvider {

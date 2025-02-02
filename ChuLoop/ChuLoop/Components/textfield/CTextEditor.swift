@@ -20,8 +20,8 @@ struct CTextEditor: View {
                 // 🔹 TextEditor
                 TextEditor(text: $text)
                     .focused($textIsFocused)
-                    .onChange(of: text) { _, newValue in
-                        textIsEmpty = newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    .onChange(of: text) {
+                        textIsEmpty = text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                     }
                     .frame(height: 174)
                     .font(.bodyNormal)

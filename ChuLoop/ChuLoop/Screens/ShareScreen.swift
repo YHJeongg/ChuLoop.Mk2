@@ -64,7 +64,7 @@ struct ShareScreen: View {
                 MainSheetScreen()
             }
         },
-                           isSecondPage: $isSecondPage, secondPage:{MainAddScreen()}
+                           isSecondPage: $isSecondPage, secondPage:{}
         )
     }
 }

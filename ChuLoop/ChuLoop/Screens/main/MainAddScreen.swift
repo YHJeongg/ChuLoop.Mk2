@@ -7,7 +7,6 @@ import SwiftUI
 struct MainAddScreen: View {
     @ObservedObject var controller = MainAddScreenController()
     @ObservedObject var mainController = MainScreenController()
-   
     
     let category1 = ["한식", "일식", "중식", "양식"]
     let category2 = ["아시안", "기타"]
@@ -15,23 +14,14 @@ struct MainAddScreen: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    // 이미지 업로드 버튼
-                    HStack {
-                        Button(action: {
-                            // 이미지 업로드 로직
-                        }) {
-                            ImageView(imageName: "camera", width: 50, height: 40)
-                                .frame(width: 50, height: 50)
-                                .padding()
-                                .background(Color.white)
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.natural80, lineWidth: 2))
-                        }
-                    }
+                VStack(alignment: .leading) {
                     
+                    // 이미지 업로드 버튼
+                    ImageListView(controller: self.controller)
+                    Spacer(minLength: 24)
                     // 맛집 이름 텍스트필드
                     CTextField(placeholder: "맛집 이름", text: $controller.restaurantName, textIsEmpty: $controller.titleEmpty, errorText: "맛집 이름을 적어주세요")
-                    
+                    Spacer(minLength: 34)
                     // 카테고리 선택 1
                     HStack(spacing: 10) {
                         ForEach(category1, id: \.self) { category in
@@ -53,16 +43,20 @@ struct MainAddScreen: View {
                             }
                         }
                     }
-                    
+                    Spacer(minLength: 24)
                     // 주소 입력
                     CTextField(placeholder: "주소", text: $controller.address, textIsEmpty: $controller.addressEmpty, errorText: "주소를 입력해 주세요")
+                    Spacer(minLength: 34)
                     // 날짜 선택
-                    DatePicker("날짜", selection: $controller.selectedDate, displayedComponents: .date)
-                        .datePickerStyle(CompactDatePickerStyle())
-                        .labelsHidden()
-                        .padding()
-                        .background(Color.white)
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black, lineWidth: 1))
+                    VStack {
+                        CTextField(placeholder: controller.selectedDate, text: $controller.selectedDate, textIsEmpty: $controller.dateEmpty,
+                                   onTap: {
+                            controller.showDatePicker.toggle()
+                        },
+                                   readonly: true)
+                        
+                    }
+                    Spacer(minLength: 24)
                     
                     // 별점
                     VStack(alignment: .leading) {
@@ -81,7 +75,7 @@ struct MainAddScreen: View {
                             }
                         }
                     }
-                    
+                    Spacer(minLength: 24)
                     // 리뷰 작성
                     VStack(alignment: .leading, spacing: 15) {
                         Text("리뷰")
@@ -89,7 +83,7 @@ struct MainAddScreen: View {
                         CTextEditor(placeholder: "식사 후 느꼈던 점을 적어보세요.", text: $controller.review, textIsEmpty: $controller.reviewEmpty, errorText: "리뷰를 적어주세요.")
                     }
                     
-                    
+                    Spacer(minLength: 24)
                     // 저장 버튼
                     HStack {
                         Spacer()
@@ -109,11 +103,12 @@ struct MainAddScreen: View {
                     }
                 }
                 .padding(.horizontal, 24)
-                .padding(.vertical, 28)
+                .padding(.top, 20)
             }
             .background(Color.primary50.ignoresSafeArea()) // 🔹 전체 배경색 변경
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar(.hidden, for: .tabBar) // ✅ TabView를 숨김
             .toolbar {
                 // 커스텀 뒤로가기 버튼
                 ToolbarItem(placement: .topBarTrailing) {
@@ -132,6 +127,38 @@ struct MainAddScreen: View {
             }
             .toolbarBackground(Color.mobileGray, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
+            // 🔹 날짜 선택
+            .sheet(isPresented: $controller.showDatePicker, content: {
+                VStack {
+                    DatePicker("날짜", selection: $controller.date, displayedComponents: .date)
+                        .datePickerStyle(WheelDatePickerStyle())
+                        .labelsHidden()
+                    
+                    Button(action: {
+                        controller.selectedDate = formatDate(controller.date)
+                        controller.showDatePicker = false
+                    }) {
+                        Text("적용")
+                            .font(.bodyNormal)
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.primary900)
+                            .cornerRadius(8)
+                    }
+                    .padding(.top, 16) // 위쪽 여백 추가
+                }
+                .padding(.horizontal, 24) // 좌우 여백 추가
+                .padding(.vertical, 20)  // 상하 여백 추가
+                
+                .cornerRadius(26)
+                .presentationDetents([.fraction(0.45)]) // 이로 인해
+            })
+            // 🔹 이미지 선택
+            .sheet(isPresented: $controller.openPhoto) {
+                ImagePicker(sourceType: .photoLibrary, selectedImage: $controller.images)
+            }
+            
         }
     }
 }
@@ -156,5 +183,58 @@ struct CategoryButton: View {
                 .padding(10)
         }
         .fixedSize()
+    }
+}
+
+
+struct ImageListView: View {
+    @ObservedObject var controller = MainAddScreenController()
+    
+    var body: some View {
+        HStack(alignment: .bottom) {
+            Button(action: {
+                // 이미지 업로드 로직
+                controller.openPhoto.toggle()
+            }) {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(controller.imageEmpty ? Color.error : Color.natural80, lineWidth: 2)
+                    .frame(width: 100, height: 100)
+                    .foregroundColor(.white)
+                    .overlay {
+                        ImageView(imageName: "camera", width: 50, height: 40)
+                    }
+            }
+            .padding(.trailing, 2)
+            
+            // 이미지 리스트 (가로스크롤)
+            ScrollView(.horizontal) {
+                HStack {
+                    ForEach(controller.images.indices, id: \.self) { index in
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(.clear)
+                            .frame(width: 108, height: 108, alignment: .bottomLeading)
+                            .overlay(alignment: .bottomLeading) {
+                                ZStack(alignment: .topTrailing) {
+                                    Image(uiImage: controller.images[index])
+                                        .resizable()
+                                        .scaledToFill() // 🔹 꽉 차게 채우기
+                                        .frame(width: 100, height: 100)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10)) // 🔹 넘치는 부분 자르기
+                                        .clipped()
+                                }
+                                Button(action: {
+                                    controller.images.remove(at: index) // 삭제 기능 추가 가능
+                                }) {
+                                    ImageView(imageName: "close-circle", width: 20, height: 20)
+                                }
+                                .offset(x: 50, y: -47)
+                            }
+                    }
+                }
+            }
+            
+            
+        }
+        .frame(height: 108, alignment: .bottom)
     }
 }

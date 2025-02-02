@@ -22,9 +22,16 @@ struct MainNavigationView<Content: View, SecondPage: View>: View {
     
     var body: some View {
         NavigationStack {
-            ZStack {
+//            VStack {
                 content()
-            }
+//                    .navigationDestination(isPresented: $isSecondPage) {
+//                        if let secondPage = secondPage {
+//                            secondPage() // `secondPage` 클로저 호출
+//                        }
+//                        
+//                    }
+//            }
+            
             .toolbar { // SwiftUI toolbar 유지
                 ToolbarItem(placement: .navigationBarLeading) {
                     Text(title)
@@ -46,12 +53,7 @@ struct MainNavigationView<Content: View, SecondPage: View>: View {
                 }
             }
             
-            .navigationDestination(isPresented: $isSecondPage) {
-                if let secondPage = secondPage {
-                    secondPage() // `secondPage` 클로저 호출
-                }
-                
-            }
+
             
             
         }
