@@ -80,23 +80,23 @@ struct ClearBackgroundView: UIViewRepresentable {
     func updateUIView(_ uiView: UIView, context: Context) {}
 }
 
-struct ClearBackgroundViewModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        if #available(iOS 16.4, *) {
-            content
-                .presentationBackground(.clear)
-        } else {
-            content
-                .background(ClearBackgroundView())
-        }
-    }
-}
+//struct ClearBackgroundViewModifier: ViewModifier {
+//    func body(content: Content) -> some View {
+//        if #available(iOS 16.4, *) {
+//            content
+//                .presentationBackground(.clear)
+//        } else {
+//            content
+//                .background(ClearBackgroundView())
+//        }
+//    }
+//}
 
-extension View {
-    func clearModalBackground()->some View {
-        self.modifier(ClearBackgroundViewModifier())
-    }
-}
+//extension View {
+//    func clearModalBackground()->some View {
+//        self.modifier(ClearBackgroundViewModifier())
+//    }
+//}
 
 struct MainSheetScreen_Previews: PreviewProvider {
     static var previews: some View {

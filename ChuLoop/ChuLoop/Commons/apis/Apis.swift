@@ -10,4 +10,5 @@ enum ApisV1: String {
     case naverLogin = "/auth/naver"
     case kakaoLogin = "/auth/kakao"
     case appleLogin = "/auth/apple"
+    case edPost = "/ed-post"
 }
