@@ -11,20 +11,31 @@ struct TimelineCard: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-//            Image(uiImage: UIImage(data: Data(base64Encoded: item.images)!)!)
-            if let base64String = item.images.first,
-               let imageData = Data(base64Encoded: base64String),
-               let uiImage = UIImage(data: imageData) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 200)
-                    .clipped()
-                    .cornerRadius(10)
-                    .onTapGesture {
-                        showSheet.toggle()
+            if let imageUrl = URL(string: item.images.first ?? "") {
+                AsyncImage(url: imageUrl) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView() // 로딩 중 표시
+                            .frame(height: 200)
+                    case .success(let image):
+                        image.resizable()
+                            .scaledToFill()
+                            .frame(height: 200)
+                            .clipped()
+                            .cornerRadius(10)
+                            .onTapGesture {
+                                showSheet.toggle()
+                            }
+                    case .failure:
+                        Image(systemName: "MainTest2") // 로드 실패 시 기본 이미지
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 200)
+                            .foregroundColor(.gray)
+                    @unknown default:
+                        EmptyView()
                     }
-                
+                }
             }
             
             VStack(alignment: .leading, spacing: 10) {
