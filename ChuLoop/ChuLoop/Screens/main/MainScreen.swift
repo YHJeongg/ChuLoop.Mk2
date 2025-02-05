@@ -25,14 +25,20 @@ struct MainScreen: View {
                 } else if controller.contents.isEmpty {
                     VStack {
                         Spacer()
-                        Text("타임라인이 비어있어요\n방문했던 맛집을 추가해 주세요")
-                            .font(.bodyMedium)
-                            .foregroundColor(.black)
-                            .multilineTextAlignment(.center)
-                            .padding()
+                        Text("타임라인이 비어있어요\n")
+                            .foregroundColor(.natural60) +
+                        Text("맛집을 추가")
+                            .foregroundColor(.blue)
+                            .underline() +
+                        Text("해 주세요")
+                            .foregroundColor(.natural60)
+                        
                         Spacer()
                     }
+                    .font(.bodyMedium)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .multilineTextAlignment(.center)
+                    .padding()
                 } else {
                     ScrollView {
                         VStack(spacing: 20) {

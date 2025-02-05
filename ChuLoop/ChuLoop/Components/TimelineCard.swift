@@ -10,24 +10,24 @@ struct TimelineCard: View {
     @Binding var showSheet: Bool
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack {
+            // 이미지
             if let imageUrl = URL(string: item.images.first ?? "") {
                 AsyncImage(url: imageUrl) { phase in
                     switch phase {
                     case .empty:
-                        ProgressView() // 로딩 중 표시
+                        ProgressView()
                             .frame(height: 200)
                     case .success(let image):
                         image.resizable()
                             .scaledToFill()
                             .frame(height: 200)
                             .clipped()
-                            .cornerRadius(10)
                             .onTapGesture {
                                 showSheet.toggle()
                             }
                     case .failure:
-                        Image(systemName: "MainTest2") // 로드 실패 시 기본 이미지
+                        Image(systemName: "photo")
                             .resizable()
                             .scaledToFit()
                             .frame(height: 200)
@@ -38,47 +38,57 @@ struct TimelineCard: View {
                 }
             }
             
-            VStack(alignment: .leading, spacing: 10) {
-                Text(item.title)
-                    .font(.bodyMediumBold)
-                    .lineLimit(1)
-                
-                Text(item.address)
-                    .font(.bodyXSmall)
-                    .foregroundColor(.black)
-                
+            VStack(alignment: .leading, spacing: 1) {
+                // 타이틀 + 날짜
                 HStack {
-                    Text("\(item.date)")
-                        .font(.bodySmall)
-                        .foregroundColor(.black)
+                    Text(item.title)
+                        .font(.bodyMediumBold)
+                        .foregroundColor(.natural90)
+                        .lineLimit(1)
                     
                     Spacer()
                     
+                    Text(item.date)
+                        .font(.bodySmall)
+                        .foregroundColor(.natural60)
+                }
+                
+                // 주소
+                Text(item.address)
+                    .font(.bodyXSmall)
+                    .foregroundColor(.natural60)
+                    .padding(.bottom, 20)
+                
+                // 별점 + 공유 토글
+                HStack {
                     HStack(spacing: 4) {
                         Image(systemName: "star.fill")
-                            .foregroundColor(.red)
+                            .foregroundColor(.error)
                             .font(.caption)
                         
                         Text(String(format: "%.1f", item.rating))
-                            .font(.caption)
+                            .font(.bodyXSmall)
                     }
-                }
-                
-                HStack {
-                    Text("커뮤니티에 공유하기")
-                        .font(.bodySmall)
-                        .foregroundColor(.black)
                     
                     Spacer()
                     
-                    Toggle("", isOn: $item.shared)
-                        .labelsHidden()
+                    HStack {
+                        Text("커뮤니티에 공유하기")
+                            .font(.bodySmall)
+                            .foregroundColor(.natural80)
+                        
+                        Toggle("", isOn: $item.shared)
+                            .labelsHidden()
+                    }
                 }
             }
-            .padding()
+            .padding(12)
         }
-        .background(Color.white)
-        .cornerRadius(15)
-        .shadow(color: Color.gray.opacity(0.2), radius: 5, x: 0, y: 2)
+        .background(Color.primary50)
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.natural60, lineWidth: 0.5)
+        )
     }
 }
