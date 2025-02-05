@@ -9,9 +9,7 @@ struct LoginScreen: View {
     @EnvironmentObject private var loginController: LoginController 
     
     var body: some View {
-        if(loginController.navigateToMain) {
-            MainTabView()
-        } else {
+
 //            NavigationStack {
                 VStack(alignment: .center, spacing: 20) {
                     // 로고 및 hook 내용 텍스트
@@ -73,7 +71,8 @@ struct LoginScreen: View {
     //                MainTabView()
     //            }
 //            }
-        }
+             
+//        }
         
     }
 }

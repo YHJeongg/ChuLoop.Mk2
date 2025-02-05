@@ -43,10 +43,10 @@ struct MainNavigationView<Content: View>: View {
                     }
                 }
             }
-            .toolbarBackground(Color.primary300, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarBackground(Color.white, for: .tabBar)
-            .toolbarBackground(.visible, for: .tabBar)
+//            .toolbarBackground(Color.primary300, for: .navigationBar)
+//            .toolbarBackground(.visible, for: .navigationBar)
+//            .toolbarBackground(Color.white, for: .tabBar)
+//            .toolbarBackground(.visible, for: .tabBar)
             
         }
     }

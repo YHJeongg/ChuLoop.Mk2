@@ -23,6 +23,7 @@ class LoginController: ObservableObject {
     
     // 로그인 API
     func login<T: Encodable>(service: LoginService, data: T?) {
+        
         Task { @MainActor in
             isLoading = true
             loginMessage = "로그인 중..."
@@ -72,4 +73,17 @@ class LoginController: ObservableObject {
             isLoading = false
         }
     }
+    
+    func getAccessToken() -> Bool {
+        if let _ = KeychainHelper.shared.read(service: "com.chuloop.auth", account: "accessToken") {
+            
+            print("Access Token found in Keychain")
+            return true
+        } else {
+            
+            print("Access Token not found in Keychain")
+            return false
+        }
+    }
+
 }

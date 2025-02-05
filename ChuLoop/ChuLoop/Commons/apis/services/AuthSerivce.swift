@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import SwiftUI
 
 final class AuthSerivce {
+    
     func googleLogin<T: Encodable>(data: T?) async -> ResponseVO {
         do {
             let result = await HTTP.shared.post(
