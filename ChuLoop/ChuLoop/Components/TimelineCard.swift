@@ -17,11 +17,11 @@ struct TimelineCard: View {
                     switch phase {
                     case .empty:
                         ProgressView()
-                            .frame(height: 200)
+                            .frame(height: 250)
                     case .success(let image):
                         image.resizable()
                             .scaledToFill()
-                            .frame(height: 200)
+                            .frame(height: 250)
                             .clipped()
                             .onTapGesture {
                                 showSheet.toggle()
@@ -85,9 +85,9 @@ struct TimelineCard: View {
             .padding(12)
         }
         .background(Color.primary50)
-        .cornerRadius(10)
+        .cornerRadius(5)
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: 5)
                 .stroke(Color.natural60, lineWidth: 0.5)
         )
     }
