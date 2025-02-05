@@ -89,7 +89,7 @@ struct MainAddScreen: View {
                         Spacer()
                         Button(action: {
                             // 저장 로직
-                            controller.submit()
+                            controller.submit(mainController: mainController)
                             
                         }) {
                             Text("저장하기")
@@ -135,7 +135,7 @@ struct MainAddScreen: View {
                         .labelsHidden()
                     
                     Button(action: {
-                        controller.selectedDate = formatDate(controller.date)
+                        controller.selectedDate = formatdotYYYYMMDDEEE(controller.date)
                         controller.showDatePicker = false
                     }) {
                         Text("적용")
@@ -156,7 +156,7 @@ struct MainAddScreen: View {
             })
             // 🔹 이미지 선택
             .sheet(isPresented: $controller.openPhoto) {
-                ImagePicker(sourceType: .photoLibrary, selectedImage: $controller.images)
+                ImagePicker(sourceType: .photoLibrary, selectedImage: $controller.images, selectedData: $controller.selectedData)
             }
             
         }

@@ -13,12 +13,8 @@ import KakaoSDKCommon
 struct ChuLoopApp: App {
     
     @StateObject private var loginController = LoginController()
-    @State private var isAutoLogin: Bool = false
-        
-       
     
     init() {
-//        getAccessToken()
         configNavigationBarAppearance()
         NaverLoginController().configure()
         KakaoLoginController().configure()
@@ -46,8 +42,6 @@ struct ChuLoopApp: App {
                         }
                     }
             }
-            
-//            MainTabView()
         }
     }
 }

@@ -12,4 +12,12 @@ final class MainService {
             queryParameters: queryParameters
         )
     }
+    
+    func postEdPost<T: Encodable>(data: T) async -> ResponseVO {
+        return await HTTP.shared.post(endpoint: ApisV1.edPost.rawValue, body: data)
+    }
+    
+    func postEdPostImage<T: Encodable>(imageData: T) async -> ResponseVO {
+        return await HTTP.shared.post(endpoint: ApisV1.edPostImage.rawValue, body: imageData)
+    }
 }

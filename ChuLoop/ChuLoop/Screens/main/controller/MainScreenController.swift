@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 class MainScreenController: ObservableObject {
     @Published var isNavigatingToAddScreen: Bool = false
     @Published var isLoading: Bool = true

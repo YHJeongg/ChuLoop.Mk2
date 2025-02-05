@@ -11,7 +11,7 @@ struct MainScreen: View {
     @State private var showSheet: Bool = false
     
     var body: some View {
-        MainNavigationView(title: "타임라인") {
+        MainNavigationView(title: "타임라인", content: {
             VStack {
                 // Search bar
                 SearchBar(searchText: $searchText)
@@ -50,10 +50,15 @@ struct MainScreen: View {
                     }
                 }
             }
+            .navigationDestination(isPresented: $controller.isNavigatingToAddScreen, destination: {MainAddScreen(mainController: controller)})
             .onAppear {
                 controller.fetchTimelineData()  // 데이터를 fetch
             }
-        }
+        }, onAddButtonTapped: {
+            controller.goToAddScreen()
+        })
+        
+        
     }
 }
 
