@@ -22,7 +22,6 @@ struct MainNavigationView<Content: View>: View {
             ZStack {
                 content()
             }
-            
             .toolbar { // SwiftUI toolbar 유지
                 ToolbarItem(placement: .navigationBarLeading) {
                     Text(title)
@@ -43,11 +42,6 @@ struct MainNavigationView<Content: View>: View {
                     }
                 }
             }
-//            .toolbarBackground(Color.primary300, for: .navigationBar)
-//            .toolbarBackground(.visible, for: .navigationBar)
-//            .toolbarBackground(Color.white, for: .tabBar)
-//            .toolbarBackground(.visible, for: .tabBar)
-            
         }
     }
 }

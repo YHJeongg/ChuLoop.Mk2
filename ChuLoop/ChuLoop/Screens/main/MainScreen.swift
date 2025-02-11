@@ -57,8 +57,6 @@ struct MainScreen: View {
         }, onAddButtonTapped: {
             controller.goToAddScreen()
         })
-        
-        
     }
 }
 

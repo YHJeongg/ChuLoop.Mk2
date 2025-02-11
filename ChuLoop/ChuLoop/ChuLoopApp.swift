@@ -16,6 +16,7 @@ struct ChuLoopApp: App {
     
     init() {
         configNavigationBarAppearance()
+        configTabView()
         NaverLoginController().configure()
         KakaoLoginController().configure()
     }
