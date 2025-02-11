@@ -108,53 +108,71 @@ class MainAddScreenController: ObservableObject {
 
     // 서버에 이미지를 업로드하는 함수
     func uploadImageToServer(imageData: Data) async -> String? {
-        // 서버에 업로드할 URL 및 요청 설정
         let url = URL(string: "\(Constants.BASE_URL)\(ApisV1.edPostImage.rawValue)")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
-        
+
+        // 타임아웃 설정 (예: 60초)
+        request.timeoutInterval = 60
+
+        // Bearer Token 설정
+        if let accessToken = KeychainHelper.shared.read(service: "com.chuloop.auth", account: "accessToken"),
+           let token = String(data: accessToken, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !token.isEmpty {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        } else {
+            print("🔴 Error: Bearer Token is missing or invalid")
+            return nil
+        }
+
+        // multipart/form-data 설정
         let boundary = "Boundary-\(UUID().uuidString)"
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        
+
         let body = createMultipartBody(imageData: imageData, boundary: boundary)
         request.httpBody = body
-        
+        request.setValue("\(body.count)", forHTTPHeaderField: "Content-Length") // 추가
+
         // 서버 응답 처리
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
-            
-            // 서버 응답을 디코딩
+
+            if let httpResponse = response as? HTTPURLResponse {
+                print("🔹 Response Status Code: \(httpResponse.statusCode)")  // 상태 코드 확인
+            }
+
+            let responseString = String(data: data, encoding: .utf8) ?? "Invalid UTF-8 Response"
+            print("🔹 Response Body: \(responseString)")  // 응답 본문 확인
+
             let decoder = JSONDecoder()
-            if let imageUploadResponse = try? decoder.decode(ImageUploadResponse.self, from: data),
-               imageUploadResponse.status == 200 {
-                // 서버에서 받은 첫 번째 imageUrl 반환
+            let imageUploadResponse = try decoder.decode(ImageUploadResponse.self, from: data)
+
+            if imageUploadResponse.status == 200 {
                 return imageUploadResponse.data.first
             } else {
-                
-                print("Failed to upload image or invalid response")
+                print("🔴 Failed: Server returned status \(imageUploadResponse.status)")
                 return nil
             }
- 
         } catch {
-            print("Error uploading image: \(error)")
+            print("🔴 JSON Decoding Error: \(error)")
             return nil
         }
     }
-
+    
+    
     // 이미지 데이터를 FormData 형식으로 변환하는 함수
     func createMultipartBody(imageData: Data, boundary: String) -> Data {
         var body = Data()
-        
+
         // 이미지 데이터 추가
         body.append("--\(boundary)\r\n".data(using: .utf8)!) // Boundary 추가
-        body.append("Content-Disposition: form-data; name=\"file\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!) // Content-Disposition 헤더
+        body.append("Content-Disposition: form-data; name=\"ed-post-images\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!) // Content-Disposition 헤더
         body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!) // Content-Type 헤더
         body.append(imageData) // 이미지 데이터
         body.append("\r\n".data(using: .utf8)!) // 줄바꿈
-        
+
         body.append("--\(boundary)--\r\n".data(using: .utf8)!) // Boundary 종료
-        
+
         return body
     }
 }

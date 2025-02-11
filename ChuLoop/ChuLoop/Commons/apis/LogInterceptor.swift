@@ -7,8 +7,13 @@ import Foundation
 
 final class LogInterceptor: URLProtocol {
     private static let handledKey = "LogInterceptorHandled"
-    //    private let accessToken = Constants.ACCESS_TOKEN // 토큰을 저장 (예: Access Token)
-    
+//    private var loginController: LoginController
+//    
+//    // URLProtocol의 지정 초기자 호출
+//    override init(request: URLRequest, cachedResponse: CachedURLResponse?, client: URLProtocolClient?) {
+//        self.loginController = LoginController() // 또는 외부에서 전달받은 로그인 컨트롤러를 사용할 수 있음
+//        super.init(request: request, cachedResponse: cachedResponse, client: client)
+//    }
     // Keychain에서 Access Token을 가져오는 메서드
     private func getAccessToken() -> String? {
         if let accessToken = KeychainHelper.shared.read(service: "com.chuloop.auth", account: "accessToken") {
@@ -55,7 +60,7 @@ final class LogInterceptor: URLProtocol {
             // 토큰이 유효한지 검사
             if let token = accessToken, !checkIsValid(token: token) {
                 print("🔄 Access Token expired, attempting to refresh...")
-
+                
                 // Refresh Token 가져오기
                 if let refreshToken = getRefreshToken() {
                     if let newToken = await reissue(refreshToken: refreshToken) {
@@ -70,24 +75,24 @@ final class LogInterceptor: URLProtocol {
                     print("❌ Refresh Token is missing")
                 }
             }
-
+            
             if let token = accessToken {
                 newRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             } else {
                 print("❌ Access Token is missing, proceeding without authentication")
             }
-
+            
             // httpBody 복사 (필요 시)
             if let bodyStream = request.httpBodyStream {
                 let data = Data(reading: bodyStream)
                 newRequest.httpBody = data
             }
-
+            
             logRequest(newRequest as URLRequest)
             
             // handledKey 설정
             URLProtocol.setProperty(true, forKey: LogInterceptor.handledKey, in: newRequest)
-
+            
             // 실제 요청 수행
             let task = URLSession.shared.dataTask(with: newRequest as URLRequest) { [weak self] data, response, error in
                 if let error = error {
@@ -144,6 +149,7 @@ final class LogInterceptor: URLProtocol {
             }
         } catch {
             print("❌ Error encoding request body: \(error)")
+//            loginController.logOut()
             return nil
         }
         
@@ -154,12 +160,14 @@ final class LogInterceptor: URLProtocol {
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) {
                 print("📥 Server Response: \(json)")
             } else {
+//                loginController.logOut()
                 print("❌ Server returned non-JSON response")
             }
             
             let decodedData = try JSONDecoder().decode(TokenResponse.self, from: data)
             return decodedData.accessToken
         } catch {
+//            loginController.logOut()
             print("❌ Error fetching data: \(error)")
             return nil
         }
