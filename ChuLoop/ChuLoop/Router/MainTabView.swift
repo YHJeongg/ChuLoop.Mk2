@@ -44,7 +44,9 @@ struct MainTabView: View {
                 }
         }
         .background(.blue)
+       
     }
+    
     
 }
 

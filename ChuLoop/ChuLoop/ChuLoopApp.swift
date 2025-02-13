@@ -12,7 +12,7 @@ import KakaoSDKCommon
 @main
 struct ChuLoopApp: App {
     
-    @StateObject private var loginController = LoginController()
+    var commonController = CommonController.shared
     
     init() {
         configNavigationBarAppearance()
@@ -23,11 +23,12 @@ struct ChuLoopApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if(loginController.getAccessToken()) {
+            if(commonController.getAccessToken()) {
                 MainTabView()
+                    .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
             } else {
                 LoginScreen()
-                    .environmentObject(loginController)
+                    .environmentObject(commonController)
                     .onOpenURL { url in
                         GIDSignIn.sharedInstance.handle(url)
                     }
@@ -42,7 +43,9 @@ struct ChuLoopApp: App {
                             
                         }
                     }
+                    .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
             }
+            
         }
     }
 }

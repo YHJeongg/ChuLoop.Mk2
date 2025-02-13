@@ -74,16 +74,6 @@ class LoginController: ObservableObject {
         }
     }
     
-    func getAccessToken() -> Bool {
-        if let _ = KeychainHelper.shared.read(service: "com.chuloop.auth", account: "accessToken") {
-            
-            print("Access Token found in Keychain")
-            return true
-        } else {
-            
-            print("Access Token not found in Keychain")
-            return false
-        }
-    }
+
 
 }
