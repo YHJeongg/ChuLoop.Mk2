@@ -103,7 +103,7 @@ class HTTP {
     }
     
     // MARK: - PUT Request
-    func put<U: Encodable>(endpoint: String, body: U) async -> ResponseVO {
+    func put<U: Encodable>(endpoint: String, body: U?) async -> ResponseVO {
         do {
             let bodyData = try JSONEncoder().encode(body)
             return await request(endpoint: endpoint, method: "PUT", body: bodyData)
@@ -113,7 +113,7 @@ class HTTP {
     }
     
     // MARK: - DELETE Request
-    func delete<U: Encodable>(endpoint: String, body: U) async -> ResponseVO {
+    func delete<U: Encodable>(endpoint: String, body: U?) async -> ResponseVO {
         do {
             let bodyData = try JSONEncoder().encode(body)
             return await request(endpoint: endpoint, method: "DELETE", body: bodyData)

@@ -15,8 +15,6 @@ struct MainScreen: View {
             VStack {
                 // Search bar
                 SearchBar(searchText: $searchText)
-                    .padding(.horizontal)
-                    .padding(.top)
                 
                 if controller.isLoading {
                     ProgressView()
@@ -40,17 +38,31 @@ struct MainScreen: View {
                     .multilineTextAlignment(.center)
                     .padding()
                 } else {
-                    ScrollView {
-                        VStack(spacing: 20) {
-                            ForEach($controller.contents) { $item in
-                                TimelineCard(item: $item, showSheet: $showSheet)
-                            }
+                    List {
+                        ForEach($controller.contents) { $item in
+                            TimelineCard(
+                                item: $item,
+                                showSheet: $showSheet,
+                                isDeletable: true,
+                                onDelete: {
+                                    controller.deletePost(postId: item.id)
+                                },
+                                onShare: {
+                                    controller.sharePost(postId: item.id)
+                                }
+                            )
+                            .listRowInsets(EdgeInsets()) // 리스트 기본 패딩 제거
+                            .listRowSeparator(.hidden)   // 리스트 구분선 숨김
                         }
-                        .padding()
+                        .padding(.bottom, ResponsiveSize.height(0.0268))
+                        .padding(.horizontal, ResponsiveSize.width(0.0558))
                     }
+                    .listStyle(PlainListStyle()) // 기본 스타일 적용
                 }
             }
-            .navigationDestination(isPresented: $controller.isNavigatingToAddScreen, destination: {MainAddScreen(mainController: controller)})
+            .navigationDestination(isPresented: $controller.isNavigatingToAddScreen, destination: {
+                MainAddScreen(mainController: controller)
+            })
             .onAppear {
                 controller.fetchTimelineData()  // 데이터를 fetch
             }

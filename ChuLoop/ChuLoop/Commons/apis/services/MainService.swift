@@ -13,11 +13,26 @@ final class MainService {
         )
     }
     
+    func deleteEdPost(postId: String) async -> ResponseVO {
+        return await HTTP.shared.delete(
+            endpoint: ApisV1.edPost.rawValue + "/\(postId)", 
+            body: ""
+        )
+    }
+    
     func postEdPost<T: Encodable>(data: T) async -> ResponseVO {
         return await HTTP.shared.post(endpoint: ApisV1.edPost.rawValue, body: data)
     }
     
     func postEdPostImage<T: Encodable>(imageData: T) async -> ResponseVO {
         return await HTTP.shared.post(endpoint: ApisV1.edPostImage.rawValue, body: imageData)
+    }
+    
+    func shareEdPost(postId: String) async -> ResponseVO {
+        let body: [String: String] = [:]
+        return await HTTP.shared.put(
+            endpoint: ApisV1.edPostShare.rawValue + "/\(postId)",
+            body: body
+        )
     }
 }

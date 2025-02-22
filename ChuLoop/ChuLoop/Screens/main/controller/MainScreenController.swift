@@ -2,8 +2,6 @@
 //  MainScreenController.swift
 //  ChuLoop
 //
-//  Created by Anna Kim on 1/28/25.
-//
 
 import SwiftUI
 
@@ -42,6 +40,36 @@ class MainScreenController: ObservableObject {
                 }
             }
             isLoading = false
+        }
+    }
+    
+    func deletePost(postId: String) {
+        Task {
+            let response = await mainService.deleteEdPost(postId: postId)
+            
+            if response.success {
+                DispatchQueue.main.async {
+                    self.contents.removeAll { $0.id == postId }
+                }
+            } else {
+                print("삭제 실패: \(response.message ?? "알 수 없는 오류")")
+            }
+        }
+    }
+    
+    func sharePost(postId: String) {
+        Task {
+            let response = await mainService.shareEdPost(postId: postId)
+            
+            if response.success {
+                DispatchQueue.main.async {
+                    if let index = self.contents.firstIndex(where: { $0.id == postId }) {
+                        self.contents[index].shared.toggle()
+                    }
+                }
+            } else {
+                print("공유 실패: \(response.message ?? "알 수 없는 오류")")
+            }
         }
     }
 

@@ -36,7 +36,10 @@ struct ShareScreen: View {
                     ScrollView {
                         VStack(spacing: 20) {
                             ForEach($items) { $item in
-                                TimelineCard(item: $item, showSheet: $showSheet)
+                                TimelineCard(
+                                    item: $item,
+                                    showSheet: $showSheet
+                                )
                             }
                         }
                         .padding()
