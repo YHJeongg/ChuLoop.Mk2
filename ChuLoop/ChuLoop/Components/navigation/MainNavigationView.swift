@@ -20,6 +20,8 @@ struct MainNavigationView<Content: View>: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                Color.primary50
+                    .ignoresSafeArea(.all)
                 content()
             }
             .toolbar { // SwiftUI toolbar 유지

@@ -6,48 +6,32 @@
 import SwiftUI
 
 struct MainTabView: View {
+    
+    @State var selectedTab: Tab = .home
+    
     var body: some View {
-        TabView {
-            MainScreen()
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("홈")
-                        .font(.bodyXXSmall)
-                }
-            
-            VisitScreen()
-                .tabItem {
-                    Image(systemName: "list.bullet")
-                    Text("방문할 맛집")
-                        .font(.bodyXXSmall)
-                }
-            
-            MapScreen()
-                .tabItem {
-                    Image(systemName: "map.fill")
-                    Text("지도로 보기")
-                        .font(.bodyXXSmall)
-                }
-            
-            ShareScreen()
-                .tabItem {
-                    Image(systemName: "square.and.arrow.up.fill")
-                    Text("맛집 공유")
-                        .font(.bodyXXSmall)
-                }
-            
-            MyPageScreen()
-                .tabItem {
-                    Image(systemName: "person.fill")
-                    Text("마이페이지")
-                        .font(.bodyXXSmall)
-                }
+        VStack(spacing: 0) {
+            switch selectedTab {
+            case .home:
+                MainScreen()
+                    .environmentObject(MainScreenController())
+            case .visit:
+                VisitScreen()
+            case .map:
+                MapScreen()
+            case .share:
+                ShareScreen()
+            case .mypage:
+                MyPageScreen()
+            }
+        
+            // 구분선 추가
+            Divider()
+                .background(Color.natural20) // 구분선 색상 조정
+            CustomTabView(selectedTab: $selectedTab)
         }
-        .background(.blue)
-       
+
     }
-    
-    
 }
 
 struct MainTabView_Previews: PreviewProvider {

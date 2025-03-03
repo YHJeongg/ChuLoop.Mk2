@@ -5,6 +5,7 @@
 
 import Foundation
 import UIKit
+import SwiftUICore
 
 func configNavigationBarAppearance() {
     let appearance = UINavigationBarAppearance()
@@ -17,4 +18,5 @@ func configNavigationBarAppearance() {
     UINavigationBar.appearance().scrollEdgeAppearance = appearance
     UINavigationBar.appearance().compactAppearance = appearance
     UINavigationBar.appearance().tintColor = UIColor.white
+    
 }

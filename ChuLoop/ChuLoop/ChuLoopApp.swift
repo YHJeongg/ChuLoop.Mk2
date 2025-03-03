@@ -16,7 +16,7 @@ struct ChuLoopApp: App {
     
     init() {
         configNavigationBarAppearance()
-        configTabView()
+//        configTabView()
         NaverLoginController().configure()
         KakaoLoginController().configure()
     }
@@ -26,6 +26,7 @@ struct ChuLoopApp: App {
             if(commonController.getAccessToken()) {
                 MainTabView()
                     .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
+                    
             } else {
                 LoginScreen()
                     .environmentObject(commonController)

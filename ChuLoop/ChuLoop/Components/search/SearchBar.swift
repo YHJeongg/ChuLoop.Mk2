@@ -31,9 +31,10 @@ struct SearchBar: View {
         .overlay(
             RoundedRectangle(cornerRadius: 5)
                 .stroke(Color.natural40, lineWidth: 0.5)
+                
         )
+        .background(Color.white)
         .padding(.horizontal, ResponsiveSize.width(0.056))
-//        .padding(.vertical, ResponsiveSize.height(0.035))
         .padding(.top, ResponsiveSize.height(0.035))
     }
 }

@@ -35,7 +35,7 @@ struct TimelineCard: View {
             // 내용 부분
             contentSection
         }
-        .background(Color.primary50)
+        .background(Color.white)
         .cornerRadius(5)
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.natural60, lineWidth: 0.5))
         .swipeActions { swipeActions }

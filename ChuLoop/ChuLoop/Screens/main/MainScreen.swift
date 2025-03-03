@@ -38,6 +38,7 @@ struct MainScreen: View {
                     .multilineTextAlignment(.center)
                     .padding()
                 } else {
+                    
                     List {
                         ForEach($controller.contents) { $item in
                             TimelineCard(
@@ -53,12 +54,21 @@ struct MainScreen: View {
                             )
                             .listRowInsets(EdgeInsets()) // 리스트 기본 패딩 제거
                             .listRowSeparator(.hidden)   // 리스트 구분선 숨김
+                            .listRowBackground(Color.clear)
+                            .padding(.top, ResponsiveSize.height(0.0268))
                         }
-                        .padding(.bottom, ResponsiveSize.height(0.0268))
-                        .padding(.horizontal, ResponsiveSize.width(0.0558))
+                        // 마지막 항목 뒤에 여백 추가
+                        if !controller.contents.isEmpty {
+                            Spacer().frame(height: ResponsiveSize.height(0.0268)) // 마지막 항목 뒤에 30px 여백 추가
+                                .listRowSeparator(.hidden) // 여백 뒤 구분선 숨기기
+                            }
                     }
+                    .padding(.horizontal, ResponsiveSize.width(0.0558))
                     .listStyle(PlainListStyle()) // 기본 스타일 적용
+                    .scrollIndicators(.hidden) // ✅ 스크롤 바 제거
+                    
                 }
+                
             }
             .navigationDestination(isPresented: $controller.isNavigatingToAddScreen, destination: {
                 MainAddScreen(mainController: controller)
