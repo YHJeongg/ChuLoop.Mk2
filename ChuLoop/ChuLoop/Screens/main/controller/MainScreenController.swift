@@ -11,12 +11,13 @@ class MainScreenController: ObservableObject {
     @Published var isLoading: Bool = true
     @Published var contents: [MainModel] = []
     @Published var responseModel: [String: Any]?
-    
+
     private let mainService = MainService()
 
-    func fetchTimelineData() {
+    // 기존의 fetchTimelineData 수정
+    func fetchTimelineData(searchText: String = "") {
         Task { @MainActor in
-            let queryParameters: [String: String] = ["search": ""]
+            let queryParameters: [String: String] = ["searchWord": searchText]
             let response = await mainService.getMainScreenData(queryParameters: queryParameters)
             
             guard response.success else {
@@ -43,6 +44,7 @@ class MainScreenController: ObservableObject {
         }
     }
     
+    // 삭제와 공유는 그대로
     func deletePost(postId: String) {
         Task {
             let response = await mainService.deleteEdPost(postId: postId)

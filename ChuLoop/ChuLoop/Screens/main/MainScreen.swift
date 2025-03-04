@@ -4,18 +4,25 @@
 //
 
 import SwiftUI
+import Combine
 
 struct MainScreen: View {
-    @StateObject private var controller = MainScreenController()
+    @StateObject private var controller = MainScreenController() // @StateObject 유지
     @State private var searchText: String = "" // 검색어 상태
     @State private var showSheet: Bool = false
+    @State private var cancellable: AnyCancellable? // 디바운스를 위한 상태
+    
+    // CurrentValueSubject로 검색어를 관리
+    private var searchSubject = CurrentValueSubject<String, Never>("")
     
     var body: some View {
         MainNavigationView(title: "타임라인", content: {
             VStack {
                 // Search bar
-                SearchBar(searchText: $searchText)
-                
+                SearchBar(searchText: $searchText, onSearch: { newSearchText in
+                    searchTextDidChange(to: newSearchText) // 검색어 변경 시 호출
+                })
+
                 if controller.isLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
@@ -54,8 +61,8 @@ struct MainScreen: View {
                             .listRowInsets(EdgeInsets()) // 리스트 기본 패딩 제거
                             .listRowSeparator(.hidden)   // 리스트 구분선 숨김
                         }
-                        .padding(.bottom, ResponsiveSize.height(0.0268))
-                        .padding(.horizontal, ResponsiveSize.width(0.0558))
+                        .padding(.bottom, ResponsiveSize.height(25))
+                        .padding(.horizontal, ResponsiveSize.width(24))
                     }
                     .listStyle(PlainListStyle()) // 기본 스타일 적용
                 }
@@ -64,11 +71,30 @@ struct MainScreen: View {
                 MainAddScreen(mainController: controller)
             })
             .onAppear {
-                controller.fetchTimelineData()  // 데이터를 fetch
+                controller.fetchTimelineData(searchText: searchText)  // 처음 화면 로드 시 데이터 fetch
             }
         }, onAddButtonTapped: {
             controller.goToAddScreen()
         })
+    }
+    
+    // 검색어 변경 시 디바운스 적용
+    func searchTextDidChange(to newValue: String) {
+        searchSubject.send(newValue)  // CurrentValueSubject로 값 변경
+    }
+
+    // 디바운스 처리
+    private func setupDebounce() {
+        cancellable = searchSubject
+            .debounce(for: .milliseconds(500), scheduler: RunLoop.main)  // 디바운스 시간 500ms
+            .sink { value in
+                print("디바운스된 검색어: \(value)")  // 디버깅: 디바운스된 값 확인
+                controller.fetchTimelineData(searchText: value)  // 최종 검색어로 데이터 요청
+            }
+    }
+    
+    init() {
+        setupDebounce() // 디바운스 설정
     }
 }
 
