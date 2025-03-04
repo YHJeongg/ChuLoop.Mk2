@@ -17,8 +17,12 @@ struct MainScreen: View {
     
     var body: some View {
         MainNavigationView(title: "타임라인", content: {
-            VStack {
-                Spacer().frame(height: ResponsiveSize.height(30))
+            VStack(spacing: 0) {
+//                Rectangle()
+//                    .fill(Color.red) // ✅ 배경색 적용
+//                    .frame(height: ResponsiveSize.height(30))
+//                    .listRowSeparator(.hidden) // ✅ 구분선 숨기기
+                Spacer().frame(height: ResponsiveSize.height(30)) // 마지막 항목 뒤에
                 // Search bar
                 SearchBar(searchText: $searchText, onSearch: { newSearchText in
                     searchTextDidChange(to: newSearchText) // 검색어 변경 시 호출

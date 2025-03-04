@@ -21,80 +21,47 @@ struct CustomTabView: View {
 
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
-    
-            Button {
+            TabButton(
+                title: "홈",
+                imageName: selectedTab == .home ? "selected-home" : "home",
+                isSelected: selectedTab == .home,
+                paddingValues: EdgeInsets(top: ResponsiveSize.width(15), leading: 0, bottom: 0, trailing: ResponsiveSize.width(12)) // ✅ 개별 패딩 설정
+            ) {
                 selectedTab = .home
-            } label: {
-                VStack(spacing: 8) {
-                    ImageView(imageName: selectedTab == .home ? "selected-home" : "home", width: 34.0, height: 34.0)
-                    Text("홈")
-                        .foregroundColor(selectedTab == .home ? .primary500 : .natural70)
-                        .font(.bodyXXSmall)
-                        .frame(width: 60, alignment: Alignment.center)
-                }
             }
-            .padding(.top, 15)
-            .padding(.trailing, 12)
             
-            Button {
+            TabButton(
+                title: "방문할 맛집",
+                imageName: selectedTab == .visit ? "selected-cupcake" : "cupcake",
+                isSelected: selectedTab == .visit
+            ) {
                 selectedTab = .visit
-            } label: {
-                VStack(spacing: 8) {
-                    ImageView(imageName: selectedTab == .visit ? "selected-cupcake" : "cupcake", width: 34.0, height: 34.0)
-                    
-                    Text("방문할 맛집")
-                        .foregroundColor(selectedTab == .visit ? .primary500 : .natural70)
-                        .font(.bodyXXSmall)
-                        .frame(width: 60, alignment: Alignment.center)
-                }
             }
-            .padding(.top, 15)
-            .padding(.horizontal, 12.5)
             
-            Button {
+            TabButton(
+                title: "지도로 보기",
+                imageName: selectedTab == .map ? "selected-map" : "map",
+                isSelected: selectedTab == .map
+            ) {
                 selectedTab = .map
-            } label: {
-                VStack(spacing: 8) {
-                    ImageView(imageName: selectedTab == .map ? "selected-map" : "map", width: 34.0, height: 34.0)
-                    
-                    Text("지도로 보기")
-                        .foregroundColor(selectedTab == .map ? .primary500 : .natural70)
-                        .font(.bodyXXSmall)
-                        .frame(width: 60, alignment: Alignment.center)
-                }
             }
-            .padding(.top, 15)
-            .padding(.horizontal, 12.5)
             
-            Button {
+            TabButton(
+                title: "맛집 공유",
+                imageName: selectedTab == .share ? "selected-planet" : "planet",
+                isSelected: selectedTab == .share
+            ) {
                 selectedTab = .share
-            } label: {
-                VStack(spacing: 8) {
-                    ImageView(imageName: selectedTab == .share ? "selected-planet" : "planet", width: 34.0, height: 34.0)
-                    
-                    Text("맛집 공유")
-                        .foregroundColor(selectedTab == .share ? .primary500 : .natural70)
-                        .font(.bodyXXSmall)
-                        .frame(width: 60, alignment: Alignment.center)
-                }
             }
-            .padding(.top, 15)
-            .padding(.horizontal, 12.5)
-        
-            Button {
+            
+            TabButton(
+                title: "마이페이지",
+                imageName: selectedTab == .mypage ? "selected-profile" : "profile",
+                isSelected: selectedTab == .mypage,
+                paddingValues: EdgeInsets(top: ResponsiveSize.width(15), leading: ResponsiveSize.width(12), bottom: 0, trailing: 0) // ✅ 개별 패딩 설정
+            ) {
                 selectedTab = .mypage
-            } label: {
-                VStack(spacing: 8) {
-                    ImageView(imageName: selectedTab == .mypage ? "selected-profile" :  "profile", width: 34.0, height: 34.0)
-                    
-                    Text("마이페이지")
-                        .foregroundColor(selectedTab == .mypage ? .primary500 : .natural70)
-                        .font(.bodyXXSmall)
-                        .frame(width: 60, alignment: Alignment.center)
-                }
             }
-            .padding(.top, 15)
-            .padding(.leading, 12)
         }
     }
 }

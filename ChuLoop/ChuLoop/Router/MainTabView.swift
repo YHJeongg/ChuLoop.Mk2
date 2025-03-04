@@ -26,8 +26,10 @@ struct MainTabView: View {
             }
         
             // 구분선 추가
-            Divider()
-                .background(Color.natural20) // 구분선 색상 조정
+            Rectangle()
+                .fill(Color.natural20) // 구분선 색상 조정)
+                .frame(height: ResponsiveSize.height(1))
+                
             CustomTabView(selectedTab: $selectedTab)
         }
 
