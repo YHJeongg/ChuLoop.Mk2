@@ -18,6 +18,7 @@ struct MainScreen: View {
     var body: some View {
         MainNavigationView(title: "타임라인", content: {
             VStack {
+                Spacer().frame(height: ResponsiveSize.height(30))
                 // Search bar
                 SearchBar(searchText: $searchText, onSearch: { newSearchText in
                     searchTextDidChange(to: newSearchText) // 검색어 변경 시 호출
@@ -62,28 +63,17 @@ struct MainScreen: View {
                             .listRowInsets(EdgeInsets()) // 리스트 기본 패딩 제거
                             .listRowSeparator(.hidden)   // 리스트 구분선 숨김
                             .listRowBackground(Color.clear)
-                            .padding(.top, ResponsiveSize.height(0.0268))
+                            .padding(.top, ResponsiveSize.height(30))
                         }
-<<<<<<< Updated upstream
 
-=======
-<<<<<<< HEAD
->>>>>>> Stashed changes
                         // 마지막 항목 뒤에 여백 추가
                         if !controller.contents.isEmpty {
                             Spacer().frame(height: ResponsiveSize.height(30)) // 마지막 항목 뒤에 30px 여백 추가
                                 .listRowSeparator(.hidden) // 여백 뒤 구분선 숨기기
                             }
-<<<<<<< Updated upstream
 
-=======
-=======
-                        .padding(.bottom, ResponsiveSize.height(25))
-                        .padding(.horizontal, ResponsiveSize.width(24))
->>>>>>> c5aadc5251a66aa3c242e72dc9377b9287a764c3
->>>>>>> Stashed changes
                     }
-                    .padding(.horizontal, ResponsiveSize.width(0.0558))
+                    .padding(.horizontal, ResponsiveSize.width(24))
                     .listStyle(PlainListStyle()) // 기본 스타일 적용
                     .scrollIndicators(.hidden) // ✅ 스크롤 바 제거
                     

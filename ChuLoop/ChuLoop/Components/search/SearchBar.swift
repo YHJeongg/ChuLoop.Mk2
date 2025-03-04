@@ -40,20 +40,9 @@ struct SearchBar: View {
                 .stroke(Color.natural40, lineWidth: 0.5)
                 
         )
-<<<<<<< Updated upstream
-
-        .padding(.horizontal, ResponsiveSize.width(24))
-        .padding(.vertical, ResponsiveSize.height(15))
-
-=======
-<<<<<<< HEAD
         .background(Color.white)
-        .padding(.horizontal, ResponsiveSize.width(0.056))
-        .padding(.top, ResponsiveSize.height(0.035))
-=======
         .padding(.horizontal, ResponsiveSize.width(24))
         .padding(.vertical, ResponsiveSize.height(15))
->>>>>>> c5aadc5251a66aa3c242e72dc9377b9287a764c3
->>>>>>> Stashed changes
+
     }
 }
