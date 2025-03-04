@@ -75,18 +75,18 @@ private extension TimelineCard {
                     switch phase {
                     case .empty:
                         ProgressView()
-                            .frame(height: ResponsiveSize.height(0.2682))
+                            .frame(height: ResponsiveSize.height(250))
                     case .success(let image):
                         image.resizable()
                             .scaledToFill()
-                            .frame(height: ResponsiveSize.height(0.2682))
+                            .frame(height: ResponsiveSize.height(250))
                             .clipped()
                             .onTapGesture { showSheet.toggle() }
                     case .failure:
                         Image(systemName: "photo")
                             .resizable()
                             .scaledToFit()
-                            .frame(height: ResponsiveSize.height(0.2682))
+                            .frame(height: ResponsiveSize.height(250))
                             .foregroundColor(.gray)
                     @unknown default:
                         EmptyView()
@@ -98,13 +98,11 @@ private extension TimelineCard {
 
     // 내용 섹션
     var contentSection: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading) {
             titleAndDateSection
             addressSection
             ratingAndShareSection
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
     }
 
     // 타이틀과 날짜
@@ -121,6 +119,8 @@ private extension TimelineCard {
                 .font(.bodySmall)
                 .foregroundColor(.natural60)
         }
+        .padding(.horizontal, ResponsiveSize.width(15))
+        .padding(.top, ResponsiveSize.height(5))
     }
 
     // 주소
@@ -128,13 +128,14 @@ private extension TimelineCard {
         Text(item.address)
             .font(.bodyXSmall)
             .foregroundColor(.natural60)
-            .padding(.bottom, 20)
+            .padding(.horizontal, ResponsiveSize.width(15))
+            .padding(.top, ResponsiveSize.height(5))
     }
 
     // 별점과 공유 토글
     var ratingAndShareSection: some View {
         HStack {
-            HStack(spacing: 4) {
+            HStack() {
                 Image(systemName: "star.fill")
                     .foregroundColor(.error)
                     .font(.caption)
@@ -160,6 +161,9 @@ private extension TimelineCard {
                     }
             }
         }
+        .padding(.horizontal, ResponsiveSize.width(15))
+        .padding(.top, ResponsiveSize.height(35))
+        .padding(.bottom, ResponsiveSize.height(10))
     }
 
     // 삭제 버튼 처리
