@@ -140,7 +140,7 @@ private extension TimelineCard {
                     .foregroundColor(.error)
                     .font(.caption)
 
-                Text(String(format: "%.1f", item.rating))
+                Text(String(format: "%.1f", Double(item.rating)))
                     .font(.bodyXSmall)
             }
 
