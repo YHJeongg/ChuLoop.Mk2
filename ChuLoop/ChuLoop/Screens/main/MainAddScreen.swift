@@ -18,12 +18,12 @@ struct MainAddScreen: View {
                     
                     // 이미지 업로드 버튼
                     ImageListView(controller: self.controller)
-                    Spacer(minLength: 24)
+                    Spacer(minLength: ResponsiveSize.height(24))
                     // 맛집 이름 텍스트필드
                     CTextField(placeholder: "맛집 이름", text: $controller.restaurantName, textIsEmpty: $controller.titleEmpty, errorText: "맛집 이름을 적어주세요")
-                    Spacer(minLength: 34)
+                    Spacer(minLength: ResponsiveSize.height(34))
                     // 카테고리 선택 1
-                    HStack(spacing: 10) {
+                    HStack(spacing: ResponsiveSize.width(10)) {
                         ForEach(category1, id: \.self) { category in
                             Button(action: {
                                 controller.selectedCategory = category
@@ -34,7 +34,7 @@ struct MainAddScreen: View {
                     }
                     
                     // 카테고리 선택 2
-                    HStack(spacing: 10) {
+                    HStack(spacing: ResponsiveSize.width(10)) {
                         ForEach(category2, id: \.self) { category in
                             Button(action: {
                                 controller.selectedCategory = category
@@ -43,10 +43,10 @@ struct MainAddScreen: View {
                             }
                         }
                     }
-                    Spacer(minLength: 24)
+                    Spacer(minLength: ResponsiveSize.height(24))
                     // 주소 입력
                     CTextField(placeholder: "주소", text: $controller.address, textIsEmpty: $controller.addressEmpty, errorText: "주소를 입력해 주세요")
-                    Spacer(minLength: 34)
+                    Spacer(minLength: ResponsiveSize.height(34))
                     // 날짜 선택
                     VStack {
                         CTextField(placeholder: controller.selectedDate, text: $controller.selectedDate, textIsEmpty: $controller.dateEmpty,
@@ -56,34 +56,34 @@ struct MainAddScreen: View {
                                    readonly: true)
                         
                     }
-                    Spacer(minLength: 24)
+                    Spacer(minLength: ResponsiveSize.height(24))
                     
                     // 별점
                     VStack(alignment: .leading) {
-                        HStack(spacing: 3) {
+                        HStack(spacing: ResponsiveSize.width(3)) {
                             Text("평점")
                                 .font(.bodyNormal)
                             Text("\(controller.rating).0")
                                 .font(.bodySmall)
                         }
-                        HStack(spacing: 5) {
+                        HStack(spacing: ResponsiveSize.width(5)) {
                             ForEach(1...5, id: \.self) { star in
-                                ImageView(imageName: star <= controller.rating ? "star-fill" : "star", width: 24, height: 24)
+                                ImageView(imageName: star <= controller.rating ? "star-fill" : "star", width: ResponsiveSize.width(24), height: ResponsiveSize.height(24))
                                     .onTapGesture {
                                         controller.rating = star
                                     }
                             }
                         }
                     }
-                    Spacer(minLength: 24)
+                    Spacer(minLength: ResponsiveSize.height(24))
                     // 리뷰 작성
-                    VStack(alignment: .leading, spacing: 15) {
+                    VStack(alignment: .leading, spacing: ResponsiveSize.height(15)) {
                         Text("리뷰")
                             .font(.bodyNormal)
                         CTextEditor(placeholder: "식사 후 느꼈던 점을 적어보세요.", text: $controller.review, textIsEmpty: $controller.reviewEmpty, errorText: "리뷰를 적어주세요.")
                     }
                     
-                    Spacer(minLength: 24)
+                    Spacer(minLength: ResponsiveSize.height(24))
                     // 저장 버튼
                     HStack {
                         Spacer()
@@ -94,16 +94,18 @@ struct MainAddScreen: View {
                         }) {
                             Text("저장하기")
                                 .font(.heading4)
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 10)
+                                .padding(.horizontal, ResponsiveSize.width(20))
+                                .padding(.vertical, ResponsiveSize.height(10))
                                 .background(Color.primary900)
                                 .foregroundColor(.white)
                                 .cornerRadius(12)
                         }
+                        
                     }
+                    Spacer(minLength: ResponsiveSize.height(24))
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 20)
+                .padding(.horizontal, ResponsiveSize.width(24))
+                .padding(.top, ResponsiveSize.height(20))
             }
             .background(Color.primary50.ignoresSafeArea()) // 🔹 전체 배경색 변경
             .navigationBarBackButtonHidden(true)
@@ -115,7 +117,7 @@ struct MainAddScreen: View {
                     Button(action: {
                         mainController.goBack() // 뒤로 가기
                     }) {
-                        ImageView(imageName: "closes", width: 16, height: 16)
+                        ImageView(imageName: "closes", width: ResponsiveSize.width(16), height: ResponsiveSize.height(16))
                     }
                 }
                 // 타이틀
@@ -146,10 +148,10 @@ struct MainAddScreen: View {
                             .background(Color.primary900)
                             .cornerRadius(8)
                     }
-                    .padding(.top, 16) // 위쪽 여백 추가
+                    .padding(.top, ResponsiveSize.height(16)) // 위쪽 여백 추가
                 }
-                .padding(.horizontal, 24) // 좌우 여백 추가
-                .padding(.vertical, 20)  // 상하 여백 추가
+                .padding(.horizontal, ResponsiveSize.width(24)) // 좌우 여백 추가
+                .padding(.vertical, ResponsiveSize.height(20))  // 상하 여백 추가
                 
                 .cornerRadius(26)
                 .presentationDetents([.fraction(0.45)]) // 이로 인해
@@ -181,7 +183,7 @@ struct CategoryButton: View {
             Text("# \(category)")
                 .font(.bodyNormal)
                 .foregroundColor(selectedCategory == category ? .natural10 : .natural90)
-                .padding(10)
+                .padding(ResponsiveSize.width(10))
         }
         .fixedSize()
     }
@@ -199,13 +201,13 @@ struct ImageListView: View {
             }) {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(controller.imageEmpty ? Color.error : Color.natural80, lineWidth: 2)
-                    .frame(width: 100, height: 100)
+                    .frame(width: ResponsiveSize.width(100), height: ResponsiveSize.height(100))
                     .foregroundColor(.white)
                     .overlay {
-                        ImageView(imageName: "camera", width: 50, height: 40)
+                        ImageView(imageName: "camera", width: ResponsiveSize.height(50), height: ResponsiveSize.height(40))
                     }
             }
-            .padding(.trailing, 2)
+            .padding(.trailing, ResponsiveSize.width(2))
             
             // 이미지 리스트 (가로스크롤)
             ScrollView(.horizontal) {
@@ -213,20 +215,20 @@ struct ImageListView: View {
                     ForEach(controller.images.indices, id: \.self) { index in
                         RoundedRectangle(cornerRadius: 10)
                             .fill(.clear)
-                            .frame(width: 108, height: 108, alignment: .bottomLeading)
+                            .frame(width: ResponsiveSize.width(108), height: ResponsiveSize.height(108), alignment: .bottomLeading)
                             .overlay(alignment: .bottomLeading) {
                                 ZStack(alignment: .topTrailing) {
                                     Image(uiImage: controller.images[index])
                                         .resizable()
                                         .scaledToFill() // 🔹 꽉 차게 채우기
-                                        .frame(width: 100, height: 100)
+                                        .frame(width: ResponsiveSize.width(100), height: ResponsiveSize.height(100))
                                         .clipShape(RoundedRectangle(cornerRadius: 10)) // 🔹 넘치는 부분 자르기
                                         .clipped()
                                 }
                                 Button(action: {
                                     controller.images.remove(at: index) // 삭제 기능 추가 가능
                                 }) {
-                                    ImageView(imageName: "close-circle", width: 20, height: 20)
+                                    ImageView(imageName: "close-circle", width: ResponsiveSize.width(20), height: ResponsiveSize.height(20))
                                 }
                                 .offset(x: 50, y: -47)
                             }
@@ -236,6 +238,6 @@ struct ImageListView: View {
             
             
         }
-        .frame(height: 108, alignment: .bottom)
+        .frame(height: ResponsiveSize.height(108), alignment: .bottom)
     }
 }
