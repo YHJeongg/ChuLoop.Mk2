@@ -43,7 +43,7 @@ class MainScreenController: ObservableObject {
             isLoading = false
         }
     }
-    
+
     // 삭제와 공유는 그대로
     func deletePost(postId: String) {
         Task {
@@ -58,19 +58,36 @@ class MainScreenController: ObservableObject {
             }
         }
     }
-    
-    func sharePost(postId: String) {
+
+    // 공유하기와 공유 취소 처리
+    func sharePost(postId: String, isShared: Bool) {
         Task {
-            let response = await mainService.shareEdPost(postId: postId)
-            
-            if response.success {
-                DispatchQueue.main.async {
-                    if let index = self.contents.firstIndex(where: { $0.id == postId }) {
-                        self.contents[index].shared.toggle()
+            if isShared {
+                // 공유 취소
+                let response = await mainService.unshareEdPost(postId: postId)
+                
+                if response.success {
+                    DispatchQueue.main.async {
+                        if let index = self.contents.firstIndex(where: { $0.id == postId }) {
+                            self.contents[index].shared = false
+                        }
                     }
+                } else {
+                    print("공유 취소 실패: \(response.message ?? "알 수 없는 오류")")
                 }
             } else {
-                print("공유 실패: \(response.message ?? "알 수 없는 오류")")
+                // 공유하기
+                let response = await mainService.shareEdPost(postId: postId)
+                
+                if response.success {
+                    DispatchQueue.main.async {
+                        if let index = self.contents.firstIndex(where: { $0.id == postId }) {
+                            self.contents[index].shared = true
+                        }
+                    }
+                } else {
+                    print("공유 실패: \(response.message ?? "알 수 없는 오류")")
+                }
             }
         }
     }

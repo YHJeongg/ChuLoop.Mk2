@@ -18,12 +18,7 @@ struct MainScreen: View {
     var body: some View {
         MainNavigationView(title: "타임라인", content: {
             VStack(spacing: 0) {
-//                Rectangle()
-//                    .fill(Color.red) // ✅ 배경색 적용
-//                    .frame(height: ResponsiveSize.height(30))
-//                    .listRowSeparator(.hidden) // ✅ 구분선 숨기기
-                Spacer().frame(height: ResponsiveSize.height(30)) // 마지막 항목 뒤에
-                // Search bar
+                Spacer().frame(height: ResponsiveSize.height(30))
                 SearchBar(searchText: $searchText, onSearch: { newSearchText in
                     searchTextDidChange(to: newSearchText) // 검색어 변경 시 호출
                 })
@@ -50,7 +45,6 @@ struct MainScreen: View {
                     .multilineTextAlignment(.center)
                     .padding()
                 } else {
-                    
                     List {
                         ForEach($controller.contents) { $item in
                             TimelineCard(
@@ -60,8 +54,9 @@ struct MainScreen: View {
                                 onDelete: {
                                     controller.deletePost(postId: item.id)
                                 },
-                                onShare: {
-                                    controller.sharePost(postId: item.id)
+                                onShare: { isShared in
+                                    // 공유 상태에 따라 sharePost 또는 unshareEdPost 호출
+                                    controller.sharePost(postId: item.id, isShared: isShared)
                                 }
                             )
                             .listRowInsets(EdgeInsets()) // 리스트 기본 패딩 제거
@@ -74,15 +69,12 @@ struct MainScreen: View {
                         if !controller.contents.isEmpty {
                             Spacer().frame(height: ResponsiveSize.height(30)) // 마지막 항목 뒤에 30px 여백 추가
                                 .listRowSeparator(.hidden) // 여백 뒤 구분선 숨기기
-                            }
-
+                        }
                     }
                     .padding(.horizontal, ResponsiveSize.width(24))
                     .listStyle(PlainListStyle()) // 기본 스타일 적용
-                    .scrollIndicators(.hidden) // ✅ 스크롤 바 제거
-                    
+                    .scrollIndicators(.hidden) // 스크롤 바 제거
                 }
-                
             }
             .navigationDestination(isPresented: $controller.isNavigatingToAddScreen, destination: {
                 MainAddScreen(mainController: controller)
