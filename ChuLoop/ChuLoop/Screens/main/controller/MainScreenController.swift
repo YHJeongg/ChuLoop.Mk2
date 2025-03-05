@@ -64,7 +64,7 @@ class MainScreenController: ObservableObject {
         Task {
             if isShared {
                 // 공유 취소
-                let response = await mainService.unshareEdPost(postId: postId)
+                let response = await mainService.shareEdPost(postId: postId)
                 
                 if response.success {
                     DispatchQueue.main.async {
@@ -77,7 +77,7 @@ class MainScreenController: ObservableObject {
                 }
             } else {
                 // 공유하기
-                let response = await mainService.shareEdPost(postId: postId)
+                let response = await mainService.unshareEdPost(postId: postId)
                 
                 if response.success {
                     DispatchQueue.main.async {

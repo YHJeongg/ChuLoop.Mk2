@@ -51,8 +51,8 @@ struct TimelineCard: View {
                   })
         }
         .alert(isPresented: $showShareAlert) {
-            Alert(title: Text(toggleState ? "게시글 공유 취소" : "게시글 공유"),
-                  message: Text(toggleState ? "이 게시글의 공유를 취소하시겠습니까?" : "이 게시글을 공유하시겠습니까?"),
+            Alert(title: Text(toggleState ? "게시글 공유" : "게시글 공유 취소"),
+                  message: Text(toggleState ? "이 게시글을 공유하시겠습니까?" : "이 게시글의 공유를 취소하시겠습니까?"),
                   primaryButton: .cancel(Text("취소")) {
                     // 취소 시 toggleState를 원래 상태로 복구하고 alert 닫기
                     toggleState = previousToggleState
