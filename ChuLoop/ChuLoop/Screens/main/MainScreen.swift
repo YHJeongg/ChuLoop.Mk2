@@ -81,6 +81,7 @@ struct MainScreen: View {
             })
             .onAppear {
                 controller.fetchTimelineData(searchText: searchText)  // 처음 화면 로드 시 데이터 fetch
+                setupDebounce() // 디바운스 설정을 onAppear에서 호출
             }
         }, onAddButtonTapped: {
             controller.goToAddScreen()
@@ -103,7 +104,7 @@ struct MainScreen: View {
     }
     
     init() {
-        setupDebounce() // 디바운스 설정
+        // 디바운스 설정을 초기화에서 하지 않고 onAppear에서 호출하도록 변경
     }
 }
 
