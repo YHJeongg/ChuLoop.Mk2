@@ -15,6 +15,7 @@ enum ApisV1: String {
 
     case edPost = "/ed-post"
     case edPostShare = "/ed-post/share"
+    case edPostUnshare = "/ed-post/unshare"
     case edPostImage = "/ed-post/image"
     
 

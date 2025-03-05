@@ -10,14 +10,14 @@ struct TimelineCard: View {
     @Binding var showSheet: Bool
     var isDeletable: Bool = false
     var onDelete: (() -> Void)? = nil
-    var onShare: (() -> Void)? = nil
+    var onShare: ((Bool) -> Void)? = nil  // Bool로 공유 여부를 전달
 
     @State private var showDeleteAlert: Bool = false
     @State private var showShareAlert: Bool = false
     @State private var toggleState: Bool
     @State private var previousToggleState: Bool // 토글 상태 저장
 
-    init(item: Binding<MainModel>, showSheet: Binding<Bool>, isDeletable: Bool = false, onDelete: (() -> Void)? = nil, onShare: (() -> Void)? = nil) {
+    init(item: Binding<MainModel>, showSheet: Binding<Bool>, isDeletable: Bool = false, onDelete: (() -> Void)? = nil, onShare: ((Bool) -> Void)? = nil) {
         self._item = item
         self._showSheet = showSheet
         self.isDeletable = isDeletable
@@ -51,16 +51,16 @@ struct TimelineCard: View {
                   })
         }
         .alert(isPresented: $showShareAlert) {
-            Alert(title: Text("게시글 공유"),
-                  message: Text("이 게시글을 공유하시겠습니까?"),
+            Alert(title: Text(toggleState ? "게시글 공유" : "게시글 공유 취소"),
+                  message: Text(toggleState ? "이 게시글을 공유하시겠습니까?" : "이 게시글의 공유를 취소하시겠습니까?"),
                   primaryButton: .cancel(Text("취소")) {
                     // 취소 시 toggleState를 원래 상태로 복구하고 alert 닫기
                     toggleState = previousToggleState
                     showShareAlert = false
                   },
                   secondaryButton: .default(Text("확인")) {
-                    onShare?()
-                    previousToggleState = toggleState // 공유 후 상태 저장
+                    onShare?(toggleState)  // 공유 여부를 전달
+                    previousToggleState = toggleState // 상태 저장
                   })
         }
     }
@@ -140,7 +140,7 @@ private extension TimelineCard {
                     .foregroundColor(.error)
                     .font(.caption)
 
-                Text(String(format: "%.1f", item.rating))
+                Text(String(format: "%.1f", Double(item.rating)))
                     .font(.bodyXSmall)
             }
 

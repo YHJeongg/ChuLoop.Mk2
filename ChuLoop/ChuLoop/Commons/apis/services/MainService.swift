@@ -7,9 +7,6 @@ import Foundation
 
 final class MainService {
     func getMainScreenData(queryParameters: [String: String]? = nil) async -> ResponseVO {
-        print("=======================")
-        print(queryParameters)
-        print("=======================")
         return await HTTP.shared.get(
             endpoint: ApisV1.edPost.rawValue,
             queryParameters: queryParameters
@@ -35,6 +32,14 @@ final class MainService {
         let body: [String: String] = [:]
         return await HTTP.shared.put(
             endpoint: ApisV1.edPostShare.rawValue + "/\(postId)",
+            body: body
+        )
+    }
+    
+    func unshareEdPost(postId: String) async -> ResponseVO {
+        let body: [String: String] = [:]
+        return await HTTP.shared.put(
+            endpoint: ApisV1.edPostUnshare.rawValue + "/\(postId)",
             body: body
         )
     }
