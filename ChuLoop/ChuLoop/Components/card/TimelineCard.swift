@@ -46,7 +46,7 @@ struct TimelineCard: View {
                     showDeleteAlert = false
                   },
                   secondaryButton: .destructive(Text("삭제")) {
-                    onDelete?()
+                    onDelete?()  // 삭제 처리
                     showDeleteAlert = false
                   })
         }
@@ -115,7 +115,7 @@ private extension TimelineCard {
 
             Spacer()
 
-            Text(item.date)
+            Text(formattedDate(from: item.date))
                 .font(.bodySmall)
                 .foregroundColor(.natural60)
         }
@@ -177,5 +177,18 @@ private extension TimelineCard {
                 }
             }
         }
+    }
+}
+
+// 날짜 변환 함수
+private func formattedDate(from dateString: String) -> String {
+    let inputFormatter = DateFormatter()
+    inputFormatter.locale = Locale(identifier: "ko_KR")
+    inputFormatter.dateFormat = "yyyy.MM.dd" // 서버에서 오는 날짜 형식
+
+    if let date = inputFormatter.date(from: dateString) {
+        return formatdotYYYYMMDDEEE(date)
+    } else {
+        return dateString // 변환 실패 시 원래 문자열 반환
     }
 }
