@@ -5,101 +5,60 @@
 
 import SwiftUI
 
+struct ListItem: Identifiable {
+    let id = UUID() // 각 항목에 고유 ID 부여
+    let title: String
+    let icon: String
+    let destination: AnyView // 뷰 타입을 AnyView로 래핑
+}
+
 struct MyPageScreen: View {
-    let items = [
-        ("하트 게시물 모아 보기", "heart.fill", Color.red),
-        ("설정", "gear", Color.black),
-        ("공지사항", "exclamationmark.circle.fill", Color.black),
-        ("개인정보 처리방침", "doc.fill", Color.black)
+    @StateObject private var controller = MyPageController() // @StateObject 유지
+    @State private var items: [ListItem] = [
+        ListItem(title: "하트 게시물 모아 보기", icon: "heart", destination: AnyView(HeartScreen())),
+        ListItem(title: "설정", icon: "setting", destination: AnyView(SettingsScreen())),
+        ListItem(title: "공지사항", icon: "info", destination: AnyView(NoticeScreen())),
+        ListItem(title: "개인정보 처리방침", icon: "note", destination: AnyView(PrivacyPolicyScreen()))
     ]
     
     var body: some View {
-        MyPageNavigationView(title: "My Page", content: {
-            List(items, id: \.0) { item, iconName, iconColor in
-                if item == "하트 게시물 모아 보기" {
-                    NavigationLink(destination: HeartScreen()) {
-                        HStack {
-                            Image(systemName: iconName)
-                                .font(.system(size: 20))
-                                .foregroundColor(iconColor)
-                            
-                            Text(item)
-                                .font(.bodyMediumBold)
-                                .foregroundColor(.black)
-                                .padding(.leading, 10)
+        MyPageNavigationView(title: controller.userInfo.nickname, profileUrl: controller.userInfo.photos, content: {
+            VStack(spacing: 0) {
+                Spacer().frame(height: ResponsiveSize.height(22))
+                List {
+                    ForEach(items) { item in
+                        HStack(spacing: 0) {
+                            HStack(spacing: 0) {
+                                ImageView(imageName: item.icon, width: ResponsiveSize.width(30), height: ResponsiveSize.width(30))
+                                Text(item.title)
+                                    .font(.bodyMediumBold)
+                                    .foregroundColor(.natural80)
+                                    .padding(.leading, 15)
+                            }
+                            Spacer() // 왼쪽 HStack과 화살표 사이를 spaceBetween 정렬
+                            ImageView(imageName: "arrow-right", width: ResponsiveSize.width(20), height: ResponsiveSize.width(20))
                         }
+                        .padding(.vertical, ResponsiveSize.height(15))
+                        .padding(.horizontal, ResponsiveSize.width(24))
+                        .background(
+                            NavigationLink(destination: item.destination) {
+                                EmptyView()
+                            }
+                                .buttonStyle(PlainButtonStyle()) // 기본 화살표 제거
+                                .opacity(0) // 터치 가능한 투명 링크
+                        )
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .padding(.vertical, 10)
-                    .listRowSeparator(.hidden)
-                } else if item == "개인정보 처리방침" {
-                    NavigationLink(destination: PrivacyPolicyScreen()) {
-                        HStack {
-                            Image(systemName: iconName)
-                                .font(.system(size: 20))
-                                .foregroundColor(iconColor)
-                            
-                            Text(item)
-                                .font(.bodyMediumBold)
-                                .foregroundColor(.black)
-                                .padding(.leading, 10)
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .padding(.vertical, 10)
-                    .listRowSeparator(.hidden)
-                } else if item == "공지사항" {
-                    NavigationLink(destination: NoticeScreen()) {
-                        HStack {
-                            Image(systemName: iconName)
-                                .font(.system(size: 20))
-                                .foregroundColor(iconColor)
-                            
-                            Text(item)
-                                .font(.bodyMediumBold)
-                                .foregroundColor(.black)
-                                .padding(.leading, 10)
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .padding(.vertical, 10)
-                    .listRowSeparator(.hidden)
-                } else if item == "설정" {
-                    NavigationLink(destination: SettingsScreen()) {
-                        HStack {
-                            Image(systemName: iconName)
-                                .font(.system(size: 20))
-                                .foregroundColor(iconColor)
-                            
-                            Text(item)
-                                .font(.bodyMediumBold)
-                                .foregroundColor(.black)
-                                .padding(.leading, 10)
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .padding(.vertical, 10)
-                    .listRowSeparator(.hidden)
-                } else {
-                    NavigationLink(destination: Text("\(item) 화면")) {
-                        HStack {
-                            Image(systemName: iconName)
-                                .font(.system(size: 20))
-                                .foregroundColor(iconColor)
-                            
-                            Text(item)
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(.black)
-                                .padding(.leading, 10)
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .padding(.vertical, 10)
-                    .listRowSeparator(.hidden)
+                    .listRowSeparator(.hidden) // 구분선 숨기기
+                    .listRowInsets(EdgeInsets()) // 기본 패딩 제거
                 }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden) // List 배경 제거
             }
-            .scrollContentBackground(.hidden)
+            
         })
+        .onAppear {
+            controller.getUserInfo();
+        }
     }
 }
 
