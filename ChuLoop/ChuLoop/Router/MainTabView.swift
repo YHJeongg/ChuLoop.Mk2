@@ -8,6 +8,8 @@ import SwiftUI
 struct MainTabView: View {
     
     @State var selectedTab: Tab = .home
+    @State private var showTabView = true  // TabView가 표시되는지 여부를 제어하는 상태
+    
     
     var body: some View {
         VStack(spacing: 0) {
@@ -22,17 +24,18 @@ struct MainTabView: View {
             case .share:
                 ShareScreen()
             case .mypage:
-                MyPageScreen()
+                MyPageScreen(showTabView: $showTabView)  // MyPageNavigationView로 상태 전달
             }
-        
             // 구분선 추가
             Rectangle()
                 .fill(Color.natural20) // 구분선 색상 조정)
                 .frame(height: ResponsiveSize.height(1))
-                
-            CustomTabView(selectedTab: $selectedTab)
+            // TabView가 보일 때만 나타나도록 처리
+            if showTabView {
+                CustomTabView(selectedTab: $selectedTab)
+            }
         }
-
+    
     }
 }
 

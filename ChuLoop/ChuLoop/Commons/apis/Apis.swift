@@ -14,6 +14,8 @@ enum ApisV1: String {
     case appleLogin = "/auth/apple"
     
     case userInfo = "/user/info"
+    case user = "/user"
+    case userImage = "/user/image"
 
     case edPost = "/ed-post"
     case edPostShare = "/ed-post/share"

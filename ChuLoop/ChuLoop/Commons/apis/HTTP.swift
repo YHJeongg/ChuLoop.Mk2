@@ -87,14 +87,15 @@ class HTTP {
     }
     
     // MARK: - POST
-    func post<T: Encodable>(
-        endpoint: String,
-        body: T?
+    func post(
+        endpoint: String, body: Encodable? = nil
     ) async -> ResponseVO {
         do {
-            let bodyData = try JSONEncoder().encode(body)
-            let result = await request(endpoint: endpoint, method: "POST", body: bodyData);
-            return result
+            if let body = body {
+                let bodyData = try JSONEncoder().encode(body)
+                return await request(endpoint: endpoint, method: "POST", body: bodyData);
+            }
+            return await request(endpoint: endpoint, method: "POST");
             
         } catch {
             return ResponseVO(status: 400, message: "Encoding error: \(error.localizedDescription)")
@@ -103,20 +104,26 @@ class HTTP {
     }
     
     // MARK: - PUT Request
-    func put<U: Encodable>(endpoint: String, body: U?) async -> ResponseVO {
+    func put(endpoint: String, body: Encodable? = nil) async -> ResponseVO {
         do {
-            let bodyData = try JSONEncoder().encode(body)
-            return await request(endpoint: endpoint, method: "PUT", body: bodyData)
+            if let body = body {
+                let bodyData = try JSONEncoder().encode(body)
+                return await request(endpoint: endpoint, method: "PUT", body: bodyData)
+            }
+            return await request(endpoint: endpoint, method: "PUT")
         } catch {
             return ResponseVO(status: 400, message: "Encoding error: \(error.localizedDescription)")
         }
     }
     
     // MARK: - DELETE Request
-    func delete<U: Encodable>(endpoint: String, body: U?) async -> ResponseVO {
+    func delete(endpoint: String, body: Encodable? = nil) async -> ResponseVO {
         do {
-            let bodyData = try JSONEncoder().encode(body)
-            return await request(endpoint: endpoint, method: "DELETE", body: bodyData)
+            if let body = body {
+                let bodyData = try JSONEncoder().encode(body)
+                return await request(endpoint: endpoint, method: "DELETE", body: bodyData)
+            }
+            return await request(endpoint: endpoint, method: "DELETE")
         } catch {
             return ResponseVO(status: 400, message: "Encoding error: \(error.localizedDescription)")
         }

@@ -14,15 +14,20 @@ struct ListItem: Identifiable {
 
 struct MyPageScreen: View {
     @StateObject private var controller = MyPageController() // @StateObject 유지
-    @State private var items: [ListItem] = [
-        ListItem(title: "하트 게시물 모아 보기", icon: "heart", destination: AnyView(HeartScreen())),
-        ListItem(title: "설정", icon: "setting", destination: AnyView(SettingsScreen())),
-        ListItem(title: "공지사항", icon: "info", destination: AnyView(NoticeScreen())),
-        ListItem(title: "개인정보 처리방침", icon: "note", destination: AnyView(PrivacyPolicyScreen()))
-    ]
+    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
+    
+    // ✅ computed property로 변경
+    private var items: [ListItem] {
+            [
+                ListItem(title: "하트 게시물 모아 보기", icon: "heart", destination: AnyView(HeartScreen())),
+                ListItem(title: "설정", icon: "setting", destination: AnyView(SettingsScreen(controller: controller))), // ✅ 여기서 controller 사용 가능
+                ListItem(title: "공지사항", icon: "info", destination: AnyView(NoticeScreen())),
+                ListItem(title: "개인정보 처리방침", icon: "note", destination: AnyView(PrivacyPolicyScreen()))
+            ]
+        }
     
     var body: some View {
-        MyPageNavigationView(title: controller.userInfo.nickname, profileUrl: controller.userInfo.photos, content: {
+        MyPageNavigationView(title: controller.userInfo.nickname, profileUrl: controller.userInfo.photos, showTabView: $showTabView, content: {
             VStack(spacing: 0) {
                 Spacer().frame(height: ResponsiveSize.height(22))
                 List {
@@ -41,29 +46,42 @@ struct MyPageScreen: View {
                         .padding(.vertical, ResponsiveSize.height(15))
                         .padding(.horizontal, ResponsiveSize.width(24))
                         .background(
-                            NavigationLink(destination: item.destination) {
-                                EmptyView()
-                            }
+                            NavigationLink(destination: item.destination
+                                .onAppear {
+                                    // 해당 페이지로 이동할 때 탭뷰 숨기기
+                                    showTabView = false
+                                }
+                                .onDisappear {
+                                    // 페이지를 벗어날 때 탭뷰 보이기
+                                    showTabView = true
+                                }) {
+                                    EmptyView()
+                                    
+                                }
                                 .buttonStyle(PlainButtonStyle()) // 기본 화살표 제거
                                 .opacity(0) // 터치 가능한 투명 링크
                         )
                     }
+                    .background(Color.primary50)  // 여기에 배경색을 지정 (예: primary50)
                     .listRowSeparator(.hidden) // 구분선 숨기기
                     .listRowInsets(EdgeInsets()) // 기본 패딩 제거
                 }
+                
                 .listStyle(.plain)
                 .scrollContentBackground(.hidden) // List 배경 제거
+                
             }
             
         })
         .onAppear {
+            showTabView = true
             controller.getUserInfo();
         }
     }
 }
 
-struct MyPageScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        MyPageScreen()
-    }
-}
+//struct MyPageScreen_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MyPageScreen()
+//    }
+//}

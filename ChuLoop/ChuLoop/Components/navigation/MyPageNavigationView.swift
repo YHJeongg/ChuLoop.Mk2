@@ -6,18 +6,22 @@
 import SwiftUI
 
 struct MyPageNavigationView<Content: View>: View {
+    
     let title: String
     let profileUrl: String
     let content: () -> Content
+    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
     
-    init(title: String, profileUrl: String, @ViewBuilder content: @escaping () -> Content) {
+    init(title: String, profileUrl: String, showTabView: Binding<Bool>, @ViewBuilder content: @escaping () -> Content) {
         self.title = title
         self.profileUrl = profileUrl
         self.content = content
+        self._showTabView = showTabView
     }
     
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(alignment: .leading, spacing: 0) {
                 // navigation bar
                 ZStack(alignment: .bottomLeading) {
@@ -45,20 +49,25 @@ struct MyPageNavigationView<Content: View>: View {
                     Color.primary50
                         .ignoresSafeArea(.all)
                     content()
+                        .onAppear {
+                            print("appear")
+                            // SubPageNavigationView로 들어가면 TabView 숨기기
+                            showTabView = true
+                        }
+//                        .onDisappear {
+//                            print("disappear")
+//                            // 나갈 때 TabView 다시 보이기
+//                            showTabView = false
+//                        }
                 }
             }
         }
+        
         .buttonStyle(PlainButtonStyle())
+        
     }
 }
 
-//struct MyPageNavigationView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MyPageNavigationView(title: "My Page", content: {
-//            Text("My Page Content")
-//        })
-//    }
-//}
 
 
 private extension MyPageNavigationView {

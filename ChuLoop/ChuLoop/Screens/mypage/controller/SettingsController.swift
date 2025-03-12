@@ -9,7 +9,7 @@ import SwiftUI
 
 class SettingsController: ObservableObject {
     @Published var isLoggedOut: Bool = false
-    
+    @Published var nameIsEmpty: Bool = false
     func logout() {
         if KeychainHelper.shared.read(service: "com.chuloop.auth", account: "accessToken") != nil {
             KeychainHelper.shared.delete(service: "com.chuloop.auth", account: "accessToken")
@@ -17,4 +17,6 @@ class SettingsController: ObservableObject {
         }
       
     }
+    
+
 }

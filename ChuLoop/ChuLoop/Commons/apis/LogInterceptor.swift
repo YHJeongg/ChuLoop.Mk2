@@ -7,19 +7,22 @@ import Foundation
 
 final class LogInterceptor: URLProtocol {
     private static let handledKey = "LogInterceptorHandled"
-//    private var loginController: LoginController
-//    
-//    // URLProtocol의 지정 초기자 호출
-//    override init(request: URLRequest, cachedResponse: CachedURLResponse?, client: URLProtocolClient?) {
-//        self.loginController = LoginController() // 또는 외부에서 전달받은 로그인 컨트롤러를 사용할 수 있음
-//        super.init(request: request, cachedResponse: cachedResponse, client: client)
-//    }
+    //    private var loginController: LoginController
+    //    
+    //    // URLProtocol의 지정 초기자 호출
+    //    override init(request: URLRequest, cachedResponse: CachedURLResponse?, client: URLProtocolClient?) {
+    //        self.loginController = LoginController() // 또는 외부에서 전달받은 로그인 컨트롤러를 사용할 수 있음
+    //        super.init(request: request, cachedResponse: cachedResponse, client: client)
+    //    }
     // Keychain에서 Access Token을 가져오는 메서드
     private func getAccessToken() -> String? {
         if let accessToken = KeychainHelper.shared.read(service: "com.chuloop.auth", account: "accessToken") {
             return String(data: accessToken, encoding: .utf8)
         }
         print("Access Token not found in Keychain")
+        DispatchQueue.main.async {
+            CommonController.shared.logout()
+        }
         return nil
     }
     
@@ -29,6 +32,9 @@ final class LogInterceptor: URLProtocol {
             return String(data: accessToken, encoding: .utf8)
         }
         print("Access Token not found in Keychain")
+        DispatchQueue.main.async {
+            CommonController.shared.logout()
+        }
         return nil
     }
     
@@ -69,9 +75,19 @@ final class LogInterceptor: URLProtocol {
                         }
                         accessToken = newToken
                     } else {
+                        DispatchQueue.main.async {
+                            if !CommonController.shared.isLoggedOut { // ✅ 중복 로그아웃 방지
+                                CommonController.shared.logout()
+                            }
+                        }
                         print("❌ Failed to refresh Access Token")
                     }
                 } else {
+                    DispatchQueue.main.async {
+                        if !CommonController.shared.isLoggedOut { // ✅ 중복 로그아웃 방지
+                            CommonController.shared.logout()
+                        }
+                    }
                     print("❌ Refresh Token is missing")
                 }
             }
@@ -79,6 +95,11 @@ final class LogInterceptor: URLProtocol {
             if let token = accessToken {
                 newRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             } else {
+//                DispatchQueue.main.async {
+//                           if !CommonController.shared.isLoggedOut { // ✅ 중복 로그아웃 방지
+//                               CommonController.shared.logout()
+//                           }
+//                       }
                 print("❌ Access Token is missing, proceeding without authentication")
             }
             
@@ -149,7 +170,7 @@ final class LogInterceptor: URLProtocol {
             }
         } catch {
             print("❌ Error encoding request body: \(error)")
-//            loginController.logOut()
+            //            loginController.logOut()
             return nil
         }
         
@@ -160,14 +181,14 @@ final class LogInterceptor: URLProtocol {
             if let json = try? JSONSerialization.jsonObject(with: data, options: []) {
                 print("📥 Server Response: \(json)")
             } else {
-//                loginController.logOut()
+                //                loginController.logOut()
                 print("❌ Server returned non-JSON response")
             }
             
             let decodedData = try JSONDecoder().decode(TokenResponse.self, from: data)
             return decodedData.accessToken
         } catch {
-//            loginController.logOut()
+            //            loginController.logOut()
             print("❌ Error fetching data: \(error)")
             return nil
         }

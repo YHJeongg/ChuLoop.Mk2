@@ -2,22 +2,21 @@
 //  ImagePicker.swift
 //  ChuLoop
 //
-//  Created by Anna Kim on 3/11/25.
+//  Created by Anna Kim on 2/2/25.
 //
 import UIKit
 import SwiftUI
 
-struct ImagePicker: UIViewControllerRepresentable {
+struct MultipleImagePicker: UIViewControllerRepresentable {
     
     var sourceType: UIImagePickerController.SourceType = .photoLibrary
     
-    @Binding var selectedImage: UIImage
-    @Binding var selectedData: Data
-    var uploadImage: () async -> Void
+    @Binding var selectedImage: [UIImage]
+    @Binding var selectedData: [Data]
     
     @Environment(\.presentationMode) private var presentationMode
     
-    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
+    func makeUIViewController(context: UIViewControllerRepresentableContext<MultipleImagePicker>) -> UIImagePickerController {
         
         let imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = false
@@ -27,10 +26,9 @@ struct ImagePicker: UIViewControllerRepresentable {
         return imagePicker
     }
     
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePicker>) {
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<MultipleImagePicker>) {
         
     }
-    
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -38,26 +36,23 @@ struct ImagePicker: UIViewControllerRepresentable {
     
     final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
         
-        var parent: ImagePicker
+        var parent: MultipleImagePicker
         
-        init(_ parent: ImagePicker) {
+        init(_ parent: MultipleImagePicker) {
             self.parent = parent
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             
             if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-                parent.selectedImage = image
+                parent.selectedImage.append(image)
             }
             if let image = info[.editedImage] as? UIImage {
-                parent.selectedData = image.jpegData(compressionQuality: 0.8)!  // JPEG로 변환하여 저장
+                parent.selectedData.append(image.jpegData(compressionQuality: 0.8)!)  // JPEG로 변환하여 저장
             } else if let image = info[.originalImage] as? UIImage {
-                parent.selectedData = image.jpegData(compressionQuality: 0.8)!
+                parent.selectedData.append(image.jpegData(compressionQuality: 0.8)!)
             }
-            // ✅ 이미지 선택 후 API 실행 (여기에 네트워크 요청 추가)
-            Task {
-                await parent.uploadImage()
-            }
+            
             
             parent.presentationMode.wrappedValue.dismiss()
         }

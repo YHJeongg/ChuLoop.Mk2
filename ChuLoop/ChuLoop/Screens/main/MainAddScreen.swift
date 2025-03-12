@@ -158,7 +158,7 @@ struct MainAddScreen: View {
             })
             // 🔹 이미지 선택
             .sheet(isPresented: $controller.openPhoto) {
-                ImagePicker(sourceType: .photoLibrary, selectedImage: $controller.images, selectedData: $controller.selectedData)
+                MultipleImagePicker(sourceType: .photoLibrary, selectedImage: $controller.images, selectedData: $controller.selectedData)
             }
             
         }

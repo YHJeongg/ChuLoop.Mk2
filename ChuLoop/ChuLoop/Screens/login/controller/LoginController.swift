@@ -14,6 +14,8 @@ enum LoginService {
 }
 
 class LoginController: ObservableObject {
+       private let commonController = CommonController.shared
+    
     @Published var isLoading: Bool = false
     @Published var loginMessage: String = ""
     @Published var navigateToMain: Bool = false
@@ -46,7 +48,7 @@ class LoginController: ObservableObject {
             if response.success {
                 loginMessage = "로그인 성공!"
                 self.navigateToMain = true
-                
+                commonController.isLoggedOut = false
                 if let responseData = response.data,
                    let accessTokenData = responseData["accessToken"] as? String {
                     

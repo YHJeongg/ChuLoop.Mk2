@@ -6,7 +6,7 @@
 import SwiftUI
 
 struct LoginScreen: View {
-    @EnvironmentObject private var loginController: LoginController 
+    @ObservedObject var loginController: LoginController = LoginController()
     
     var body: some View {
 
@@ -78,8 +78,8 @@ struct LoginScreen: View {
 }
 
 
-struct LoginScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginScreen()
-    }
-}
+//struct LoginScreen_Previews: PreviewProvider {
+//    static var previews: some View {
+//        LoginScreen()
+//    }
+//}

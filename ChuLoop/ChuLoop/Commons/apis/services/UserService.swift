@@ -13,4 +13,18 @@ final class UserService {
         )
     }
     
+    func putUserNickname(userId: String, nickname: String) async -> ResponseVO {
+        return await HTTP.shared.put(
+            endpoint: ApisV1.user.rawValue + "/\(userId)/\(nickname)"
+        )
+    }
+    
+    func postUserImage<T: Encodable>(imageData: T) async -> ResponseVO {
+        return await HTTP.shared.post(
+            endpoint: ApisV1.userImage.rawValue,
+            body: imageData
+        )
+    }
+
+    
 }
