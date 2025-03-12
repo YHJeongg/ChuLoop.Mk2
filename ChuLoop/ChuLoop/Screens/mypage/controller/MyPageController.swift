@@ -117,7 +117,7 @@ class MyPageController: ObservableObject {
     }
     
     func changeProfileImage(multipartData: Data) async {
-        let result = await userSerivce.postUserImage(imageData: multipartData)
+        let result = await userSerivce.postUserImage(userId: userInfo.userId, imageData: multipartData)
 
         if result.success {
             print(result.data ?? "")

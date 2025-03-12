@@ -90,10 +90,8 @@ class MainAddScreenController: ObservableObject {
             )
             
             let result = await mainService.postEdPost(data: requestData)
-            
             if(result.success) {
                 await mainController.goBack()
-                
             } else {
                 print(result.message ?? "")
             }

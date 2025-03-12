@@ -19,9 +19,9 @@ final class UserService {
         )
     }
     
-    func postUserImage<T: Encodable>(imageData: T) async -> ResponseVO {
+    func postUserImage<T: Encodable>(userId: String, imageData: T) async -> ResponseVO {
         return await HTTP.shared.post(
-            endpoint: ApisV1.userImage.rawValue,
+            endpoint: ApisV1.userImage.rawValue + "/\(userId)",
             body: imageData
         )
     }
