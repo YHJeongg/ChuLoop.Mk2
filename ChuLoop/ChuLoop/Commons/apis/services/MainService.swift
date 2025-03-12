@@ -43,4 +43,10 @@ final class MainService {
             body: body
         )
     }
+    
+    func getMainSheetScreenData(postId: String) async -> ResponseVO {
+        return await HTTP.shared.get(
+            endpoint: ApisV1.edPost.rawValue + "/\(postId)"
+        )
+    }
 }

@@ -7,20 +7,20 @@ import SwiftUI
 import Combine
 
 struct MainScreen: View {
-    @StateObject private var controller = MainScreenController() // @StateObject 유지
-    @State private var searchText: String = "" // 검색어 상태
+    @StateObject private var controller = MainScreenController()
+    @State private var searchText: String = ""
     @State private var showSheet: Bool = false
-    @State private var cancellable: AnyCancellable? // 디바운스를 위한 상태
-    
-    // CurrentValueSubject로 검색어를 관리
+    @State private var cancellable: AnyCancellable?
+    @State private var selectedPostId: String?
+
     private var searchSubject = CurrentValueSubject<String, Never>("")
-    
+
     var body: some View {
         MainNavigationView(title: "타임라인", content: {
             VStack(spacing: 0) {
                 Spacer().frame(height: ResponsiveSize.height(30))
                 SearchBar(searchText: $searchText, onSearch: { newSearchText in
-                    searchTextDidChange(to: newSearchText) // 검색어 변경 시 호출
+                    searchTextDidChange(to: newSearchText)
                 })
 
                 if controller.isLoading {
@@ -37,7 +37,7 @@ struct MainScreen: View {
                             .underline() +
                         Text("해 주세요")
                             .foregroundColor(.natural60)
-                        
+
                         Spacer()
                     }
                     .font(.bodyMedium)
@@ -55,58 +55,60 @@ struct MainScreen: View {
                                     controller.deletePost(postId: item.id)
                                 },
                                 onShare: { isShared in
-                                    // 공유 상태에 따라 sharePost 또는 unshareEdPost 호출
                                     controller.sharePost(postId: item.id, isShared: isShared)
                                 }
                             )
-                            .listRowInsets(EdgeInsets()) // 리스트 기본 패딩 제거
-                            .listRowSeparator(.hidden)   // 리스트 구분선 숨김
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                selectedPostId = item.id
+                                showSheet = true
+                            }
+                            .listRowInsets(EdgeInsets())
+                            .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
                             .padding(.top, ResponsiveSize.height(30))
                         }
 
-                        // 마지막 항목 뒤에 여백 추가
                         if !controller.contents.isEmpty {
-                            Spacer().frame(height: ResponsiveSize.height(30)) // 마지막 항목 뒤에 30px 여백 추가
-                                .listRowSeparator(.hidden) // 여백 뒤 구분선 숨기기
+                            Spacer().frame(height: ResponsiveSize.height(30))
+                                .listRowSeparator(.hidden)
                         }
                     }
                     .padding(.horizontal, ResponsiveSize.width(24))
-                    .listStyle(PlainListStyle()) // 기본 스타일 적용
-                    .scrollIndicators(.hidden) // 스크롤 바 제거
+                    .listStyle(PlainListStyle())
+                    .scrollIndicators(.hidden)
                 }
             }
             .navigationDestination(isPresented: $controller.isNavigatingToAddScreen, destination: {
                 MainAddScreen(mainController: controller)
             })
             .onAppear {
-                controller.fetchTimelineData(searchText: searchText)  // 처음 화면 로드 시 데이터 fetch
-                setupDebounce() // 디바운스 설정을 onAppear에서 호출
+                controller.getMainPost(searchText: searchText)
+                setupDebounce()
+            }
+            .sheet(isPresented: $showSheet) {
+                if let postId = selectedPostId {
+                    MainSheetScreen(controller: controller, postId: postId)
+                }
             }
         }, onAddButtonTapped: {
             controller.goToAddScreen()
         })
     }
-    
-    // 검색어 변경 시 디바운스 적용
+
     func searchTextDidChange(to newValue: String) {
-        searchSubject.send(newValue)  // CurrentValueSubject로 값 변경
+        searchSubject.send(newValue)
     }
 
-    // 디바운스 처리
     private func setupDebounce() {
         cancellable = searchSubject
-            .debounce(for: .milliseconds(500), scheduler: RunLoop.main)  // 디바운스 시간 500ms
+            .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .sink { value in
-                print("디바운스된 검색어: \(value)")  // 디버깅: 디바운스된 값 확인
-                controller.fetchTimelineData(searchText: value)  // 최종 검색어로 데이터 요청
+                controller.getMainPost(searchText: value)
             }
     }
-    
-    init() {
-        // 디바운스 설정을 초기화에서 하지 않고 onAppear에서 호출하도록 변경
-    }
 }
+
 
 struct MainScreen_Previews: PreviewProvider {
     static var previews: some View {

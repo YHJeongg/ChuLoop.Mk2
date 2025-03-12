@@ -38,7 +38,15 @@ struct TimelineCard: View {
         .background(Color.white)
         .cornerRadius(5)
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.natural60, lineWidth: 0.5))
-        .swipeActions { swipeActions }
+        .swipeActions {
+            if isDeletable {
+                Button(role: .destructive) {
+                    showDeleteAlert = true
+                } label: {
+                    Label("삭제", systemImage: "trash")
+                }
+            }
+        }
         .alert(isPresented: $showDeleteAlert) {
             Alert(title: Text("삭제 확인"),
                   message: Text("정말 삭제하시겠습니까?"),

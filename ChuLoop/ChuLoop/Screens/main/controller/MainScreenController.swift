@@ -11,11 +11,11 @@ class MainScreenController: ObservableObject {
     @Published var isLoading: Bool = true
     @Published var contents: [MainModel] = []
     @Published var responseModel: [String: Any]?
+    @Published var selectedPost: MainModel?
 
     private let mainService = MainService()
 
-    // 기존의 fetchTimelineData 수정
-    func fetchTimelineData(searchText: String = "") {
+    func getMainPost(searchText: String = "") {
         Task { @MainActor in
             let queryParameters: [String: String] = ["searchWord": searchText]
             let response = await mainService.getMainScreenData(queryParameters: queryParameters)
@@ -100,5 +100,24 @@ class MainScreenController: ObservableObject {
     // 이전 화면으로 돌아가기
     func goBack() {
         isNavigatingToAddScreen = false
+    }
+    
+    func getMainSheetPost(postId: String) {
+        Task { @MainActor in
+            let response = await mainService.getMainSheetScreenData(postId: postId)
+            
+            guard response.success, let data = response.data else {
+                print("데이터 요청 실패: \(response.message ?? "알 수 없는 오류")")
+                return
+            }
+            
+            do {
+                let jsonData = try JSONSerialization.data(withJSONObject: data)
+                let post = try JSONDecoder().decode(MainModel.self, from: jsonData)
+                self.selectedPost = post
+            } catch {
+                print("디코딩 오류: \(error)")
+            }
+        }
     }
 }

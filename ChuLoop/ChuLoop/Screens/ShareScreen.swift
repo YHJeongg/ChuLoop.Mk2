@@ -46,9 +46,6 @@ struct ShareScreen: View {
                     }
                 }
             }
-            .sheet(isPresented: $showSheet) {
-                MainSheetScreen()
-            }
         }
         )
     }

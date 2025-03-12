@@ -13,6 +13,7 @@ struct MainModel: Codable, Identifiable {
     var category: String
     var address: String
     var images: [String]
+    var description: String?
     
     enum CodingKeys: String, CodingKey {
         case id = "_id"
@@ -23,6 +24,7 @@ struct MainModel: Codable, Identifiable {
         case category
         case address
         case images
+        case description
     }
 }
 

@@ -39,9 +39,6 @@ struct HeartScreen: View {
                 }
             }
         }
-        .sheet(isPresented: $showSheet) {
-            MainSheetScreen()
-        }
         .navigationTitle("하트")
     }
 }
