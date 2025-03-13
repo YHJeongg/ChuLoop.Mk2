@@ -129,7 +129,8 @@ struct SettingsScreen: View {
         // 🔹 이미지 선택
             .sheet(isPresented: $controller.openPhoto) {
                 ImagePicker(sourceType: .photoLibrary, selectedImage: $controller.selectedImage, selectedData: $controller.selectedData) {
-                    controller.getProfileImageForUpdate()
+                    await controller.getProfileImageForUpdate()
+                    
                 }
             }
     }

@@ -63,7 +63,7 @@ class MainAddScreenController: ObservableObject {
     func postEdPostImage(mainController: MainScreenController) {
         Task {
             for imageData in selectedData {
-                if let imageUrl = await CommonController.shared.uploadImageToServer(imageData: imageData) {
+                if let imageUrl = await CommonController.shared.uploadImageToServer(endpoint: ApisV1.edPostImage.rawValue, imageData: imageData) {
                     selectedImageUrl.append(imageUrl)
                 } else {
                     print("Failed to upload image")

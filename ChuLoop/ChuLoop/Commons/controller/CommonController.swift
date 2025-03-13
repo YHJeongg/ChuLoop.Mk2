@@ -29,8 +29,9 @@ class CommonController: ObservableObject {
     }
     
     
-    func uploadImageToServer(imageData: Data) async -> String? {
-        let url = URL(string: "\(Constants.BASE_URL)\(ApisV1.edPostImage.rawValue)")!
+    func uploadImageToServer(endpoint: String, imageData: Data) async -> String? {
+        let url = URL(string: "\(Constants.BASE_URL)\(endpoint)")!
+//        let url = URL(string: "\(Constants.BASE_URL)\(ApisV1.edPostImage.rawValue)")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.timeoutInterval = 60  // 타임아웃 설정
@@ -65,14 +66,24 @@ class CommonController: ObservableObject {
             print("🔹 Response Body: \(responseString)")
             
             let decoder = JSONDecoder()
-            let imageUploadResponse = try decoder.decode(ImageUploadResponse.self, from: data)
-            
-            if imageUploadResponse.status == 200 {
-                return imageUploadResponse.data.first
-            } else {
-                print("🔴 Failed: Server returned status \(imageUploadResponse.status)")
-                return nil
-            }
+                let imageUploadResponse = try decoder.decode(ImageUploadResponse.self, from: data)
+
+                if imageUploadResponse.status == 200 {
+                    switch imageUploadResponse.data {
+                    case .single(let imageUrl):
+                        print("✅ 단일 이미지 URL: \(imageUrl)")
+                        return imageUrl
+                    case .multiple(let imageUrls):
+                        print("✅ 여러 개의 이미지 URL: \(imageUrls)")
+                        return imageUrls.first  // 첫 번째 이미지 URL만 사용
+                    case .none:
+                        print("⚠️ Warning: 'data' 필드가 없음")
+                        return nil
+                    }
+                } else {
+                    print("🔴 Failed: Server returned status \(imageUploadResponse.status)")
+                    return nil
+                }
         } catch {
             print("🔴 JSON Decoding Error: \(error)")
             return nil
@@ -84,7 +95,7 @@ class CommonController: ObservableObject {
         var body = Data()
         
         body.append("--\(boundary)\r\n".data(using: .utf8)!)
-        body.append("Content-Disposition: form-data; name=\"ed-post-images\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"image\"; filename=\"image.jpg\"\r\n".data(using: .utf8)!)
         body.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)
         body.append(imageData)
         body.append("\r\n".data(using: .utf8)!)

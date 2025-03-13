@@ -81,44 +81,43 @@ class MyPageController: ObservableObject {
     }
     
     func compressImage(_ image: UIImage, quality: CGFloat = 0.5) -> Data? {
-        return image.jpegData(compressionQuality: quality) // ✅ 압축 품질 조정 (기본 50%)
+        let compressedData = image.jpegData(compressionQuality: quality)
+        print("📌 압축 후 데이터 크기: \(compressedData?.count ?? 0) bytes")
+        
+        if compressedData == nil {
+            print("❌ 이미지 압축 실패")
+        }
+        
+        return compressedData
     }
     
     func processImageForUpload(_ image: UIImage) -> Data? {
         // ✅ 리사이징 (가로 800px, 비율 유지)
-        let targetWidth: CGFloat = 800
+        let targetWidth: CGFloat = 500
         let scaleFactor = targetWidth / image.size.width
         let targetSize = CGSize(width: targetWidth, height: image.size.height * scaleFactor)
         
         let resizedImage = resizeImage(image, targetSize: targetSize)
-
+        
         // ✅ 압축 (50%)
-        return compressImage(resizedImage, quality: 0.3)
+        return compressImage(resizedImage, quality: 0.2)
     }
     
-    func getProfileImageForUpdate() {
-        Task {
-            guard let optimizedData = processImageForUpload(selectedImage) else {
-                print("❌ 이미지 최적화 실패")
-                return
+    func getProfileImageForUpdate() async {
+        if let imageurl = await CommonController.shared.uploadImageToServer(endpoint: "\(ApisV1.userImage.rawValue)/\(userInfo.userId)", imageData: selectedData) {
+            DispatchQueue.main.async { [unowned self] in
+                self.userInfo.photos = imageurl  // ✅ UI 업데이트는 메인 스레드에서 실행!
             }
-
-            let boundary = "Boundary-\(UUID().uuidString)"
-            multipartData = CommonController.shared.createMultipartBody(imageData: optimizedData, boundary: boundary)
-
-            // ✅ multipartData가 nil이면 처리 중단
-            guard let multipartData = multipartData else {
-                print("❌ 이미지 변환 실패")
-                return
-            }
-
-            await changeProfileImage(multipartData: multipartData)
+            print(imageurl)
+        } else {
+            print("Failed to upload image")
         }
     }
     
     func changeProfileImage(multipartData: Data) async {
+        print("✅ 전송할 데이터 크기: \(multipartData.count / 1024) KB")
         let result = await userSerivce.postUserImage(userId: userInfo.userId, imageData: multipartData)
-
+        
         if result.success {
             print(result.data ?? "")
             print(result.message ?? "")
@@ -147,11 +146,11 @@ class MyPageController: ObservableObject {
         }
     }
     
-//    func logout() {
-//        if KeychainHelper.shared.read(service: "com.chuloop.auth", account: "accessToken") != nil {
-//            KeychainHelper.shared.delete(service: "com.chuloop.auth", account: "accessToken")
-//            self.isLoggedOut = true
-//        }
-//        
-//    }
+    //    func logout() {
+    //        if KeychainHelper.shared.read(service: "com.chuloop.auth", account: "accessToken") != nil {
+    //            KeychainHelper.shared.delete(service: "com.chuloop.auth", account: "accessToken")
+    //            self.isLoggedOut = true
+    //        }
+    //
+    //    }
 }
