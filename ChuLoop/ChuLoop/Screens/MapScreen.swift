@@ -27,9 +27,12 @@ struct MapScreen: View {
     ]
     
     @State private var showOptions = false
+    
+    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
+
 
     var body: some View {
-        MainNavigationView(title: "맛집지도",content: {
+        MainNavigationView(title: "맛집지도", showTabView: $showTabView, content: {
             ZStack {
                 Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: restaurants) { restaurant in
                     MapAnnotation(coordinate: restaurant.coordinate) {
@@ -104,9 +107,9 @@ struct MapScreen: View {
         })
     }
 }
-
-struct MapScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        MapScreen()
-    }
-}
+//
+//struct MapScreen_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MapScreen()
+//    }
+//}

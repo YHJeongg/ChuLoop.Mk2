@@ -7,22 +7,28 @@ import SwiftUI
 import Combine
 
 struct MainScreen: View {
-    @StateObject private var controller = MainScreenController()
+    @StateObject var controller = MainScreenController()
     @State private var searchText: String = ""
     @State private var showSheet: Bool = false
     @State private var cancellable: AnyCancellable?
     @State private var selectedPostId: String?
-
-    private var searchSubject = CurrentValueSubject<String, Never>("")
-
+    
+    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
+    
+    
+    var searchSubject = CurrentValueSubject<String, Never>("")
+    
+    
     var body: some View {
-        MainNavigationView(title: "타임라인", content: {
+        MainNavigationView(title: "타임라인",
+                           showTabView: $showTabView,
+                           content: {
             VStack(spacing: 0) {
                 Spacer().frame(height: ResponsiveSize.height(30))
                 SearchBar(searchText: $searchText, onSearch: { newSearchText in
                     searchTextDidChange(to: newSearchText)
                 })
-
+                
                 if controller.isLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
@@ -37,7 +43,7 @@ struct MainScreen: View {
                             .underline() +
                         Text("해 주세요")
                             .foregroundColor(.natural60)
-
+                        
                         Spacer()
                     }
                     .font(.bodyMedium)
@@ -68,7 +74,7 @@ struct MainScreen: View {
                             .listRowBackground(Color.clear)
                             .padding(.top, ResponsiveSize.height(30))
                         }
-
+                        
                         if !controller.contents.isEmpty {
                             Spacer().frame(height: ResponsiveSize.height(30))
                                 .listRowSeparator(.hidden)
@@ -81,6 +87,13 @@ struct MainScreen: View {
             }
             .navigationDestination(isPresented: $controller.isNavigatingToAddScreen, destination: {
                 MainAddScreen(mainController: controller)
+                    .onAppear {
+                        showTabView = false  // 화면이 나타날 때 탭바 보이기
+                    }
+                    .onDisappear {
+                        // 페이지를 벗어날 때 탭뷰 보이기
+                        showTabView = true
+                    }
             })
             .onAppear {
                 controller.getMainPost(searchText: searchText)
@@ -95,11 +108,11 @@ struct MainScreen: View {
             controller.goToAddScreen()
         })
     }
-
+    
     func searchTextDidChange(to newValue: String) {
         searchSubject.send(newValue)
     }
-
+    
     private func setupDebounce() {
         cancellable = searchSubject
             .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
@@ -110,8 +123,8 @@ struct MainScreen: View {
 }
 
 
-struct MainScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        MainScreen()
-    }
-}
+//struct MainScreen_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MainScreen()
+//    }
+//}

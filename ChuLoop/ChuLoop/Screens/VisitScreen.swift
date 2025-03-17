@@ -15,9 +15,11 @@ struct VisitScreen: View {
     
     @State private var searchText: String = ""
     @State private var isSecondPage: Bool = false
-    
+    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
+
+
     var body: some View {
-        MainNavigationView(title: "방문할 맛집", content: {
+        MainNavigationView(title: "방문할 맛집", showTabView: $showTabView, content: {
             VStack(spacing: 0) {
                 // 검색창
                 SearchBar(searchText: $searchText)
@@ -102,6 +104,6 @@ struct VisitPlace: Identifiable {
     let category: String
 }
 
-#Preview {
-    VisitScreen()
-}
+//#Preview {
+//    VisitScreen()
+//}

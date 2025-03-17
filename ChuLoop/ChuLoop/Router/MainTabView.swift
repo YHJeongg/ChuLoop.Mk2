@@ -15,27 +15,27 @@ struct MainTabView: View {
         VStack(spacing: 0) {
             switch selectedTab {
             case .home:
-                MainScreen()
+                MainScreen(showTabView: $showTabView)
                     .environmentObject(MainScreenController())
             case .visit:
-                VisitScreen()
+                VisitScreen(showTabView: $showTabView)
             case .map:
-                MapScreen()
+                MapScreen(showTabView: $showTabView)
             case .share:
-                ShareScreen()
+                ShareScreen(showTabView: $showTabView)
             case .mypage:
                 MyPageScreen(showTabView: $showTabView)  // MyPageNavigationView로 상태 전달
             }
-            // 구분선 추가
-            Rectangle()
-                .fill(Color.natural20) // 구분선 색상 조정)
-                .frame(height: ResponsiveSize.height(1))
             // TabView가 보일 때만 나타나도록 처리
             if showTabView {
+                // 구분선 추가
+                Rectangle()
+                    .fill(Color.natural20) // 구분선 색상 조정
+                    .frame(height: ResponsiveSize.height(1))
                 CustomTabView(selectedTab: $selectedTab)
+                
             }
         }
-    
     }
 }
 

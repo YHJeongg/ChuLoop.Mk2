@@ -7,14 +7,18 @@ import SwiftUI
 
 struct MainNavigationView<Content: View>: View {
     let title: String
+    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
     let content: () -> Content
     let onAddButtonTapped: (() -> Void)?
+
     
     
-    init(title: String, @ViewBuilder content: @escaping () -> Content, onAddButtonTapped: (() -> Void)? = nil) {
+    init(title: String, showTabView: Binding<Bool>, @ViewBuilder content: @escaping () -> Content, onAddButtonTapped: (() -> Void)? = nil) {
         self.title = title
+        self._showTabView = showTabView
         self.content = content
         self.onAddButtonTapped = onAddButtonTapped
+    
     }
     
     var body: some View {
@@ -23,6 +27,10 @@ struct MainNavigationView<Content: View>: View {
                 Color.primary50
                     .ignoresSafeArea(.all)
                 content()
+                    .onAppear {
+                        // SubPageNavigationView로 들어가면 TabView 숨기기
+                        showTabView = true
+                    }
             }
             .toolbar { // SwiftUI toolbar 유지
                 ToolbarItem(placement: .navigationBarLeading) {

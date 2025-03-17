@@ -10,10 +10,12 @@ struct ShareScreen: View {
     @State private var showSheet: Bool = false
     @State private var items: [MainModel] = []
     @State private var isSecondPage: Bool = false
-    
+    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
+
+
     
     var body: some View {
-        MainNavigationView(title: "맛집 커뮤니티", content: {
+        MainNavigationView(title: "맛집 커뮤니티", showTabView: $showTabView, content: {
             VStack {
                 SearchBar(searchText: $searchText)
                     .padding(.horizontal)
@@ -51,6 +53,6 @@ struct ShareScreen: View {
     }
 }
 
-#Preview {
-    ShareScreen()
-}
+//#Preview {
+//    ShareScreen()
+//}

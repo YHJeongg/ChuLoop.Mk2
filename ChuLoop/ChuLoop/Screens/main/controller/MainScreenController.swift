@@ -12,7 +12,8 @@ class MainScreenController: ObservableObject {
     @Published var contents: [MainModel] = []
     @Published var responseModel: [String: Any]?
     @Published var selectedPost: MainModel?
-
+    
+    
     private let mainService = MainService()
 
     func getMainPost(searchText: String = "") {

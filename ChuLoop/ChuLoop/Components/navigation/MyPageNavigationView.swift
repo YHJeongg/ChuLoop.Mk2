@@ -50,21 +50,13 @@ struct MyPageNavigationView<Content: View>: View {
                         .ignoresSafeArea(.all)
                     content()
                         .onAppear {
-                            print("appear")
                             // SubPageNavigationView로 들어가면 TabView 숨기기
                             showTabView = true
                         }
-//                        .onDisappear {
-//                            print("disappear")
-//                            // 나갈 때 TabView 다시 보이기
-//                            showTabView = false
-//                        }
                 }
             }
         }
-        
         .buttonStyle(PlainButtonStyle())
-        
     }
 }
 

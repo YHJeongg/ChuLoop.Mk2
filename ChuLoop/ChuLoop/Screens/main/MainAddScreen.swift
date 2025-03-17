@@ -162,7 +162,6 @@ struct MainAddScreen: View {
             }
             
         }
-//        .toolbar(.hidden, for: .tabBar) // ✅ TabView를 숨김
     }
 }
 
