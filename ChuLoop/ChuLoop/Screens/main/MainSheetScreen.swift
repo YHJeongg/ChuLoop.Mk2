@@ -8,8 +8,11 @@ import SwiftUI
 struct MainSheetScreen: View {
     @Environment(\.dismiss) var dismiss
     @ObservedObject var controller: MainScreenController
+    @State private var currentIndex = 0
     let postId: String
-
+    
+    @State private var isExpanded = false
+    
     var body: some View {
         ZStack {
             if controller.isLoading {
@@ -28,30 +31,80 @@ struct MainSheetScreen: View {
 
                         Spacer()
 
-                        Text(post.title)
-                            .font(.bodyLargeBold)
-                            .fontWeight(.bold)
-                            .lineLimit(1)
-                            .foregroundColor(.white)
+                        VStack {
+                            let title = limitTitle(post.title)
+                            if title.count > 12 {
+                                Text(title.prefix(12) + "\n" + title.dropFirst(12))
+                            } else {
+                                Text(title)
+                            }
+                        }
+                        .font(.bodyLargeBold)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.white)
 
                         Spacer()
 
-                        Text("1 / \(post.images.count)")
+                        Text("\(currentIndex + 1) / \(post.images.count)")
                             .font(.bodyMedium)
                             .foregroundColor(.white)
                     }
                     .padding()
 
-                    if let imageUrl = post.images.first {
-                        AsyncImage(url: URL(string: imageUrl)) { image in
-                            image
-                                .resizable()
-//                                .scaledToFit()
-                        } placeholder: {
-                            ProgressView()
+                    ZStack {
+                        // 이미지 슬라이드
+                        TabView(selection: $currentIndex) {
+                            ForEach(post.images.indices, id: \.self) { index in
+                                AsyncImage(url: URL(string: post.images[index])) { image in
+                                    image.resizable()
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: ResponsiveSize.height(500))
+                                .tag(index) // 현재 인덱스 추적
+                            }
                         }
-                        .frame(maxWidth: .infinity, maxHeight: ResponsiveSize.height(500))
+                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never)) // 기본 인디케이터 숨김
+                        .frame(height: ResponsiveSize.height(500))
                         .padding(.bottom, ResponsiveSize.height(6))
+
+                        // 왼쪽 화살표 (첫 번째 이미지가 아닐 때만 표시)
+                        if currentIndex > 0 {
+                            Button(action: {
+                                withAnimation { currentIndex -= 1 }
+                            }) {
+                                Image(systemName: "chevron.left")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                                    .padding()
+                            }
+                            .offset(x: -UIScreen.main.bounds.width / 2 + 40, y: 0) // 이미지 중앙 왼쪽
+                        }
+
+                        // 오른쪽 화살표 (마지막 이미지가 아닐 때만 표시)
+                        if currentIndex < post.images.count - 1 {
+                            Button(action: {
+                                withAnimation { currentIndex += 1 }
+                            }) {
+                                Image(systemName: "chevron.right")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                                    .padding()
+                            }
+                            .offset(x: UIScreen.main.bounds.width / 2 - 40, y: 0) // 이미지 중앙 오른쪽
+                        }
+
+                        // 페이지 인디케이터 (하단 중앙)
+                        HStack(spacing: 6) {
+                            ForEach(post.images.indices, id: \.self) { index in
+                                Circle()
+                                    .fill(index == currentIndex ? Color.white : Color.gray)
+                                    .frame(width: index == currentIndex ? 10 : 6, height: index == currentIndex ? 10 : 6) // 선택된 인디케이터 크기 증가
+                                    .animation(.easeInOut(duration: 0.2), value: currentIndex) // 애니메이션 추가
+                            }
+                        }
+                        .offset(y: ResponsiveSize.height(240))
                     }
 
                     VStack(alignment: .leading, spacing: 4) {
@@ -71,18 +124,20 @@ struct MainSheetScreen: View {
                             .foregroundColor(.white)
                             .padding(.vertical, ResponsiveSize.height(8))
 
-                        Text(post.description!)
-                            .lineLimit(4)
+                        let description = post.description ?? ""
+                        Text(isExpanded ? description : String(description.prefix(62)))
                             .font(.bodyNormal)
                             .foregroundColor(.white)
                             .padding(.vertical, ResponsiveSize.height(7))
 
-                        Button(action: {
-                            print("더보기 버튼 클릭")
-                        }) {
-                            Text("더보기")
-                                .font(.bodySmallBold)
-                                .foregroundColor(.blue)
+                        if description.count > 62 {
+                            Button(action: {
+                                isExpanded.toggle()
+                            }) {
+                                Text(isExpanded ? "접기" : "더보기")
+                                    .font(.bodySmallBold)
+                                    .foregroundColor(.blue)
+                            }
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -99,6 +154,10 @@ struct MainSheetScreen: View {
         .onAppear {
             controller.getMainSheetPost(postId: postId)
         }
+    }
+
+    func limitTitle(_ title: String) -> String {
+        return String(title.prefix(24))
     }
 }
 
