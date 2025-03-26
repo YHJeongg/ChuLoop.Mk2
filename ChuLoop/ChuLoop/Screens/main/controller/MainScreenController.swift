@@ -8,40 +8,64 @@ import SwiftUI
 @MainActor
 class MainScreenController: ObservableObject {
     @Published var isNavigatingToAddScreen: Bool = false
-    @Published var isLoading: Bool = true
+    @Published var isLoading: Bool = false  // 초기값 false로 변경
     @Published var contents: [MainModel] = []
     @Published var responseModel: [String: Any]?
     @Published var selectedPost: MainModel?
-    
-    
-    private let mainService = MainService()
 
-    func getMainPost(searchText: String = "") {
+    private let mainService = MainService()
+    private var page: Int = 1
+    private let limit: Int = 5
+    private var hasMorePages: Bool = true  // 데이터가 더 있는지 여부
+
+    func getMainPost(searchText: String = "", isRefreshing: Bool = false) {
+        // 중복 호출 방지 + 데이터가 더 없으면 요청 중단
+        guard !isLoading, hasMorePages || isRefreshing else { return }
+
+        if isRefreshing {
+            page = 1
+            hasMorePages = true
+            contents.removeAll()
+        }
+
+        isLoading = true
+
         Task { @MainActor in
-            let queryParameters: [String: String] = ["searchWord": searchText]
+            let queryParameters: [String: String] = [
+                "searchWord": searchText,
+                "page": "\(page)",
+                "limit": "\(limit)"
+            ]
             let response = await mainService.getMainScreenData(queryParameters: queryParameters)
-            
+
             guard response.success else {
                 print("데이터 요청 실패: \(response.message ?? "알 수 없는 오류")")
                 isLoading = false
                 return
             }
-            
+
             if let data = response.data {
                 do {
-                    let responseVO = ResponseVO(status: response.status ?? 0, code: response.code, message: response.message, data: data)
-                    self.responseModel = responseVO.data
+                    let jsonData = try JSONSerialization.data(withJSONObject: data)
+                    let mainResponse = try JSONDecoder().decode(MainResponseModel.self, from: jsonData)
                     
-                    if let data = responseVO.data {
-                        let jsonData = try JSONSerialization.data(withJSONObject: data)
-                        let mainResponse = try JSONDecoder().decode(MainResponseModel.self, from: jsonData)
-                        self.contents = mainResponse.contents
+                    DispatchQueue.main.async {
+                        if isRefreshing {
+                            self.contents = mainResponse.contents
+                        } else {
+                            self.contents.append(contentsOf: mainResponse.contents)
+                        }
+                        self.hasMorePages = mainResponse.contents.count == self.limit
+                        if self.hasMorePages { self.page += 1 }
+                        self.isLoading = false
                     }
                 } catch {
                     print("디코딩 오류: \(error)")
+                    isLoading = false
                 }
+            } else {
+                isLoading = false
             }
-            isLoading = false
         }
     }
 

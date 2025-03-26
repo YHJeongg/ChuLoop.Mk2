@@ -73,12 +73,25 @@ struct MainScreen: View {
                             .listRowSeparator(.hidden)
                             .listRowBackground(Color.clear)
                             .padding(.top, ResponsiveSize.height(30))
+                            .onAppear {
+                                // 마지막 아이템이면서 로딩 중이 아닐 때만 추가 요청
+                                if item.id == controller.contents.last?.id, !controller.isLoading {
+                                    controller.getMainPost(searchText: searchText)
+                                }
+                            }
                         }
-                        
-                        if !controller.contents.isEmpty {
-                            Spacer().frame(height: ResponsiveSize.height(30))
-                                .listRowSeparator(.hidden)
+
+                        if controller.isLoading {
+                            HStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }
+                            .padding()
                         }
+                    }
+                    .refreshable {
+                        controller.getMainPost(searchText: searchText, isRefreshing: true)
                     }
                     .padding(.horizontal, ResponsiveSize.width(24))
                     .listStyle(PlainListStyle())
@@ -121,10 +134,3 @@ struct MainScreen: View {
             }
     }
 }
-
-
-//struct MainScreen_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MainScreen()
-//    }
-//}
