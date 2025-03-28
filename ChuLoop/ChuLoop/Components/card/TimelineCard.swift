@@ -89,7 +89,6 @@ private extension TimelineCard {
                             .scaledToFill()
                             .frame(height: ResponsiveSize.height(250))
                             .clipped()
-                            .onTapGesture { showSheet.toggle() }
                     case .failure:
                         Image(systemName: "photo")
                             .resizable()

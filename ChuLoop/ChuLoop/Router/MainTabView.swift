@@ -18,7 +18,7 @@ struct MainTabView: View {
                 MainScreen(showTabView: $showTabView)
                     .environmentObject(MainScreenController())
             case .visit:
-                VisitScreen(showTabView: $showTabView)
+                WillScreen(showTabView: $showTabView)
             case .map:
                 MapScreen(showTabView: $showTabView)
             case .share:
