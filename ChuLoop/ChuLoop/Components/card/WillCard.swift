@@ -11,17 +11,17 @@ struct WillCard: View {
     var onCopyAddressAndGetDirections: (() -> Void)? = nil
 
     var body: some View {
-        HStack(spacing: 15) {
+        HStack(spacing: 10) {
             // 이미지 부분
             imageSection
 
             // 내용 부분
             contentSection
         }
+        .frame(width: ResponsiveSize.width(382), height: ResponsiveSize.height(140))
         .background(Color.white)
         .cornerRadius(5)
-        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.gray.opacity(0.3), lineWidth: 0.5))
-        .padding(.horizontal)
+        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.natural60, lineWidth: 0.5))
     }
 }
 
@@ -41,7 +41,7 @@ private extension WillCard {
                         image.resizable()
                             .scaledToFill()
                             .frame(width: ResponsiveSize.width(140), height: ResponsiveSize.height(140))
-                            .scaledToFill()
+                            .clipped()
                     case .failure:
                         Image(systemName: "photo")
                             .resizable()
@@ -58,26 +58,26 @@ private extension WillCard {
 
     // 내용 섹션
     var contentSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 4) {
             titleAndCategorySection
             addressSection
-            Spacer()
             actionSection
         }
+        .padding(.trailing, ResponsiveSize.width(10))
     }
 
     // 타이틀과 카테고리
     var titleAndCategorySection: some View {
         HStack {
             Text(place.title)
-                .font(.headline)
+                .font(.bodySmallBold)
                 .foregroundColor(.black)
                 .lineLimit(1)
 
             Spacer()
 
             Text(place.category)
-                .font(.subheadline)
+                .font(.bodyXXSmall)
                 .foregroundColor(.black)
         }
         .padding(.top, 5)
@@ -86,7 +86,7 @@ private extension WillCard {
     // 주소
     var addressSection: some View {
         Text(place.address)
-            .font(.body)
+            .font(.bodyXSmall)
             .foregroundColor(.black)
             .lineLimit(2)
             .padding(.bottom, 8)
@@ -99,8 +99,11 @@ private extension WillCard {
                 onWriteReview?()
             }) {
                 Text("리뷰 작성")
-                    .font(.body)
-                    .foregroundColor(.blue)
+                    .font(.bodySmall)
+                    .foregroundColor(.black)
+                    .frame(width: ResponsiveSize.width(70), height: ResponsiveSize.height(30))
+                    .background(Color.secondary50)
+                    .cornerRadius(8)
             }
 
             Spacer()
@@ -110,8 +113,8 @@ private extension WillCard {
                 onCopyAddressAndGetDirections?()
             }) {
                 Text("주소복사 / 길찾기")
-                    .font(.body)
-                    .foregroundColor(.blue)
+                    .font(.bodyXXSmall)
+                    .foregroundColor(.black)
             }
         }
         .padding(.top, 8)

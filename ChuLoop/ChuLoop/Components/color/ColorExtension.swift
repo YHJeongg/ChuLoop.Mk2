@@ -52,4 +52,6 @@ extension Color {
     static let blue: Color = Color(hex: "487AFF")
     static let purple: Color = Color(hex: "9747FF")
     
+    static let secondary50: Color = Color(hex: "E0F5F5")
+    
 }

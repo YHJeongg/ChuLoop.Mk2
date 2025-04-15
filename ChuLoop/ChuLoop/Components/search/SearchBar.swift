@@ -31,7 +31,7 @@ struct SearchBar: View {
 
            
         }
-        .frame(height: ResponsiveSize.height(45))
+        .frame(width: ResponsiveSize.width(382), height: ResponsiveSize.height(45))
         .overlay(
             RoundedRectangle(cornerRadius: 5)
                 .stroke(Color.natural40, lineWidth: 1)

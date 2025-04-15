@@ -8,13 +8,13 @@ import SwiftUI
 struct WillScreen: View {
     @StateObject private var controller = WillScreenController()
     @State private var searchText: String = ""
+    @State private var isShowingSearchScreen = false
     @Binding var showTabView: Bool
 
     var body: some View {
         MainNavigationView(title: "방문할 맛집", showTabView: $showTabView, content: {
             VStack(spacing: 0) {
                 SearchBar(searchText: $searchText)
-                    .padding(.horizontal)
                     .padding(.top)
                 
                 if controller.isLoading && controller.contents.isEmpty {
@@ -30,12 +30,13 @@ struct WillScreen: View {
                         ForEach($controller.contents) { $place in
                             WillCard(place: $place)
                                 .onAppear {
-                                    // 마지막 아이템에서 추가 데이터 로드
                                     if place.id == controller.contents.last?.id {
                                         controller.getWillPosts(searchText: searchText)
                                     }
                                 }
                         }
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
                         
                         if controller.isLoading {
                             HStack {
@@ -46,18 +47,23 @@ struct WillScreen: View {
                         }
                     }
                     .refreshable {
-                        // 새로 고침
                         controller.getWillPosts(searchText: searchText, isRefreshing: true)
                     }
+                    .listStyle(PlainListStyle())
+                    .scrollIndicators(.hidden)
+                }
+
+                // 화면 전환용 NavigationLink
+                NavigationLink(destination: SearchRestaurantScreen(showTabView: $showTabView), isActive: $isShowingSearchScreen) {
+                    EmptyView()
                 }
             }
             .onAppear {
-                // 화면 등장 시 데이터를 로드
                 controller.getWillPosts(searchText: searchText)
             }
         }, onAddButtonTapped: {
-            // Add 버튼이 눌리면 호출되는 부분
-//            controller.goToAddScreen()
+            showTabView = false
+            isShowingSearchScreen = true
         })
     }
 }
