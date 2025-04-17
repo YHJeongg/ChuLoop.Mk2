@@ -8,14 +8,17 @@ import SwiftUI
 struct SearchRestaurantScreen: View {
     @Binding var showTabView: Bool
     @State private var searchText: String = ""
-    @State private var recentSearches: [String] = [] // 최근 검색 데이터를 저장할 배열
-    @State private var searchResults: [String] = [] // 검색 결과를 저장할 배열
-    @State private var isSearching: Bool = false // 검색 중 여부를 체크하는 변수
+    @State private var recentSearches: [String] = []
+    @State private var searchResults: [Place] = []
+    @State private var isSearching: Bool = false
+    @StateObject private var controller = WillScreenController()
+
+    private let recentSearchesKey = "RecentSearches"
 
     var body: some View {
         SubPageNavigationView(title: "맛집 검색") {
             VStack(alignment: .leading) {
-                HStack() {
+                HStack {
                     ZStack(alignment: .trailing) {
                         TextField("검색", text: $searchText)
                             .padding(.horizontal, ResponsiveSize.width(10))
@@ -28,7 +31,6 @@ struct SearchRestaurantScreen: View {
                                 RoundedRectangle(cornerRadius: 5)
                                     .stroke(Color.natural40, lineWidth: 1)
                             )
-                            .multilineTextAlignment(.leading)
 
                         if !searchText.isEmpty {
                             Button(action: {
@@ -38,7 +40,6 @@ struct SearchRestaurantScreen: View {
                                     .foregroundColor(.black)
                             }
                             .padding(.trailing, ResponsiveSize.width(10))
-                            .zIndex(1)
                         }
                     }
                     .frame(width: ResponsiveSize.width(302))
@@ -46,9 +47,18 @@ struct SearchRestaurantScreen: View {
                     Button(action: {
                         if !searchText.isEmpty {
                             isSearching = true
+                            searchResults = []
+
                             recentSearches.insert(searchText, at: 0)
-                            // 서버에서 검색 결과를 받아오는 함수 호출 예정
-                            // searchResults = ...
+                            recentSearches = Array(NSOrderedSet(array: recentSearches)) as! [String]
+                            if recentSearches.count > 10 {
+                                recentSearches = Array(recentSearches.prefix(10))
+                            }
+                            UserDefaults.standard.set(recentSearches, forKey: recentSearchesKey)
+
+                            controller.GooglePlace(keyword: searchText) { results in
+                                self.searchResults = results
+                            }
                         }
                     }) {
                         Text("검색")
@@ -58,8 +68,6 @@ struct SearchRestaurantScreen: View {
                     .background(Color.primary900)
                     .cornerRadius(8)
                 }
-                .frame(maxWidth: .infinity)
-                .multilineTextAlignment(.center)
 
                 Text(isSearching ? "검색 결과" : "최근 검색")
                     .font(.bodyLargeBold)
@@ -78,16 +86,36 @@ struct SearchRestaurantScreen: View {
                         }
                         .frame(maxHeight: .infinity)
                     } else {
-                        VStack(alignment: .leading) {
-                            ForEach(searchResults, id: \.self) { search in
-                                HStack {
-                                    Image(systemName: "magnifyingglass")
-                                        .foregroundColor(.black)
-                                    Text(search)
-                                        .font(.bodyNormal)
-                                        .foregroundColor(.black)
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: ResponsiveSize.height(16)) {
+                                ForEach(searchResults) { place in
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        HStack {
+                                            Text(place.name)
+                                                .font(.bodyLargeBold)
+                                                .foregroundColor(.black)
+                                            Spacer()
+                                            Text(place.category)
+                                                .font(.bodySmall)
+                                                .foregroundColor(.natural60)
+                                        }
+
+                                        HStack {
+                                            Text(place.address)
+                                                .font(.bodyNormal)
+                                                .foregroundColor(.black)
+                                            Spacer()
+                                            Button(action: {
+                                                UIApplication.shared.open(place.mapURL)
+                                            }) {
+                                                Text("지도보기")
+                                                    .font(.bodySmall)
+                                                    .foregroundColor(.primary900)
+                                            }
+                                        }
+                                    }
+                                    .padding(.vertical, ResponsiveSize.height(6))
                                 }
-                                .padding(.vertical, ResponsiveSize.height(10))
                             }
                         }
                     }
@@ -106,11 +134,33 @@ struct SearchRestaurantScreen: View {
                         VStack(alignment: .leading) {
                             ForEach(recentSearches, id: \.self) { search in
                                 HStack {
-                                    Image(systemName: "magnifyingglass")
-                                        .foregroundColor(.black)
-                                    Text(search)
-                                        .font(.bodyNormal)
-                                        .foregroundColor(.black)
+                                    Button(action: {
+                                        searchText = search
+                                        isSearching = true
+                                        searchResults = []
+
+                                        controller.GooglePlace(keyword: search) { results in
+                                            self.searchResults = results
+                                        }
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "magnifyingglass")
+                                                .foregroundColor(.black)
+                                            Text(search)
+                                                .font(.bodyNormal)
+                                                .foregroundColor(.black)
+                                        }
+                                    }
+                                    Spacer()
+                                    Button(action: {
+                                        if let index = recentSearches.firstIndex(of: search) {
+                                            recentSearches.remove(at: index)
+                                            UserDefaults.standard.set(recentSearches, forKey: recentSearchesKey)
+                                        }
+                                    }) {
+                                        Image(systemName: "xmark")
+                                            .foregroundColor(.black)
+                                    }
                                 }
                                 .padding(.vertical, ResponsiveSize.height(10))
                             }
@@ -125,6 +175,11 @@ struct SearchRestaurantScreen: View {
             .navigationBarTitleDisplayMode(.inline)
             .onDisappear {
                 showTabView = true
+            }
+            .onAppear {
+                if let savedSearches = UserDefaults.standard.stringArray(forKey: recentSearchesKey) {
+                    recentSearches = savedSearches
+                }
             }
             .onChange(of: searchText) { newValue in
                 if newValue.isEmpty {
