@@ -87,34 +87,55 @@ struct SearchRestaurantScreen: View {
                         .frame(maxHeight: .infinity)
                     } else {
                         ScrollView {
-                            VStack(alignment: .leading, spacing: ResponsiveSize.height(16)) {
+                            VStack(alignment: .leading) {
                                 ForEach(searchResults) { place in
                                     VStack(alignment: .leading, spacing: 4) {
                                         HStack {
                                             Text(place.name)
-                                                .font(.bodyLargeBold)
+                                                .font(.bodySmallBold)
                                                 .foregroundColor(.black)
-                                            Spacer()
+//                                            Spacer()
                                             Text(place.category)
-                                                .font(.bodySmall)
-                                                .foregroundColor(.natural60)
+                                                .font(.bodyXXSmall)
+                                                .foregroundColor(.black)
+                                                .frame(maxWidth: .infinity, alignment: .trailing)
                                         }
-
+                                        .padding(.horizontal, ResponsiveSize.width(15))
+                                        .padding(.bottom, ResponsiveSize.height(9))
+                                        
                                         HStack {
                                             Text(place.address)
-                                                .font(.bodyNormal)
+                                                .font(.bodyXSmall)
                                                 .foregroundColor(.black)
-                                            Spacer()
+                                                .lineLimit(nil)
+                                                .fixedSize(horizontal: false, vertical: true)
+                                            
+//                                            Spacer()
+                                            
                                             Button(action: {
                                                 UIApplication.shared.open(place.mapURL)
                                             }) {
                                                 Text("지도보기")
                                                     .font(.bodySmall)
                                                     .foregroundColor(.primary900)
+                                                    .padding(.vertical, ResponsiveSize.height(6))
+                                                    .padding(.horizontal, ResponsiveSize.width(10))
+                                                    .background(Color.secondary50)
+                                                    .cornerRadius(8)
                                             }
+                                            .frame(width: ResponsiveSize.width(70), height: ResponsiveSize.height(30))
+                                            .frame(maxWidth: .infinity, alignment: .trailing)
                                         }
+                                        .padding(.horizontal, ResponsiveSize.width(15))
                                     }
-                                    .padding(.vertical, ResponsiveSize.height(6))
+                                    .padding(.vertical, ResponsiveSize.height(9))
+                                    .frame(width: ResponsiveSize.width(382), height: ResponsiveSize.height(90))
+                                    .background(Color.white)
+                                    .cornerRadius(5)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .stroke(Color.natural40, lineWidth: 1)
+                                    )
                                 }
                             }
                         }
