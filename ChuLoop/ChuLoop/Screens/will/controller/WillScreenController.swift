@@ -46,10 +46,8 @@ class WillScreenController: ObservableObject {
 
             if let data = response.data {
                 do {
-                    // JSONSerialization을 사용하여 [String: Any]에서 Data로 변환
                     let jsonData = try JSONSerialization.data(withJSONObject: data)
 
-                    // Data를 WillResponseModel로 디코딩
                     let willResponse = try JSONDecoder().decode(WillResponseModel.self, from: jsonData)
 
                     DispatchQueue.main.async {

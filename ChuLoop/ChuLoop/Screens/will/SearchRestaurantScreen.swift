@@ -11,6 +11,7 @@ struct SearchRestaurantScreen: View {
     @State private var recentSearches: [String] = []
     @State private var searchResults: [Place] = []
     @State private var isSearching: Bool = false
+    @State private var isLoading: Bool = false
     @StateObject private var controller = WillScreenController()
 
     private let recentSearchesKey = "RecentSearches"
@@ -18,6 +19,7 @@ struct SearchRestaurantScreen: View {
     var body: some View {
         SubPageNavigationView(title: "맛집 검색") {
             VStack(alignment: .leading) {
+                // 검색창
                 HStack {
                     ZStack(alignment: .trailing) {
                         TextField("검색", text: $searchText)
@@ -47,8 +49,10 @@ struct SearchRestaurantScreen: View {
                     Button(action: {
                         if !searchText.isEmpty {
                             isSearching = true
+                            isLoading = true
                             searchResults = []
 
+                            // 최근 검색어 저장
                             recentSearches.insert(searchText, at: 0)
                             recentSearches = Array(NSOrderedSet(array: recentSearches)) as! [String]
                             if recentSearches.count > 10 {
@@ -58,6 +62,7 @@ struct SearchRestaurantScreen: View {
 
                             controller.GooglePlace(keyword: searchText) { results in
                                 self.searchResults = results
+                                self.isLoading = false
                             }
                         }
                     }) {
@@ -74,8 +79,17 @@ struct SearchRestaurantScreen: View {
                     .foregroundColor(.black)
                     .padding(.vertical, ResponsiveSize.height(24))
 
+                // 검색 중일 때
                 if isSearching {
-                    if searchResults.isEmpty {
+                    if isLoading {
+                        ZStack {
+                            Color.clear
+
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle())
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    } else if searchResults.isEmpty {
                         VStack {
                             Spacer()
                             Text("검색결과가 없습니다.")
@@ -86,6 +100,7 @@ struct SearchRestaurantScreen: View {
                         }
                         .frame(maxHeight: .infinity)
                     } else {
+                        // 검색 결과 리스트
                         ScrollView {
                             VStack(alignment: .leading) {
                                 ForEach(searchResults) { place in
@@ -94,7 +109,6 @@ struct SearchRestaurantScreen: View {
                                             Text(place.name)
                                                 .font(.bodySmallBold)
                                                 .foregroundColor(.black)
-//                                            Spacer()
                                             Text(place.category)
                                                 .font(.bodyXXSmall)
                                                 .foregroundColor(.black)
@@ -102,16 +116,14 @@ struct SearchRestaurantScreen: View {
                                         }
                                         .padding(.horizontal, ResponsiveSize.width(15))
                                         .padding(.bottom, ResponsiveSize.height(9))
-                                        
+
                                         HStack {
                                             Text(place.address)
                                                 .font(.bodyXSmall)
                                                 .foregroundColor(.black)
                                                 .lineLimit(nil)
                                                 .fixedSize(horizontal: false, vertical: true)
-                                            
-//                                            Spacer()
-                                            
+
                                             Button(action: {
                                                 UIApplication.shared.open(place.mapURL)
                                             }) {
@@ -141,6 +153,7 @@ struct SearchRestaurantScreen: View {
                         }
                     }
                 } else {
+                    // 최근 검색어
                     if recentSearches.isEmpty {
                         VStack {
                             Spacer()
@@ -158,10 +171,12 @@ struct SearchRestaurantScreen: View {
                                     Button(action: {
                                         searchText = search
                                         isSearching = true
+                                        isLoading = true
                                         searchResults = []
 
                                         controller.GooglePlace(keyword: search) { results in
                                             self.searchResults = results
+                                            self.isLoading = false
                                         }
                                     }) {
                                         HStack {
@@ -205,6 +220,7 @@ struct SearchRestaurantScreen: View {
             .onChange(of: searchText) { newValue in
                 if newValue.isEmpty {
                     isSearching = false
+                    isLoading = false
                     searchResults = []
                 }
             }
