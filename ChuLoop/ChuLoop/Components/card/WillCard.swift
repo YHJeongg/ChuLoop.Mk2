@@ -8,7 +8,10 @@ import SwiftUI
 struct WillCard: View {
     @Binding var place: WillModel
     var onWriteReview: (() -> Void)? = nil
-    var onCopyAddressAndGetDirections: (() -> Void)? = nil
+    var onGetDirections: (() -> Void)? = nil  // 길찾기만 따로 콜백
+    
+    // 길찾기 버튼 클릭 시 나타낼 Sheet 상태
+    @State private var showCustomSheet = false
 
     var body: some View {
         HStack(spacing: 10) {
@@ -22,6 +25,10 @@ struct WillCard: View {
         .background(Color.white)
         .cornerRadius(5)
         .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.natural60, lineWidth: 0.5))
+        .sheet(isPresented: $showCustomSheet) {
+            CustomSheetView(place: place)
+                .clearModalBackground() // 배경을 투명하게 처리
+        }
     }
 }
 
@@ -92,7 +99,7 @@ private extension WillCard {
             .padding(.bottom, 8)
     }
 
-    // 액션 버튼 (리뷰 작성, 주소 복사 및 길찾기 버튼)
+    // 액션 버튼 (리뷰 작성, 주소 복사, 길찾기)
     var actionSection: some View {
         HStack {
             Button(action: {
@@ -108,15 +115,72 @@ private extension WillCard {
 
             Spacer()
 
-            // 주소 복사 / 길찾기 버튼
+            // 주소복사 버튼
             Button(action: {
-                onCopyAddressAndGetDirections?()
+                UIPasteboard.general.string = place.address
             }) {
-                Text("주소복사 / 길찾기")
+                Text("주소복사")
                     .font(.bodyXXSmall)
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary900)
+            }
+
+            // 길찾기 버튼
+            Button(action: {
+                showCustomSheet.toggle()  // 커스텀 시트 띄우기
+            }) {
+                Text("길찾기")
+                    .font(.bodyXXSmall)
+                    .foregroundColor(.primary900)
             }
         }
         .padding(.top, 8)
+    }
+}
+
+struct CustomSheetView: View {
+    var place: WillModel
+
+    var body: some View {
+        VStack {
+            Text("어떤 지도 앱을 사용하시겠어요?")
+                .font(.headline)
+                .padding()
+
+            // 길찾기 앱 선택 버튼
+            HStack {
+                Button(action: {
+                    if let url = URL(string: "kakaomap://route?sp=\(place.address)") {
+                        UIApplication.shared.open(url)
+                    }
+                }) {
+                    Text("카카오맵")
+                        .font(.body)
+                        .padding()
+                }
+
+                Button(action: {
+                    if let url = URL(string: "nmap://navigate?query=\(place.address)") {
+                        UIApplication.shared.open(url)
+                    }
+                }) {
+                    Text("네이버맵")
+                        .font(.body)
+                        .padding()
+                }
+
+                Button(action: {
+                    if let url = URL(string: "maps.apple.com/?q=\(place.address)") {
+                        UIApplication.shared.open(url)
+                    }
+                }) {
+                    Text("애플맵")
+                        .font(.body)
+                        .padding()
+                }
+            }
+        }
+        .background(Color.white)
+        .cornerRadius(10)
+        .padding()
     }
 }

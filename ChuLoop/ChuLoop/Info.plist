@@ -65,5 +65,12 @@
     <string>${NAVER_CLIENT_SECRET}</string>
     <key>GOOGLE_PLACE</key>
     <string>$(GOOGLE_PLACE)</string>
+    
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>kakaomap</string>
+        <string>nmap</string>
+    </array>
+
 </dict>
 </plist>
