@@ -9,10 +9,10 @@ import SwiftUI
 
 struct NoticeScreen: View {
     @ObservedObject var controller: NoticeController // 외부에서 주입받음
-//    @Binding var showTabView: Bool
+    @Binding var showTabView: Bool
     
     var body: some View {
-        SubPageNavigationView(title: "공지사항") {
+        SubPageNavigationView(title: "공지사항", showTabView: $showTabView) {
             if(controller.notices.isEmpty) {
                 VStack(alignment: .center, spacing: 0) {
                     Spacer()
@@ -31,7 +31,7 @@ struct NoticeScreen: View {
             } else {
                 List {
                     ForEach(controller.notices) { notice in
-                        NoticeCard(title: notice.title, date: formatStringToYYYYMMDD(notice.updatedAt == "none" ? notice.createdAt : notice.updatedAt), content: notice.content)
+                        NoticeCard(title: notice.title, date: formatStringToYYYYMMDD(notice.updatedAt == "none" ? notice.createdAt : notice.updatedAt), content: notice.content, showTabView: $showTabView)
                     }
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)

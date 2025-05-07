@@ -13,11 +13,11 @@ struct SearchRestaurantScreen: View {
     @State private var isSearching: Bool = false
     @State private var isLoading: Bool = false
     @StateObject private var controller = WillScreenController()
-
+    
     private let recentSearchesKey = "RecentSearches"
 
     var body: some View {
-        SubPageNavigationView(title: "맛집 검색") {
+        SubPageNavigationView(title: "맛집 검색", showTabView: $showTabView) {
             VStack(alignment: .leading) {
                 // 검색창
                 HStack {

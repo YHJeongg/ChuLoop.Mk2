@@ -13,11 +13,11 @@ struct NoticeDetailScreen: View {
     @ObservedObject var controller: NoticeController // 외부에서 주입받음
     let title: String
     let content: String
-//    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
+    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
         
     
     var body: some View {
-        SubPageNavigationView(title: "공지사항") {
+        SubPageNavigationView(title: "공지사항", showTabView: $showTabView) {
             ZStack(alignment: .topLeading) {
                 Rectangle()
                     .fill(.white)

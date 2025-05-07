@@ -10,9 +10,10 @@ struct SettingsScreen: View {
     
     @ObservedObject var controller: MyPageController // 외부에서 주입받음
     @EnvironmentObject var appState: AppState // 전역 상태 객체
-    //    @Binding var showTabView: Bool
+    @Binding var showTabView: Bool
+    
     var body: some View {
-        SubPageNavigationView(title: "설정") {
+        SubPageNavigationView(title: "설정", showTabView: $showTabView) {
             GeometryReader { geometry in
                 ZStack {
                     ScrollView {

@@ -20,8 +20,8 @@ struct MyPageScreen: View {
     private var items: [ListItem] {
         [
             ListItem(title: "하트 게시물 모아 보기", icon: "heart", destination: AnyView(HeartScreen())),
-            ListItem(title: "설정", icon: "setting", destination: AnyView(SettingsScreen(controller: controller))), // ✅ 여기서 controller 사용 가능
-            ListItem(title: "공지사항", icon: "info", destination: AnyView(NoticeScreen(controller: NoticeController()))),
+            ListItem(title: "설정", icon: "setting", destination: AnyView(SettingsScreen(controller: controller, showTabView: $showTabView))), // ✅ 여기서 controller 사용 가능
+            ListItem(title: "공지사항", icon: "info", destination: AnyView(NoticeScreen(controller: NoticeController(), showTabView: $showTabView))),
             ListItem(title: "개인정보 처리방침", icon: "note", destination: AnyView(PrivacyPolicyScreen()))
         ]
     }
@@ -73,9 +73,9 @@ struct MyPageScreen: View {
             showTabView = true
             controller.getUserInfo();
         }
-        .onDisappear {
-            showTabView = false
-        }
+//        .onDisappear {
+//            showTabView = false
+//        }
     }
 }
 

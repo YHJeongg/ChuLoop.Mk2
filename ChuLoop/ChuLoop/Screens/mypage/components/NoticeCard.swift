@@ -11,7 +11,7 @@ struct NoticeCard: View {
     let title: String
     let date: String
     let content: String
-//    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
+    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
     
 //    @ObservedObject var controller: NoticeController // 외부에서 주입받음
     
@@ -49,7 +49,7 @@ struct NoticeCard: View {
             .padding(.horizontal, ResponsiveSize.width(15))
             .background(Color.clear)
             .background(
-                NavigationLink(destination: AnyView(NoticeDetailScreen(controller: NoticeController(), title: title, content: content)
+                NavigationLink(destination: AnyView(NoticeDetailScreen(controller: NoticeController(), title: title, content: content, showTabView: $showTabView)
                    
                                                    )
                    ) {
