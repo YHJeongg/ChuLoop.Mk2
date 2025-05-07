@@ -37,6 +37,25 @@ func formatdotYYYYMMDD(_ date: Date) -> String {
     return formatter.string(from: date)
 }
 
+// yyyy.MM.dd
+func formatStringToYYYYMMDD(_ dateString: String) -> String {
+    let inputFormatter = DateFormatter()
+    inputFormatter.locale = Locale(identifier: "en_US_POSIX") // ISO 8601 표준 변환에 필수
+    inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    inputFormatter.timeZone = TimeZone(abbreviation: "UTC") // 서버에서 받은 시간은 UTC 기준
+
+    let outputFormatter = DateFormatter()
+    outputFormatter.locale = Locale(identifier: "ko_KR")
+    outputFormatter.dateFormat = "yyyy.MM.dd"
+    outputFormatter.timeZone = TimeZone(identifier: "Asia/Seoul") // 한국 시간 기준 변환
+
+    if let date = inputFormatter.date(from: dateString) {
+        return outputFormatter.string(from: date) // 한국 시간으로 변환 후 반환
+    } else {
+        return "날짜 변환 실패"
+    }
+}
+
 // 시간에 따라 ~일전, ~주전 등으로 표시
 func timeAgo(from dateString: String) -> String {
     let formatter = DateFormatter()

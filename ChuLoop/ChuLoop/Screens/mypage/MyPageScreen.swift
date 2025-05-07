@@ -18,13 +18,13 @@ struct MyPageScreen: View {
     
     // ✅ computed property로 변경
     private var items: [ListItem] {
-            [
-                ListItem(title: "하트 게시물 모아 보기", icon: "heart", destination: AnyView(HeartScreen())),
-                ListItem(title: "설정", icon: "setting", destination: AnyView(SettingsScreen(controller: controller))), // ✅ 여기서 controller 사용 가능
-                ListItem(title: "공지사항", icon: "info", destination: AnyView(NoticeScreen())),
-                ListItem(title: "개인정보 처리방침", icon: "note", destination: AnyView(PrivacyPolicyScreen()))
-            ]
-        }
+        [
+            ListItem(title: "하트 게시물 모아 보기", icon: "heart", destination: AnyView(HeartScreen())),
+            ListItem(title: "설정", icon: "setting", destination: AnyView(SettingsScreen(controller: controller))), // ✅ 여기서 controller 사용 가능
+            ListItem(title: "공지사항", icon: "info", destination: AnyView(NoticeScreen(controller: NoticeController()))),
+            ListItem(title: "개인정보 처리방침", icon: "note", destination: AnyView(PrivacyPolicyScreen()))
+        ]
+    }
     
     var body: some View {
         MyPageNavigationView(title: controller.userInfo.nickname, profileUrl: controller.userInfo.photos, showTabView: $showTabView, content: {
@@ -50,10 +50,6 @@ struct MyPageScreen: View {
                                 .onAppear {
                                     // 해당 페이지로 이동할 때 탭뷰 숨기기
                                     showTabView = false
-                                }
-                                .onDisappear {
-                                    // 페이지를 벗어날 때 탭뷰 보이기
-                                    showTabView = true
                                 }) {
                                     EmptyView()
                                     
@@ -76,6 +72,9 @@ struct MyPageScreen: View {
         .onAppear {
             showTabView = true
             controller.getUserInfo();
+        }
+        .onDisappear {
+            showTabView = false
         }
     }
 }

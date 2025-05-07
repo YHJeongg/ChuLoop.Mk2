@@ -16,15 +16,18 @@ enum ApisV1: String {
     case userInfo = "/user/info"
     case user = "/user"
     case userImage = "/user/image"
+    case likedPost = "/liked-post"
 
     case edPost = "/ed-post"
     case edPostShare = "/ed-post/share"
     case edPostUnshare = "/ed-post/unshare"
     case edPostImage = "/ed-post/image"
     
-    case willPost = "/will-post"
-    
 
+    case willPost = "/will-post"
+
+    case noticeList = "/notice"
+    
     
     
 

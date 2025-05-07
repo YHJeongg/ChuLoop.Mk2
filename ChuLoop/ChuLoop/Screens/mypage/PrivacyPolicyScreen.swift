@@ -21,7 +21,6 @@ struct PrivacyPolicyScreen: View {
                     .fixedSize(horizontal: false, vertical: true) // 텍스트가 길어져도 잘리지 않게 설정
                     .lineLimit(nil) // 텍스트가 여러 줄로 표시되게 함
                     .padding(.top)
-
                 Spacer()
             }
 //            .padding(.top)

@@ -46,8 +46,17 @@ class MainScreenController: ObservableObject {
 
             if let data = response.data {
                 do {
+
                     let jsonData = try JSONSerialization.data(withJSONObject: data)
                     let mainResponse = try JSONDecoder().decode(MainResponseModel.self, from: jsonData)
+
+                    let responseVO = ResponseVO(status: response.status ?? 0, code: response.code, message: response.message, data: data)
+                    if let dictionaryData = responseVO.data as? [String: Any] {
+                        self.responseModel = dictionaryData
+                    } else {
+                        self.responseModel = nil
+                    }
+
                     
                     DispatchQueue.main.async {
                         if isRefreshing {

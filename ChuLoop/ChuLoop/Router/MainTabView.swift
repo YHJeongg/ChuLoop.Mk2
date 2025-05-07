@@ -33,7 +33,6 @@ struct MainTabView: View {
                     .fill(Color.natural20) // 구분선 색상 조정
                     .frame(height: ResponsiveSize.height(1))
                 CustomTabView(selectedTab: $selectedTab)
-                
             }
         }
     }

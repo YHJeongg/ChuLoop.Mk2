@@ -6,6 +6,7 @@
 //
 import SwiftUI
 
+
 class MyPageController: ObservableObject {
     @Published var isLoading: Bool = true
     @Published var userInfo: UserInfoModel = UserInfoModel()
@@ -22,6 +23,8 @@ class MyPageController: ObservableObject {
     @Published var multipartData: Data?
     @Published var koreanSocialType: String = ""
     
+    @Published var showNicknameDialog: Bool = false
+    
     
     func getUserInfo() {
         Task { @MainActor in
@@ -36,7 +39,11 @@ class MyPageController: ObservableObject {
             if let data = response.data {
                 do {
                     let responseVO = ResponseVO(status: response.status ?? 0, code: response.code, message: response.message, data: data)
-                    self.responseModel = responseVO.data
+                    if let dictionaryData = responseVO.data as? [String: Any] {
+                        self.responseModel = dictionaryData
+                    } else {
+                        self.responseModel = nil
+                    }
                     
                     if let data = responseVO.data {
                         let jsonData = try JSONSerialization.data(withJSONObject: data)
@@ -55,6 +62,7 @@ class MyPageController: ObservableObject {
         }
     }
     
+    @MainActor
     func changeNickname() {
         Task {
             let result = await userSerivce.putUserNickname(userId: userInfo.userId, nickname: userInfo.nickname)
@@ -62,6 +70,11 @@ class MyPageController: ObservableObject {
                 print(result.data ?? "")
                 print(result.message ?? "")
                 //show toasto popup
+                
+                DispatchQueue.main.async {
+                    self.showNicknameDialog = true
+                }
+                
             } else {
                 print(result.status ?? "")
                 print(result.data ?? "")

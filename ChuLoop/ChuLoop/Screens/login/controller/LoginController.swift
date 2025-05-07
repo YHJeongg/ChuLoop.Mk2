@@ -49,7 +49,7 @@ class LoginController: ObservableObject {
                 loginMessage = "로그인 성공!"
                 self.navigateToMain = true
                 commonController.isLoggedOut = false
-                if let responseData = response.data,
+                if let responseData = response.data as? [String: Any],
                    let accessTokenData = responseData["accessToken"] as? String {
                     
                     // Keychain에 액세스 토큰 저장

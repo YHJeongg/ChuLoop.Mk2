@@ -6,7 +6,6 @@
 import SwiftUI
 
 struct MyPageNavigationView<Content: View>: View {
-    
     let title: String
     let profileUrl: String
     let content: () -> Content

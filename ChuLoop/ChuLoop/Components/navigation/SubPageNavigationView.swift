@@ -13,22 +13,29 @@ struct SubPageNavigationView<Content: View>: View {
     
     let title: String
     let content: () -> Content
+//    @Binding var showTabView: Bool  // TabView 상태를 관리하는 바인딩
     
     
     init(title: String, @ViewBuilder content: @escaping () -> Content) {
         self.title = title
+//        self._showTabView = showTabView
         self.content = content
+        
     }
     
     var body: some View {
-        NavigationView {
+//        NavigationView {
             // body
             ZStack(alignment: .topLeading) {
                 Color.primary50
                     .ignoresSafeArea(.all)
                 content()
+//                    .onAppear {
+//                        // SubPageNavigationView로 들어가면 TabView 숨기기
+//                        showTabView = false
+//                    }
             }
-        }
+//        }
         .navigationBarBackButtonHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
