@@ -46,10 +46,8 @@ class WillScreenController: ObservableObject {
 
             if let data = response.data {
                 do {
-                    // JSONSerialization을 사용하여 [String: Any]에서 Data로 변환
                     let jsonData = try JSONSerialization.data(withJSONObject: data)
 
-                    // Data를 WillResponseModel로 디코딩
                     let willResponse = try JSONDecoder().decode(WillResponseModel.self, from: jsonData)
 
                     DispatchQueue.main.async {
@@ -72,5 +70,55 @@ class WillScreenController: ObservableObject {
                 isLoading = false
             }
         }
+    }
+    
+    func GooglePlace(keyword: String, completion: @escaping ([Place]) -> Void) {
+        guard let apiKey = Bundle.main.infoDictionary?["GOOGLE_PLACE"] as? String else {
+            print("API Key가 없습니다.")
+            completion([])
+            return
+        }
+
+        let query = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let urlStr = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(query)&key=\(apiKey)"
+        guard let url = URL(string: urlStr) else {
+            completion([])
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data else {
+                completion([])
+                return
+            }
+
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                let results = json?["results"] as? [[String: Any]] ?? []
+
+                let places: [Place] = results.compactMap { result in
+                    guard
+                        let name = result["name"] as? String,
+                        let address = result["formatted_address"] as? String,
+                        let types = result["types"] as? [String]
+                    else {
+                        return nil
+                    }
+
+                    let category = types.first ?? "카테고리 없음"
+                    let encodedAddress = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                    let mapURL = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedAddress)")!
+
+                    return Place(name: name, category: category, address: address, mapURL: mapURL)
+                }
+
+                DispatchQueue.main.async {
+                    completion(places)
+                }
+            } catch {
+                print("디코딩 에러: \(error)")
+                completion([])
+            }
+        }.resume()
     }
 }
