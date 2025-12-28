@@ -5,7 +5,7 @@
 
 import Foundation
 import UIKit
-import SwiftUICore
+import SwiftUI
 
 func configNavigationBarAppearance() {
     let appearance = UINavigationBarAppearance()
