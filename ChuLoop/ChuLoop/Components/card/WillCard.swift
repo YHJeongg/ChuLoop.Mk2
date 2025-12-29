@@ -81,7 +81,7 @@ struct WillCard: View {
                 .font(.bodyXXSmall)
                 .foregroundColor(.black)
         }
-        .padding(.top, 5)
+        .padding(.top, ResponsiveSize.height(15))
     }
 
     private var addressSection: some View {
@@ -89,7 +89,7 @@ struct WillCard: View {
             .font(.bodyXSmall)
             .foregroundColor(.black)
             .lineLimit(2)
-            .padding(.bottom, 8)
+            .padding(.vertical, ResponsiveSize.height(15))
     }
 
     private var actionSection: some View {
@@ -97,7 +97,7 @@ struct WillCard: View {
             Button(action: {
                 onWriteReview?()
             }) {
-                Text("리뷰 작성")
+                Text("리뷰 쓰기")
                     .font(.bodySmall)
                     .foregroundColor(.black)
                     .frame(width: ResponsiveSize.width(70), height: ResponsiveSize.height(30))
@@ -114,6 +114,10 @@ struct WillCard: View {
                     .font(.bodyXXSmall)
                     .foregroundColor(.black)
             }
+            
+            Text("/")
+                .font(.bodyXXSmall)
+                .foregroundColor(.natural60)
 
             Button(action: {
                 onGetDirections?()
@@ -123,6 +127,6 @@ struct WillCard: View {
                     .foregroundColor(.black)
             }
         }
-        .padding(.top, 8)
+        .padding(.bottom, ResponsiveSize.height(10))
     }
 }

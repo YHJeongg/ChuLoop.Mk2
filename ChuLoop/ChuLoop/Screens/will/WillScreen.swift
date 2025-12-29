@@ -50,18 +50,24 @@ struct WillScreen: View {
                             else {
                                 List {
                                     ForEach($controller.contents) { $place in
-                                        WillCard(place: $place) {
-                                            selectedPlace = place
+                                        HStack {
+                                            Spacer()
+                                            
+                                            WillCard(place: $place) {
+                                                selectedPlace = place
+                                            }
+                                            
+                                            Spacer()
                                         }
+                                        .listRowSeparator(.hidden)
+                                        .listRowBackground(Color.clear)
                                         .onAppear {
                                             if place.id == controller.contents.last?.id {
                                                 controller.getWillPosts(searchText: searchText)
                                             }
                                         }
                                     }
-                                    .listRowSeparator(.hidden)
-                                    .listRowBackground(Color.clear)
-
+                                    
                                     if controller.isLoading {
                                         HStack {
                                             Spacer()
@@ -69,12 +75,6 @@ struct WillScreen: View {
                                             Spacer()
                                         }
                                     }
-                                }
-                                .refreshable {
-                                    controller.getWillPosts(
-                                        searchText: searchText,
-                                        isRefreshing: true
-                                    )
                                 }
                                 .listStyle(PlainListStyle())
                                 .scrollIndicators(.hidden)
