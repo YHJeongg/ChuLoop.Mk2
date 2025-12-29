@@ -27,27 +27,28 @@ struct WillScreen: View {
                         ZStack {
 
                             // 로딩
-                            if controller.isLoading && controller.contents.isEmpty {
+                            if controller.isLoading {
                                 ProgressView()
-                            }
-
-                            else if controller.contents.isEmpty {
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .padding()
+                            } else if controller.contents.isEmpty {
                                 VStack {
                                     Spacer()
-
-                                    Text("""
-                                    방문할 맛집 리스트가 비어있어요
-                                    방문하고 싶은 맛집을 추가해 주세요
-                                    """)
-                                    .multilineTextAlignment(.center)
-                                    .foregroundColor(.gray)
-
+                                    Text("방문할 맛집 리스트가 비어있어요\n방문하고싶은 ")
+                                        .foregroundColor(.natural60) +
+                                    Text("맛집을 추가")
+                                        .foregroundColor(.blue)
+                                        .underline() +
+                                    Text("해 주세요")
+                                        .foregroundColor(.natural60)
+                                    
                                     Spacer()
                                 }
-                            }
-
-                            // 리스트
-                            else {
+                                .font(.bodyMedium)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                            } else {
                                 List {
                                     ForEach($controller.contents) { $place in
                                         HStack {
