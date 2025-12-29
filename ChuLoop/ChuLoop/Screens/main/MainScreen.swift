@@ -36,7 +36,7 @@ struct MainScreen: View {
                 } else if controller.contents.isEmpty {
                     VStack {
                         Spacer()
-                        Text("타임라인이 비어있어요\n")
+                        Text("타임라인이 비어있어요\n방문했던 ")
                             .foregroundColor(.natural60) +
                         Text("맛집을 추가")
                             .foregroundColor(.blue)
