@@ -54,9 +54,17 @@ struct WillScreen: View {
                                         HStack {
                                             Spacer()
                                             
-                                            WillCard(place: $place) {
-                                                selectedPlace = place
-                                            }
+                                            WillCard(
+                                                place: $place,
+                                                onWriteReview: {
+                                                    // 리뷰쓰기
+                                                },
+                                                onGetDirections: {
+                                                    selectedPlace = place
+                                                }
+                                            )
+                                            .buttonStyle(.plain)
+                                            .contentShape(Rectangle())
                                             
                                             Spacer()
                                         }

@@ -97,7 +97,7 @@ struct WillCard: View {
             Button(action: {
                 onWriteReview?()
             }) {
-                Text("리뷰 쓰기")
+                Text("리뷰쓰기")
                     .font(.bodySmall)
                     .foregroundColor(.black)
                     .frame(width: ResponsiveSize.width(70), height: ResponsiveSize.height(30))
