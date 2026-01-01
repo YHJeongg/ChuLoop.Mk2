@@ -4,31 +4,32 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct WillCard: View {
     @Binding var place: WillModel
     var onWriteReview: (() -> Void)? = nil
     var onGetDirections: (() -> Void)? = nil
-    @State private var showCustomSheet = false
+    var onCopyAddress: (() -> Void)? = nil
 
     var body: some View {
-        ZStack {
-            cardContent
-        }
-    }
-
-    private var cardContent: some View {
         HStack(spacing: 10) {
             imageSection
             contentSection
         }
-        .frame(width: ResponsiveSize.width(382), height: ResponsiveSize.height(140))
+        .frame(
+            width: ResponsiveSize.width(382),
+            height: ResponsiveSize.height(140)
+        )
         .background(Color.white)
         .cornerRadius(5)
-        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.natural60, lineWidth: 0.5))
+        .overlay(
+            RoundedRectangle(cornerRadius: 5)
+                .stroke(Color.natural60, lineWidth: 0.5)
+        )
     }
 
-    // MARK: - 이미지 섹션
+    // MARK: - 이미지
     private var imageSection: some View {
         Group {
             if let imageUrl = URL(string: place.images.first ?? "") {
@@ -36,20 +37,31 @@ struct WillCard: View {
                     switch phase {
                     case .empty:
                         ProgressView()
-                            .frame(width: ResponsiveSize.width(140), height: ResponsiveSize.height(140))
+                            .frame(
+                                width: ResponsiveSize.width(140),
+                                height: ResponsiveSize.height(140)
+                            )
                             .background(Color.gray.opacity(0.1))
-                            .scaledToFill()
+
                     case .success(let image):
                         image.resizable()
                             .scaledToFill()
-                            .frame(width: ResponsiveSize.width(140), height: ResponsiveSize.height(140))
+                            .frame(
+                                width: ResponsiveSize.width(140),
+                                height: ResponsiveSize.height(140)
+                            )
                             .clipped()
+
                     case .failure:
                         Image(systemName: "photo")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: ResponsiveSize.width(140), height: ResponsiveSize.height(140))
+                            .frame(
+                                width: ResponsiveSize.width(140),
+                                height: ResponsiveSize.height(140)
+                            )
                             .foregroundColor(.gray)
+
                     @unknown default:
                         EmptyView()
                     }
@@ -58,7 +70,7 @@ struct WillCard: View {
         }
     }
 
-    // MARK: - 내용 섹션
+    // MARK: - 내용
     private var contentSection: some View {
         VStack(alignment: .leading, spacing: 4) {
             titleAndCategorySection
@@ -92,36 +104,41 @@ struct WillCard: View {
             .padding(.vertical, ResponsiveSize.height(15))
     }
 
+    // MARK: - 버튼 영역
     private var actionSection: some View {
         HStack {
-            Button(action: {
+            Button {
                 onWriteReview?()
-            }) {
+            } label: {
                 Text("리뷰쓰기")
                     .font(.bodySmall)
                     .foregroundColor(.black)
-                    .frame(width: ResponsiveSize.width(70), height: ResponsiveSize.height(30))
+                    .frame(
+                        width: ResponsiveSize.width(70),
+                        height: ResponsiveSize.height(30)
+                    )
                     .background(Color.secondary50)
                     .cornerRadius(8)
             }
 
             Spacer()
 
-            Button(action: {
+            Button {
                 UIPasteboard.general.string = place.address
-            }) {
+                onCopyAddress?()   // 토스트 요청
+            } label: {
                 Text("주소복사")
                     .font(.bodyXXSmall)
                     .foregroundColor(.black)
             }
-            
+
             Text("/")
                 .font(.bodyXXSmall)
                 .foregroundColor(.natural60)
 
-            Button(action: {
+            Button {
                 onGetDirections?()
-            }) {
+            } label: {
                 Text("길찾기")
                     .font(.bodyXXSmall)
                     .foregroundColor(.black)
