@@ -127,14 +127,29 @@ struct WillScreen: View {
                 VStack {
                     Spacer().frame(height: 6)
 
-                    Text("주소가 복사되었습니다")
-                        .font(.bodySmall)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 10)
-                        .background(Color.black.opacity(0.9))
-                        .cornerRadius(20)
-                        .shadow(radius: 8)
+                    HStack(spacing: 12) {
+                        
+                        Image(systemName: "info.circle")
+                            .font(.system(size: 24))
+                            .foregroundColor(.primary500)
+
+                        // 메시지
+                        Text("주소가 복사되었습니다.")
+                            .font(.bodyNormal)
+                            .foregroundColor(.black)
+                        
+                        Spacer()
+
+                    }
+                    .padding(.horizontal, 16)
+                    .frame(width: ResponsiveSize.width(362), height: ResponsiveSize.height(60))
+                    .background(Color.gray)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 45)
+                            .stroke(Color.primary500, lineWidth: 1)
+                    )
+                    .cornerRadius(45)
+//                    .shadow(color: Color.black.opacity(0.1), radius: 6, y: 4)
 
                     Spacer()
                 }
