@@ -125,24 +125,22 @@ struct WillScreen: View {
             // 상단 토스트
             if showTopToast {
                 VStack {
-                    Spacer().frame(height: 6)
-
-                    HStack(spacing: 12) {
-                        
+                    HStack(spacing: 0) {
                         Image(systemName: "info.circle")
                             .font(.system(size: 24))
                             .foregroundColor(.primary500)
+                            .padding(.horizontal, ResponsiveSize.width(15))
 
                         // 메시지
                         Text("주소가 복사되었습니다.")
                             .font(.bodyNormal)
-                            .foregroundColor(.black)
+                            .foregroundColor(.natural80)
                         
                         Spacer()
-
                     }
-                    .padding(.horizontal, 16)
-                    .frame(width: ResponsiveSize.width(362), height: ResponsiveSize.height(60))
+                    .frame(width: ResponsiveSize.width(362),
+                           height: ResponsiveSize.height(60),
+                           alignment: .leading)
                     .background(Color.gray)
                     .overlay(
                         RoundedRectangle(cornerRadius: 45)
@@ -153,7 +151,8 @@ struct WillScreen: View {
 
                     Spacer()
                 }
-                .padding(.top, topSafeArea())
+                .padding(.horizontal, ResponsiveSize.width(34))
+                .padding(.top, ResponsiveSize.height(10))
                 .transition(.move(edge: .top).combined(with: .opacity))
                 .zIndex(1000)
             }
