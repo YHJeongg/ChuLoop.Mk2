@@ -86,37 +86,41 @@ class WillScreenController: ObservableObject {
             return
         }
 
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        URLSession.shared.dataTask(with: url) { data, _, _ in
             guard let data = data else {
                 completion([])
                 return
             }
 
             do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
                 let results = json?["results"] as? [[String: Any]] ?? []
 
                 let places: [Place] = results.compactMap { result in
                     guard
                         let name = result["name"] as? String,
                         let address = result["formatted_address"] as? String,
-                        let types = result["types"] as? [String]
-                    else {
-                        return nil
-                    }
+                        let types = result["types"] as? [String],
+                        let geometry = result["geometry"] as? [String: Any],
+                        let location = geometry["location"] as? [String: Any],
+                        let lat = location["lat"] as? Double,
+                        let lng = location["lng"] as? Double
+                    else { return nil }
 
-                    let category = types.first ?? "카테고리 없음"
-                    let encodedAddress = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-                    let mapURL = URL(string: "https://www.google.com/maps/search/?api=1&query=\(encodedAddress)")!
-
-                    return Place(name: name, category: category, address: address, mapURL: mapURL)
+                    return Place(
+                        name: name,
+                        category: types.first ?? "카테고리 없음",
+                        address: address,
+                        latitude: lat,
+                        longitude: lng
+                    )
                 }
 
                 DispatchQueue.main.async {
                     completion(places)
                 }
             } catch {
-                print("디코딩 에러: \(error)")
+                print("디코딩 에러:", error)
                 completion([])
             }
         }.resume()

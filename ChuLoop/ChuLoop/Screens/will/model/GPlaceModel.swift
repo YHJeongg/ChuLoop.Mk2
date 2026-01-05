@@ -10,5 +10,6 @@ struct Place: Identifiable, Hashable {
     let name: String
     let category: String
     let address: String
-    let mapURL: URL
+    let latitude: Double
+    let longitude: Double
 }

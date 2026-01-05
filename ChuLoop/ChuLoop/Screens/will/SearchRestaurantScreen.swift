@@ -124,9 +124,12 @@ struct SearchRestaurantScreen: View {
                                                 .lineLimit(nil)
                                                 .fixedSize(horizontal: false, vertical: true)
 
-                                            Button(action: {
-                                                UIApplication.shared.open(place.mapURL)
-                                            }) {
+                                            NavigationLink(
+                                                destination: SearchRestaurantMapScreen(
+                                                    place: place,
+                                                    showTabView: $showTabView
+                                                )
+                                            ) {
                                                 Text("지도보기")
                                                     .font(.bodySmall)
                                                     .foregroundColor(.primary900)
