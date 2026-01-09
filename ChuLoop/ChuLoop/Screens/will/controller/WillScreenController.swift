@@ -80,7 +80,10 @@ class WillScreenController: ObservableObject {
         }
 
         let query = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        let urlStr = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(query)&key=\(apiKey)"
+        let urlStr =
+        "https://maps.googleapis.com/maps/api/place/textsearch/json" +
+        "?query=\(query)&key=\(apiKey)"
+
         guard let url = URL(string: urlStr) else {
             completion([])
             return
@@ -88,7 +91,7 @@ class WillScreenController: ObservableObject {
 
         URLSession.shared.dataTask(with: url) { data, _, _ in
             guard let data = data else {
-                completion([])
+                DispatchQueue.main.async { completion([]) }
                 return
             }
 
@@ -96,7 +99,7 @@ class WillScreenController: ObservableObject {
                 let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
                 let results = json?["results"] as? [[String: Any]] ?? []
 
-                let places: [Place] = results.compactMap { result in
+                let places: [Place] = results.compactMap { result -> Place? in
                     guard
                         let name = result["name"] as? String,
                         let address = result["formatted_address"] as? String,
@@ -105,14 +108,22 @@ class WillScreenController: ObservableObject {
                         let location = geometry["location"] as? [String: Any],
                         let lat = location["lat"] as? Double,
                         let lng = location["lng"] as? Double
-                    else { return nil }
+                    else {
+                        return nil
+                    }
+
+                    let photos = result["photos"] as? [[String: Any]] ?? []
+                    let photoRefs = photos.compactMap {
+                        $0["photo_reference"] as? String
+                    }
 
                     return Place(
                         name: name,
                         category: types.first ?? "카테고리 없음",
                         address: address,
                         latitude: lat,
-                        longitude: lng
+                        longitude: lng,
+                        photoReferences: photoRefs
                     )
                 }
 
@@ -121,8 +132,9 @@ class WillScreenController: ObservableObject {
                 }
             } catch {
                 print("디코딩 에러:", error)
-                completion([])
+                DispatchQueue.main.async { completion([]) }
             }
-        }.resume()
+        }
+        .resume()
     }
 }

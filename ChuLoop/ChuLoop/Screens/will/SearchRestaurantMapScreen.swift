@@ -36,15 +36,22 @@ struct SearchRestaurantMapScreen: View {
             title: "맛집 검색",
             showTabView: .constant(false)
         ) {
-            Map(position: $position) {
-                Marker(
-                    place.name,
-                    coordinate: CLLocationCoordinate2D(
-                        latitude: place.latitude,
-                        longitude: place.longitude
+            ZStack(alignment: .bottom) {
+                Map(position: $position) {
+                    Marker(
+                        place.name,
+                        coordinate: CLLocationCoordinate2D(
+                            latitude: place.latitude,
+                            longitude: place.longitude
+                        )
                     )
+                }
+
+                SearchRestaurantMapBottomSheet(
+                    place: place,
+                    googleApiKey: Bundle.main.infoDictionary?["GOOGLE_PLACE"] as? String ?? ""
                 )
-                .tint(.red)
+                .padding(.bottom, 12)
             }
             .onAppear {
                 showTabView = false

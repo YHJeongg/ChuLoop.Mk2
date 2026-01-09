@@ -12,4 +12,5 @@ struct Place: Identifiable, Hashable {
     let address: String
     let latitude: Double
     let longitude: Double
+    let photoReferences: [String]
 }
