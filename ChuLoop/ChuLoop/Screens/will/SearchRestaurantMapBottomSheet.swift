@@ -10,25 +10,21 @@ struct SearchRestaurantMapBottomSheet: View {
     let googleApiKey: String
 
     var body: some View {
-        VStack(spacing: 16) {
-
-            // 드래그 바
-            Capsule()
-                .fill(Color.gray.opacity(0.3))
-                .frame(width: 40, height: 5)
-                .padding(.top, 8)
+        VStack(spacing: ResponsiveSize.height(25)) {
 
             // 레스토랑 이름
             Text(place.name)
-                .font(.bodyLargeBold)
-                .foregroundColor(.black)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.bodyMediumBold)
+                .foregroundColor(.natural90)
+                .frame(alignment: .leading)
+//                .frame(maxWidth: ResponsiveSize.width(382), maxHeight: ResponsiveSize.height(30), alignment: .leading)
 
             // 레스토랑 주소
             Text(place.address)
-                .font(.bodySmall)
-                .foregroundColor(.natural70)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.bodyNormal)
+                .foregroundColor(.natural80)
+                .frame(alignment: .leading)
+//                .frame(maxWidth: ResponsiveSize.width(382), maxHeight: ResponsiveSize.height(44), alignment: .leading)
 
             // Google Place 사진
             photoScrollView
@@ -38,20 +34,19 @@ struct SearchRestaurantMapBottomSheet: View {
                 print("가고싶은 맛집으로 저장")
             }) {
                 Text("가고싶은 맛집으로 저장")
-                    .font(.bodyMediumBold)
-                    .foregroundColor(.white)
-//                    .frame(maxWidth: .infinity, height: 48)
+                    .font(.bodyMedium)
+                    .foregroundColor(.natural10)
+                    .frame(maxWidth: ResponsiveSize.width(382), maxHeight: ResponsiveSize.height(50))
                     .background(Color.primary900)
                     .cornerRadius(10)
             }
         }
-        .padding(.horizontal, 20)
-        .padding(.bottom, 24)
+        .padding(.horizontal, ResponsiveSize.width(30))
+        .frame(maxWidth: ResponsiveSize.width(430), maxHeight: ResponsiveSize.height(333))
         .background(
-            RoundedRectangle(cornerRadius: 20)
+            RoundedRectangle(cornerRadius: 25)
                 .fill(Color.white)
         )
-        .shadow(color: .black.opacity(0.1), radius: 8, y: -2)
     }
 
     // MARK: - Photo Scroll View
