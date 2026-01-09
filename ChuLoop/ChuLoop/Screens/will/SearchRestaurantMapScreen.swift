@@ -34,7 +34,7 @@ struct SearchRestaurantMapScreen: View {
     var body: some View {
         SubPageNavigationView(
             title: "맛집 검색",
-            showTabView: $showTabView
+            showTabView: .constant(false)
         ) {
             Map(position: $position) {
                 Marker(
@@ -46,11 +46,11 @@ struct SearchRestaurantMapScreen: View {
                 )
                 .tint(.red)
             }
-            .ignoresSafeArea(edges: .bottom)
-            .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 showTabView = false
             }
+            .ignoresSafeArea(edges: .bottom)
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

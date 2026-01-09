@@ -129,6 +129,9 @@ struct SearchRestaurantScreen: View {
                                                     place: place,
                                                     showTabView: $showTabView
                                                 )
+                                                .onAppear {
+                                                    showTabView = false
+                                                }
                                             ) {
                                                 Text("지도보기")
                                                     .font(.bodySmall)
@@ -212,9 +215,6 @@ struct SearchRestaurantScreen: View {
             .padding(.horizontal, ResponsiveSize.width(34))
             .padding(.top)
             .navigationBarTitleDisplayMode(.inline)
-            .onDisappear {
-                showTabView = true
-            }
             .onAppear {
                 if let savedSearches = UserDefaults.standard.stringArray(forKey: recentSearchesKey) {
                     recentSearches = savedSearches
