@@ -16,15 +16,13 @@ struct SearchRestaurantMapBottomSheet: View {
             Text(place.name)
                 .font(.bodyMediumBold)
                 .foregroundColor(.natural90)
-                .frame(alignment: .leading)
-//                .frame(maxWidth: ResponsiveSize.width(382), maxHeight: ResponsiveSize.height(30), alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             // 레스토랑 주소
             Text(place.address)
                 .font(.bodyNormal)
                 .foregroundColor(.natural80)
-                .frame(alignment: .leading)
-//                .frame(maxWidth: ResponsiveSize.width(382), maxHeight: ResponsiveSize.height(44), alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             // Google Place 사진
             photoScrollView
@@ -52,7 +50,7 @@ struct SearchRestaurantMapBottomSheet: View {
     // MARK: - Photo Scroll View
     private var photoScrollView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
+            HStack(spacing: ResponsiveSize.width(15)) {
                 if place.photoReferences.isEmpty {
                     emptyPhotoView
                 } else {
@@ -64,10 +62,10 @@ struct SearchRestaurantMapBottomSheet: View {
                                     .resizable()
                                     .scaledToFill()
                             default:
-                                Color.gray.opacity(0.2)
+                                Color.gray.opacity(0.5)
                             }
                         }
-                        .frame(width: 160, height: 120)
+                        .frame(width: ResponsiveSize.width(80), height: ResponsiveSize.height(80))
                         .clipped()
                         .cornerRadius(10)
                     }
@@ -78,12 +76,12 @@ struct SearchRestaurantMapBottomSheet: View {
 
     private var emptyPhotoView: some View {
         ZStack {
-            Color.gray.opacity(0.15)
+            Color.gray.opacity(0.5)
             Image(systemName: "photo")
                 .font(.system(size: 28))
                 .foregroundColor(.gray)
         }
-        .frame(width: 160, height: 120)
+        .frame(width: ResponsiveSize.width(80), height: ResponsiveSize.height(80))
         .cornerRadius(10)
     }
 
