@@ -10,7 +10,7 @@ struct SearchRestaurantMapBottomSheet: View {
     let googleApiKey: String
 
     var body: some View {
-        VStack(spacing: ResponsiveSize.height(25)) {
+        VStack(spacing: ResponsiveSize.height(20)) {
 
             // 레스토랑 이름
             Text(place.name)
@@ -18,14 +18,17 @@ struct SearchRestaurantMapBottomSheet: View {
                 .foregroundColor(.natural90)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-            // 레스토랑 주소
-            Text(place.address)
-                .font(.bodyNormal)
-                .foregroundColor(.natural80)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            // 사진 + 주소
+            HStack(alignment: .center, spacing: ResponsiveSize.width(15)) {
 
-            // Google Place 사진
-            photoScrollView
+                restaurantImage
+
+                // 주소
+                Text(place.address)
+                    .font(.bodyNormal)
+                    .foregroundColor(.natural80)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
 
             // 저장 버튼
             Button(action: {
@@ -34,55 +37,61 @@ struct SearchRestaurantMapBottomSheet: View {
                 Text("가고싶은 맛집으로 저장")
                     .font(.bodyMedium)
                     .foregroundColor(.natural10)
-                    .frame(maxWidth: ResponsiveSize.width(382), maxHeight: ResponsiveSize.height(50))
+                    .frame(
+                        maxWidth: ResponsiveSize.width(382),
+                        maxHeight: ResponsiveSize.height(50)
+                    )
                     .background(Color.primary900)
                     .cornerRadius(10)
             }
         }
         .padding(.horizontal, ResponsiveSize.width(30))
-        .frame(maxWidth: ResponsiveSize.width(430), maxHeight: ResponsiveSize.height(333))
+        .padding(.top, ResponsiveSize.height(25))
+        .padding(.bottom, ResponsiveSize.height(20))
+//        .frame(maxHeight: ResponsiveSize.height(333))
         .background(
             RoundedRectangle(cornerRadius: 25)
                 .fill(Color.white)
+                .ignoresSafeArea(edges: .bottom)
         )
     }
 
-    // MARK: - Photo Scroll View
-    private var photoScrollView: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: ResponsiveSize.width(15)) {
-                if place.photoReferences.isEmpty {
-                    emptyPhotoView
-                } else {
-                    ForEach(place.photoReferences, id: \.self) { ref in
-                        AsyncImage(url: photoURL(photoReference: ref)) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                            default:
-                                Color.gray.opacity(0.5)
-                            }
-                        }
-                        .frame(width: ResponsiveSize.width(80), height: ResponsiveSize.height(80))
-                        .clipped()
-                        .cornerRadius(10)
+    // MARK: - Restaurant Image
+    private var restaurantImage: some View {
+        Group {
+            if let ref = place.photoReferences.first,
+               let url = photoURL(photoReference: ref) {
+
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    default:
+                        Color.gray.opacity(0.3)
                     }
                 }
+
+            } else {
+                emptyPhotoView
             }
         }
+        .frame(
+            width: ResponsiveSize.width(80),
+            height: ResponsiveSize.height(80)
+        )
+        .clipped()
+        .cornerRadius(10)
     }
 
     private var emptyPhotoView: some View {
         ZStack {
-            Color.gray.opacity(0.5)
+            Color.gray.opacity(0.3)
             Image(systemName: "photo")
-                .font(.system(size: 28))
+                .font(.system(size: 24))
                 .foregroundColor(.gray)
         }
-        .frame(width: ResponsiveSize.width(80), height: ResponsiveSize.height(80))
-        .cornerRadius(10)
     }
 
     // MARK: - Google Photo URL
