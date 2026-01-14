@@ -8,8 +8,12 @@ import SwiftUI
 struct SearchRestaurantMapBottomSheet: View {
     let place: Place
     let googleApiKey: String
+    
+    // 부모 뷰로 이벤트를 전달하기 위해 추가
+    var onAddressTap: (WillModel) -> Void
 
     var body: some View {
+        // 메인 컨텐츠
         VStack(spacing: ResponsiveSize.height(20)) {
 
             // 레스토랑 이름
@@ -23,11 +27,25 @@ struct SearchRestaurantMapBottomSheet: View {
 
                 restaurantImage
 
-                // 주소
-                Text(place.address)
-                    .font(.bodyNormal)
-                    .foregroundColor(.natural80)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                // 주소 클릭 시 부모 뷰의 팝업 트리거 실행
+                Button(action: {
+                    let model = WillModel(
+                        id: UUID().uuidString,
+                        title: place.name,
+                        category: "",
+                        address: place.address,
+                        date: "",
+                        images: place.photoReferences
+                    )
+                    onAddressTap(model)
+                }) {
+                    Text(place.address)
+                        .font(.bodyNormal)
+                        .foregroundColor(.natural80)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .multilineTextAlignment(.leading)
+                }
+                .buttonStyle(PlainButtonStyle())
             }
 
             // 저장 버튼
@@ -48,7 +66,6 @@ struct SearchRestaurantMapBottomSheet: View {
         .padding(.horizontal, ResponsiveSize.width(30))
         .padding(.top, ResponsiveSize.height(25))
         .padding(.bottom, ResponsiveSize.height(20))
-//        .frame(maxHeight: ResponsiveSize.height(333))
         .background(
             RoundedRectangle(cornerRadius: 25)
                 .fill(Color.white)
@@ -94,14 +111,8 @@ struct SearchRestaurantMapBottomSheet: View {
         }
     }
 
-    // MARK: - Google Photo URL
     private func photoURL(photoReference: String) -> URL? {
-        let urlString =
-        "https://maps.googleapis.com/maps/api/place/photo" +
-        "?maxwidth=400" +
-        "&photo_reference=\(photoReference)" +
-        "&key=\(googleApiKey)"
-
+        let urlString = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=\(photoReference)&key=\(googleApiKey)"
         return URL(string: urlString)
     }
 }
