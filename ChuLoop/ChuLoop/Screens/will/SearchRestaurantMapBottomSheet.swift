@@ -32,7 +32,7 @@ struct SearchRestaurantMapBottomSheet: View {
                     let model = WillModel(
                         id: UUID().uuidString,
                         title: place.name,
-                        category: "",
+                        category: place.category,
                         address: place.address,
                         date: "",
                         images: place.photoReferences

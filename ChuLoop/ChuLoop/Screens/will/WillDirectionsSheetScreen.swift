@@ -10,11 +10,20 @@ struct WillDirectionsSheetScreen: View {
 
     var body: some View {
         VStack {
-            Text("지도 앱에서 길찾기")
-                .font(.bodyNormal)
-                .padding(.top, 20)
-
             HStack {
+                Image(systemName: "doc.on.doc")
+                    .font(.bodySmall)
+                
+                Text("주소만 복사")
+                    .font(.bodyNormal)
+                
+                Spacer()
+            }
+            .frame(alignment: .leading)
+            .padding(.top, ResponsiveSize.height(35))
+            .padding(.bottom, ResponsiveSize.height(37))
+            
+            HStack(spacing: ResponsiveSize.width(25)) {
                 mapButton(
                     for: "카카오맵",
                     urlString: "kakaomap://route?sp=\(place.address)",
@@ -34,8 +43,9 @@ struct WillDirectionsSheetScreen: View {
                     imageName: "apple_map_icon"
                 )
             }
-            .padding(.bottom, 20)
+            .padding(.bottom, ResponsiveSize.height(40))
         }
+        .frame(width: ResponsiveSize.width(200), height: ResponsiveSize.height(300))
     }
 
     func mapButton(for title: String, urlString: String, fallbackAppStoreURL: String, imageName: String) -> some View {
@@ -54,7 +64,7 @@ struct WillDirectionsSheetScreen: View {
                 if let image = UIImage(named: imageName) {
                     Image(uiImage: image)
                         .resizable()
-                        .frame(width: 40, height: 40)
+                        .frame(width: ResponsiveSize.width(50), height: ResponsiveSize.height(50))
                 } else {
                     Text("Image not found")
                         .foregroundColor(.gray)
@@ -64,7 +74,7 @@ struct WillDirectionsSheetScreen: View {
                     .foregroundColor(.black)
                     .font(.bodySmall)
             }
-            .frame(width: 80)
+//            .frame(width: 80)
         }
     }
 }
