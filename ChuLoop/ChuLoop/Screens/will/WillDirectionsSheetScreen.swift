@@ -45,7 +45,7 @@ struct WillDirectionsSheetScreen: View {
             }
             .padding(.bottom, ResponsiveSize.height(40))
         }
-        .frame(width: ResponsiveSize.width(200), height: ResponsiveSize.height(300))
+        .frame(width: ResponsiveSize.width(200))
     }
 
     func mapButton(for title: String, urlString: String, fallbackAppStoreURL: String, imageName: String) -> some View {
