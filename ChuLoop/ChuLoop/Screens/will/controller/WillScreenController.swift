@@ -72,6 +72,7 @@ class WillScreenController: ObservableObject {
         }
     }
     
+    // 음식점 정보 GPlace에서 불러오기
     func GooglePlace(keyword: String, completion: @escaping ([Place]) -> Void) {
         guard let apiKey = Bundle.main.infoDictionary?["GOOGLE_PLACE"] as? String else {
             print("API Key가 없습니다.")
@@ -136,5 +137,35 @@ class WillScreenController: ObservableObject {
             }
         }
         .resume()
+    }
+
+    // 맛집 저장
+    func saveWillPost(place: Place, completion: @escaping (Bool) -> Void) {
+        self.isLoading = true
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd"
+        let dateString = formatter.string(from: Date())
+
+        let requestBody = WillSaveRequest(
+            title: place.name,
+            category: "한식",
+            address: place.address,
+            date: dateString,
+            images: place.photoReferences
+        )
+
+        Task { @MainActor in
+            let response = await willService.saveWillPost(data: requestBody)
+            
+            if response.success {
+                print("DB 저장 성공!")
+                completion(true)
+            } else {
+                print("서버 응답 에러: \(response.message ?? "")")
+                completion(false)
+            }
+            self.isLoading = false
+        }
     }
 }

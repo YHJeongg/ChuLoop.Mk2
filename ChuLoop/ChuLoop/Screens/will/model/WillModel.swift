@@ -30,3 +30,11 @@ struct WillResponseModel: Codable {
     let totalCounts: Int
     let contents: [WillModel]
 }
+
+struct WillSaveRequest: Encodable {
+    let title: String
+    let category: String
+    let address: String
+    let date: String
+    let images: [String]
+}

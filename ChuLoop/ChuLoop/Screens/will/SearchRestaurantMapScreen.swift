@@ -56,6 +56,10 @@ struct SearchRestaurantMapScreen: View {
                     onAddressTap: { model in
                         // 바텀시트에서 전달된 모델을 받아 팝업 표시
                         selectedPlaceForMap = model
+                    },
+                    onSaveSuccess: {
+                        // DB 저장 성공 시 실행될 코드
+                        print("부모 뷰: 저장이 성공되었습니다.")
                     }
                 )
                 .padding(.bottom, 12)

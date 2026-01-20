@@ -6,11 +6,12 @@
 import SwiftUI
 
 struct SearchRestaurantMapBottomSheet: View {
+    @StateObject private var controller = WillScreenController()
     let place: Place
     let googleApiKey: String
     
-    // 부모 뷰로 이벤트를 전달하기 위해 추가
-    var onAddressTap: (WillModel) -> Void
+    var onAddressTap: (WillModel) -> Void // 부모 뷰로 이벤트를 전달하기 위해 추가
+    var onSaveSuccess: () -> Void // 저장 성공 시 부모뷰에 알릴 용도
 
     var body: some View {
         // 메인 컨텐츠
@@ -50,7 +51,11 @@ struct SearchRestaurantMapBottomSheet: View {
 
             // 저장 버튼
             Button(action: {
-                print("가고싶은 맛집으로 저장")
+                controller.saveWillPost(place: place) { success in
+                    if success {
+                        onSaveSuccess()
+                    }
+                }
             }) {
                 Text("가고싶은 맛집으로 저장")
                     .font(.bodyMedium)
