@@ -143,29 +143,66 @@ class WillScreenController: ObservableObject {
     func saveWillPost(place: Place, completion: @escaping (Bool) -> Void) {
         self.isLoading = true
 
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy.MM.dd"
-        let dateString = formatter.string(from: Date())
-
-        let requestBody = WillSaveRequest(
-            title: place.name,
-            category: "한식",
-            address: place.address,
-            date: dateString,
-            images: place.photoReferences
-        )
-
         Task { @MainActor in
+            var uploadedImageUrls: [String] = []
+
+            // 이미지 업로드
+            if let firstPhotoRef = place.photoReferences.first,
+               let imageData = await saveImage(photoReference: firstPhotoRef) {
+                
+                let result = await CommonController.shared.uploadImageToServer(
+                    endpoint: ApisV1.willPost.rawValue + "/image",
+                    imageData: imageData
+                )
+                
+                if let urls = result as? [String] {
+                    uploadedImageUrls = urls
+                } else if let singleUrl = result as? String {
+                    uploadedImageUrls = [singleUrl]
+                }
+            }
+
+            // 업로드 결과 확인
+            guard !uploadedImageUrls.isEmpty else {
+                print("업로드 실패: 결과값이 [String] 또는 String이 아님")
+                self.isLoading = false
+                completion(false)
+                return
+            }
+
+            // 최종 저장
+            let requestBody = WillSaveRequest(
+                title: place.name,
+                category: "기타",
+                address: place.address,
+                date: formatdotYYYYMMDD(Date()),
+                images: uploadedImageUrls
+            )
+
             let response = await willService.saveWillPost(data: requestBody)
             
             if response.success {
-                print("DB 저장 성공!")
+                print("최종 저장 성공")
                 completion(true)
             } else {
-                print("서버 응답 에러: \(response.message ?? "")")
+                print("저장 실패: \(response.message ?? "")")
                 completion(false)
             }
             self.isLoading = false
+        }
+    }
+    
+    private func saveImage(photoReference: String) async -> Data? {
+        guard let apiKey = Bundle.main.infoDictionary?["GOOGLE_PLACE"] as? String else { return nil }
+        let urlStr = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=\(photoReference)&key=\(apiKey)"
+        
+        guard let url = URL(string: urlStr) else { return nil }
+        
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            return data
+        } catch {
+            return nil
         }
     }
 }

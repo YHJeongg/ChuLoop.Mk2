@@ -9,12 +9,10 @@ struct SearchRestaurantMapBottomSheet: View {
     @StateObject private var controller = WillScreenController()
     let place: Place
     let googleApiKey: String
-    
-    var onAddressTap: (WillModel) -> Void // 부모 뷰로 이벤트를 전달하기 위해 추가
-    var onSaveSuccess: () -> Void // 저장 성공 시 부모뷰에 알릴 용도
+    var onAddressTap: (WillModel) -> Void
+    var onSaveSuccess: () -> Void
 
     var body: some View {
-        // 메인 컨텐츠
         VStack(spacing: ResponsiveSize.height(20)) {
 
             // 레스토랑 이름
@@ -25,10 +23,8 @@ struct SearchRestaurantMapBottomSheet: View {
 
             // 사진 + 주소
             HStack(alignment: .center, spacing: ResponsiveSize.width(15)) {
-
                 restaurantImage
 
-                // 주소 클릭 시 부모 뷰의 팝업 트리거 실행
                 Button(action: {
                     let model = WillModel(
                         id: UUID().uuidString,
@@ -49,7 +45,7 @@ struct SearchRestaurantMapBottomSheet: View {
                 .buttonStyle(PlainButtonStyle())
             }
 
-            // 저장 버튼
+            // 저장 버튼 (로딩 상태 추가)
             Button(action: {
                 controller.saveWillPost(place: place) { success in
                     if success {
@@ -57,16 +53,27 @@ struct SearchRestaurantMapBottomSheet: View {
                     }
                 }
             }) {
-                Text("가고싶은 맛집으로 저장")
-                    .font(.bodyMedium)
-                    .foregroundColor(.natural10)
-                    .frame(
-                        maxWidth: ResponsiveSize.width(382),
-                        maxHeight: ResponsiveSize.height(50)
-                    )
-                    .background(Color.primary900)
-                    .cornerRadius(10)
+                ZStack {
+                    if controller.isLoading {
+                        // 로딩 중일 때 표시할 인디케이터
+                        ProgressView()
+                            .tint(.natural10)
+                    } else {
+                        Text("가고싶은 맛집으로 저장")
+                            .font(.bodyMedium)
+                            .foregroundColor(.natural10)
+                    }
+                }
+                .frame(
+                    maxWidth: ResponsiveSize.width(382),
+                    maxHeight: ResponsiveSize.height(50)
+                )
+                // 로딩 중일 때는 배경색을 살짝 흐리게 처리
+                .background(controller.isLoading ? Color.primary900.opacity(0.7) : Color.primary900)
+                .cornerRadius(10)
             }
+            // 로딩 중에는 버튼 중복 클릭 방지
+            .disabled(controller.isLoading)
         }
         .padding(.horizontal, ResponsiveSize.width(30))
         .padding(.top, ResponsiveSize.height(25))
@@ -90,8 +97,12 @@ struct SearchRestaurantMapBottomSheet: View {
                         image
                             .resizable()
                             .scaledToFill()
-                    default:
-                        Color.gray.opacity(0.3)
+                    case .failure:
+                        emptyPhotoView
+                    case .empty:
+                        ProgressView()
+                    @unknown default:
+                        emptyPhotoView
                     }
                 }
 
