@@ -25,10 +25,8 @@ enum ApisV1: String {
     
 
     case willPost = "/will-post"
-
+    case willImage = "/will-post/image"
+    
     case noticeList = "/notice"
     
-    
-    
-
 }

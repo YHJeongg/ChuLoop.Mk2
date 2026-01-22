@@ -141,67 +141,86 @@ class WillScreenController: ObservableObject {
 
     // 맛집 저장
     func saveWillPost(place: Place, completion: @escaping (Bool) -> Void) {
-        self.isLoading = true
+        isLoading = true
 
-        Task { @MainActor in
-            var uploadedImageUrls: [String] = []
-
-            // 이미지 업로드
-            if let firstPhotoRef = place.photoReferences.first,
-               let imageData = await saveImage(photoReference: firstPhotoRef) {
-                
-                let result = await CommonController.shared.uploadImageToServer(
-                    endpoint: ApisV1.willPost.rawValue + "/image",
-                    imageData: imageData
-                )
-                
-                if let urls = result as? [String] {
-                    uploadedImageUrls = urls
-                } else if let singleUrl = result as? String {
-                    uploadedImageUrls = [singleUrl]
+        Task {
+            guard let firstPhotoRef = place.photoReferences.first else {
+                await MainActor.run {
+                    self.isLoading = false // 사진이 없으면 로딩 중단
+                    completion(false) // 실패 콜백 호출
                 }
-            }
-
-            // 업로드 결과 확인
-            guard !uploadedImageUrls.isEmpty else {
-                print("업로드 실패: 결과값이 [String] 또는 String이 아님")
-                self.isLoading = false
-                completion(false)
                 return
             }
 
-            // 최종 저장
+            guard let imageData = await fetchGooglePlaceImage(photoReference: firstPhotoRef) else {
+                await MainActor.run {
+                    self.isLoading = false // 이미지 다운로드 실패 시 로딩 중단
+                    completion(false) // 실패 콜백 호출
+                }
+                return
+            }
+
+            guard let uploadedImageUrls = await willService.uploadWillImage(imageData: imageData),
+                  !uploadedImageUrls.isEmpty else {
+                await MainActor.run {
+                    self.isLoading = false // 우리 서버 업로드 실패 시 로딩 중단
+                    completion(false) // 실패 콜백 호출
+                }
+                return
+            }
+
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy.MM.dd"
+            let dateString = formatter.string(from: Date())
+
             let requestBody = WillSaveRequest(
                 title: place.name,
-                category: "기타",
+                category: place.category,
                 address: place.address,
-                date: formatdotYYYYMMDD(Date()),
+                date: dateString,
                 images: uploadedImageUrls
             )
 
+            // 맛집 저장 요청
             let response = await willService.saveWillPost(data: requestBody)
-            
-            if response.success {
-                print("최종 저장 성공")
-                completion(true)
-            } else {
-                print("저장 실패: \(response.message ?? "")")
-                completion(false)
+
+            await MainActor.run {
+                if response.success {
+                    print("DB 저장 성공")
+                    completion(true)
+                } else {
+                    print("DB 저장 실패:", response.message ?? "")
+                    completion(false)
+                }
+                self.isLoading = false
             }
-            self.isLoading = false
         }
     }
-    
-    private func saveImage(photoReference: String) async -> Data? {
-        guard let apiKey = Bundle.main.infoDictionary?["GOOGLE_PLACE"] as? String else { return nil }
-        let urlStr = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=\(photoReference)&key=\(apiKey)"
-        
-        guard let url = URL(string: urlStr) else { return nil }
-        
+
+
+    // GPlace Image Data
+    private func fetchGooglePlaceImage(photoReference: String) async -> Data? {
+        guard let apiKey = Bundle.main.infoDictionary?["GOOGLE_PLACE"] as? String else {
+            print("GOOGLE_PLACE API Key 없음")
+            return nil
+        }
+
+        let urlString =
+        "https://maps.googleapis.com/maps/api/place/photo" +
+        "?maxwidth=400" +
+        "&photo_reference=\(photoReference)" +
+        "&key=\(apiKey)"
+
+        guard let url = URL(string: urlString) else {
+            print("Google Photo URL 생성 실패")
+            return nil
+        }
+
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             return data
         } catch {
+            print("Google Place 이미지 다운로드 실패:", error)
             return nil
         }
     }
