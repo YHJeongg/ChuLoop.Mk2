@@ -224,4 +224,20 @@ class WillScreenController: ObservableObject {
             return nil
         }
     }
+    
+    // 삭제
+    func deleteWillPost(id: String) {
+        Task {
+            let response = await willService.deleteWillPost(postId: id)
+            
+            await MainActor.run {
+                if response.success {
+                    print("DB 삭제 성공: \(id)")
+                    self.contents.removeAll { $0.id == id }
+                } else {
+                    print("DB 삭제 실패: \(response.message ?? "")")
+                }
+            }
+        }
+    }
 }

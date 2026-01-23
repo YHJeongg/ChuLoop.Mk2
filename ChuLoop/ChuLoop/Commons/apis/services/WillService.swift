@@ -35,4 +35,11 @@ class WillService {
 
         return nil
     }
+    
+    // 맛집 삭제
+    func deleteWillPost(postId: String) async -> ResponseVO {
+        return await HTTP.shared.delete(
+            endpoint: "\(ApisV1.willPost.rawValue)/\(postId)"
+        )
+    }
 }
