@@ -9,15 +9,15 @@ import MapKit
 struct SearchRestaurantMapScreen: View {
     let place: Place
     @Binding var showTabView: Bool
+    @Binding var isShowingSearchScreen: Bool
 
     @State private var position: MapCameraPosition
-    
-    // 화면 전체 중앙에 띄울 팝업 상태 추가
     @State private var selectedPlaceForMap: WillModel? = nil
 
-    init(place: Place, showTabView: Binding<Bool>) {
+    init(place: Place, showTabView: Binding<Bool>, isShowingSearchScreen: Binding<Bool>) {
         self.place = place
         self._showTabView = showTabView
+        self._isShowingSearchScreen = isShowingSearchScreen
         self._position = State(
             initialValue: .region(
                 MKCoordinateRegion(
@@ -35,31 +35,24 @@ struct SearchRestaurantMapScreen: View {
     }
 
     var body: some View {
-        SubPageNavigationView(
-            title: "맛집 검색",
-            showTabView: .constant(false)
-        ) {
+        SubPageNavigationView(title: "맛집 검색", showTabView: .constant(false)) {
             ZStack(alignment: .bottom) {
                 Map(position: $position) {
-                    Marker(
-                        place.name,
-                        coordinate: CLLocationCoordinate2D(
-                            latitude: place.latitude,
-                            longitude: place.longitude
-                        )
-                    )
+                    Marker(place.name,
+                           coordinate:
+                            CLLocationCoordinate2D(
+                                latitude: place.latitude,
+                                longitude: place.longitude
+                            ))
                 }
 
                 SearchRestaurantMapBottomSheet(
                     place: place,
                     googleApiKey: Bundle.main.infoDictionary?["GOOGLE_PLACE"] as? String ?? "",
-                    onAddressTap: { model in
-                        // 바텀시트에서 전달된 모델을 받아 팝업 표시
-                        selectedPlaceForMap = model
-                    },
+                    onAddressTap: { model in selectedPlaceForMap = model },
                     onSaveSuccess: {
-                        // DB 저장 성공 시 실행될 코드
-                        print("부모 뷰: 저장이 성공되었습니다.")
+                        // 저장 성공 시 이 값을 false로 바꿔 모든 검색 스택을 닫음
+                        self.isShowingSearchScreen = false
                     }
                 )
                 .padding(.bottom, 12)

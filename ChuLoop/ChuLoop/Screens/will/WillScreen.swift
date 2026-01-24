@@ -17,7 +17,6 @@ struct WillScreen: View {
 
     var body: some View {
         ZStack {
-            // 메인 네비게이션
             MainNavigationView(
                 title: "방문할 맛집",
                 showTabView: $showTabView,
@@ -29,13 +28,11 @@ struct WillScreen: View {
                             .padding(.horizontal)
 
                         ZStack {
-                            // 로딩 상태
                             if controller.isLoading && controller.contents.isEmpty {
                                 ProgressView()
                                     .progressViewStyle(CircularProgressViewStyle())
                                     .padding()
                             }
-                            // 데이터 없음
                             else if controller.contents.isEmpty {
                                 VStack {
                                     Spacer()
@@ -52,28 +49,19 @@ struct WillScreen: View {
                                 .multilineTextAlignment(.center)
                                 .padding()
                             }
-                            // 맛집 리스트
                             else {
                                 List {
                                     ForEach(controller.contents) { place in
                                         HStack {
                                             Spacer()
-                                            // 카드 컴포넌트 (id 전달을 위해 @Binding 대신 상수로 전달)
                                             WillCard(
                                                 place: .constant(place),
-                                                onWriteReview: {
-                                                    // 리뷰쓰기 로직
-                                                },
-                                                onGetDirections: {
-                                                    selectedPlace = place
-                                                },
-                                                onCopyAddress: {
-                                                    showToast()
-                                                }
+                                                onWriteReview: { },
+                                                onGetDirections: { selectedPlace = place },
+                                                onCopyAddress: { showToast() }
                                             )
                                             .buttonStyle(.plain)
                                             .contentShape(Rectangle())
-
                                             Spacer()
                                         }
                                         .padding(.top, ResponsiveSize.height(24))
@@ -81,13 +69,12 @@ struct WillScreen: View {
                                         .listRowSeparator(.hidden)
                                         .listRowBackground(Color.clear)
                                         .onAppear {
-                                            // 무한 스크롤: 마지막 아이템 도달 시 추가 로드
                                             if place.id == controller.contents.last?.id {
                                                 controller.getWillPosts(searchText: searchText)
                                             }
                                         }
                                     }
-                                    .onDelete(perform: deleteItems) // 👈 슬라이드 삭제 활성화
+                                    .onDelete(perform: deleteItems)
                                 }
                                 .listStyle(PlainListStyle())
                                 .scrollIndicators(.hidden)
@@ -95,9 +82,12 @@ struct WillScreen: View {
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                        // 검색 화면 이동을 위한 hidden 링크
+                        // isShowingSearchScreen 바인딩 전달
                         NavigationLink(
-                            destination: SearchRestaurantScreen(showTabView: $showTabView),
+                            destination: SearchRestaurantScreen(
+                                showTabView: $showTabView,
+                                isShowingSearchScreen: $isShowingSearchScreen
+                            ),
                             isActive: $isShowingSearchScreen
                         ) {
                             EmptyView()
@@ -105,6 +95,7 @@ struct WillScreen: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .onAppear {
+                        // 하위 뷰가 닫히고 돌아올 때마다 자동으로 데이터 리프레시
                         controller.getWillPosts(searchText: searchText)
                     }
                 },
@@ -114,15 +105,8 @@ struct WillScreen: View {
                 }
             )
 
-            // 상단 토스트 UI
-            if showTopToast {
-                toastView
-            }
-
-            // 중앙 커스텀 시트
-            if let selected = selectedPlace {
-                customSheetView(selected: selected)
-            }
+            if showTopToast { toastView }
+            if let selected = selectedPlace { customSheetView(selected: selected) }
         }
         .animation(.easeInOut, value: showTopToast)
         .animation(.easeInOut, value: selectedPlace != nil)

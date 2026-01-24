@@ -7,6 +7,8 @@ import SwiftUI
 
 struct SearchRestaurantScreen: View {
     @Binding var showTabView: Bool
+    @Binding var isShowingSearchScreen: Bool
+    
     @State private var searchText: String = ""
     @State private var recentSearches: [String] = []
     @State private var searchResults: [Place] = []
@@ -19,7 +21,7 @@ struct SearchRestaurantScreen: View {
     var body: some View {
         SubPageNavigationView(title: "맛집 검색", showTabView: $showTabView) {
             VStack(alignment: .leading) {
-                // 검색창
+                // 검색창 영역
                 HStack {
                     ZStack(alignment: .trailing) {
                         TextField("검색", text: $searchText)
@@ -29,17 +31,11 @@ struct SearchRestaurantScreen: View {
                             .cornerRadius(5)
                             .foregroundColor(.black)
                             .font(.bodySmall)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .stroke(Color.natural40, lineWidth: 1)
-                            )
+                            .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.natural40, lineWidth: 1))
 
                         if !searchText.isEmpty {
-                            Button(action: {
-                                searchText = ""
-                            }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.black)
+                            Button(action: { searchText = "" }) {
+                                Image(systemName: "xmark.circle.fill").foregroundColor(.black)
                             }
                             .padding(.trailing, ResponsiveSize.width(10))
                         }
@@ -51,13 +47,9 @@ struct SearchRestaurantScreen: View {
                             isSearching = true
                             isLoading = true
                             searchResults = []
-
-                            // 최근 검색어 저장
                             recentSearches.insert(searchText, at: 0)
                             recentSearches = Array(NSOrderedSet(array: recentSearches)) as! [String]
-                            if recentSearches.count > 10 {
-                                recentSearches = Array(recentSearches.prefix(10))
-                            }
+                            if recentSearches.count > 10 { recentSearches = Array(recentSearches.prefix(10)) }
                             UserDefaults.standard.set(recentSearches, forKey: recentSearchesKey)
 
                             controller.GooglePlace(keyword: searchText) { results in
@@ -66,8 +58,7 @@ struct SearchRestaurantScreen: View {
                             }
                         }
                     }) {
-                        Text("검색")
-                            .foregroundColor(.white)
+                        Text("검색").foregroundColor(.white)
                     }
                     .frame(width: ResponsiveSize.width(70), height: ResponsiveSize.height(45))
                     .background(Color.primary900)
@@ -79,59 +70,32 @@ struct SearchRestaurantScreen: View {
                     .foregroundColor(.black)
                     .padding(.vertical, ResponsiveSize.height(24))
 
-                // 검색 중일 때
                 if isSearching {
                     if isLoading {
-                        ZStack {
-                            Color.clear
-
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle())
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else if searchResults.isEmpty {
-                        VStack {
-                            Spacer()
-                            Text("검색결과가 없습니다.")
-                                .foregroundColor(.natural60)
-                                .font(.bodyMedium)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                            Spacer()
-                        }
-                        .frame(maxHeight: .infinity)
+                        Text("검색결과가 없습니다.").frame(maxWidth: .infinity, maxHeight: .infinity)
                     } else {
-                        // 검색 결과 리스트
                         ScrollView {
                             VStack(alignment: .leading) {
                                 ForEach(searchResults) { place in
                                     VStack(alignment: .leading, spacing: 4) {
                                         HStack {
-                                            Text(place.name)
-                                                .font(.bodySmallBold)
-                                                .foregroundColor(.black)
-                                            Text(place.category)
-                                                .font(.bodyXXSmall)
-                                                .foregroundColor(.black)
-                                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                            Text(place.name).font(.bodySmallBold).foregroundColor(.black)
+                                            Text(place.category).font(.bodyXXSmall).foregroundColor(.black).frame(maxWidth: .infinity, alignment: .trailing)
                                         }
                                         .padding(.horizontal, ResponsiveSize.width(15))
                                         .padding(.bottom, ResponsiveSize.height(9))
 
                                         HStack {
-                                            Text(place.address)
-                                                .font(.bodyXSmall)
-                                                .foregroundColor(.black)
-                                                .lineLimit(nil)
-                                                .fixedSize(horizontal: false, vertical: true)
-
+                                            Text(place.address).font(.bodyXSmall).foregroundColor(.black).lineLimit(nil).fixedSize(horizontal: false, vertical: true)
                                             NavigationLink(
                                                 destination: SearchRestaurantMapScreen(
                                                     place: place,
-                                                    showTabView: $showTabView
+                                                    showTabView: $showTabView,
+                                                    isShowingSearchScreen: $isShowingSearchScreen
                                                 )
-                                                .onAppear {
-                                                    showTabView = false
-                                                }
+                                                .onAppear { showTabView = false }
                                             ) {
                                                 Text("지도보기")
                                                     .font(.bodySmall)
@@ -150,66 +114,49 @@ struct SearchRestaurantScreen: View {
                                     .frame(width: ResponsiveSize.width(382), height: ResponsiveSize.height(90))
                                     .background(Color.white)
                                     .cornerRadius(5)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 5)
-                                            .stroke(Color.natural40, lineWidth: 1)
-                                    )
+                                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.natural40, lineWidth: 1))
                                 }
                             }
                         }
                     }
                 } else {
-                    // 최근 검색어
-                    if recentSearches.isEmpty {
-                        VStack {
-                            Spacer()
-                            Text("검색한 내역이 없습니다.")
-                                .foregroundColor(.natural60)
-                                .font(.bodyMedium)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                            Spacer()
-                        }
-                        .frame(maxHeight: .infinity)
-                    } else {
-                        VStack(alignment: .leading) {
-                            ForEach(recentSearches, id: \.self) { search in
-                                HStack {
-                                    Button(action: {
-                                        searchText = search
-                                        isSearching = true
-                                        isLoading = true
-                                        searchResults = []
+                    VStack(alignment: .leading) {
+                        ForEach(recentSearches, id: \.self) { search in
+                            HStack {
+                                Button(action: {
+                                    searchText = search
+                                    isSearching = true
+                                    isLoading = true
+                                    searchResults = []
 
-                                        controller.GooglePlace(keyword: search) { results in
-                                            self.searchResults = results
-                                            self.isLoading = false
-                                        }
-                                    }) {
-                                        HStack {
-                                            Image(systemName: "magnifyingglass")
-                                                .foregroundColor(.black)
-                                            Text(search)
-                                                .font(.bodyNormal)
-                                                .foregroundColor(.black)
-                                        }
+                                    controller.GooglePlace(keyword: search) { results in
+                                        self.searchResults = results
+                                        self.isLoading = false
                                     }
-                                    Spacer()
-                                    Button(action: {
-                                        if let index = recentSearches.firstIndex(of: search) {
-                                            recentSearches.remove(at: index)
-                                            UserDefaults.standard.set(recentSearches, forKey: recentSearchesKey)
-                                        }
-                                    }) {
-                                        Image(systemName: "xmark")
+                                }) {
+                                    HStack {
+                                        Image(systemName: "magnifyingglass")
+                                            .foregroundColor(.black)
+                                        Text(search)
+                                            .font(.bodyNormal)
                                             .foregroundColor(.black)
                                     }
                                 }
-                                .padding(.vertical, ResponsiveSize.height(10))
+                                Spacer()
+                                Button(action: {
+                                    if let index = recentSearches.firstIndex(of: search) {
+                                        recentSearches.remove(at: index)
+                                        UserDefaults.standard.set(recentSearches, forKey: recentSearchesKey)
+                                    }
+                                }) {
+                                    Image(systemName: "xmark")
+                                        .foregroundColor(.black)
+                                }
                             }
+                            .padding(.vertical, ResponsiveSize.height(10))
                         }
                     }
                 }
-
                 Spacer()
             }
             .padding(.horizontal, ResponsiveSize.width(34))
