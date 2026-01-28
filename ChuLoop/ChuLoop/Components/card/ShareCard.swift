@@ -1,0 +1,156 @@
+//
+//  ShareCard.swift
+//  ChuLoop
+//
+
+import SwiftUI
+
+struct ShareCard: View {
+    @Binding var item: ShareModel
+    @Binding var showSheet: Bool
+    
+    // 액션 클로저
+    var onLike: (() -> Void)? = nil
+    var onShare: (() -> Void)? = nil
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // 상단 사용자 정보
+            HStack(spacing: 8) {
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(.natural40)
+                
+                Text(item.userName ?? "익명 사용자")
+                    .font(.bodySmallBold)
+                    .foregroundColor(.natural90)
+                
+                Spacer()
+            }
+            .padding(.horizontal, ResponsiveSize.width(15))
+            .padding(.vertical, ResponsiveSize.height(12))
+
+            // 이미지 섹션
+            imageSection
+
+            // 내용 및 액션 버튼 섹션
+            VStack(alignment: .leading, spacing: 0) {
+                titleAndDateSection
+                addressSection
+                actionButtonSection
+            }
+        }
+        .background(Color.white)
+        .cornerRadius(5)
+        .overlay(
+            RoundedRectangle(cornerRadius: 5)
+                .stroke(Color.natural40, lineWidth: 0.5)
+        )
+    }
+}
+
+// MARK: - Subviews
+private extension ShareCard {
+    
+    // 이미지 영역
+    var imageSection: some View {
+        Group {
+            if let firstImage = item.images.first, let imageUrl = URL(string: firstImage) {
+                AsyncImage(url: imageUrl) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: ResponsiveSize.height(250))
+                    case .success(let image):
+                        image.resizable()
+                            .scaledToFill()
+                            .frame(height: ResponsiveSize.height(250))
+                            .clipped()
+                    case .failure:
+                        placeholderImage
+                    @unknown default:
+                        EmptyView()
+                    }
+                }
+            } else {
+                placeholderImage
+            }
+        }
+    }
+    
+    // 이미지 없을 때 표시할 플레이스홀더
+    var placeholderImage: some View {
+        Rectangle()
+            .fill(Color.natural20)
+            .frame(height: ResponsiveSize.height(250))
+            .overlay(
+                Image(systemName: "photo")
+                    .foregroundColor(.natural40)
+                    .font(.largeTitle)
+            )
+    }
+
+    // 제목 및 날짜 영역
+    var titleAndDateSection: some View {
+        HStack {
+            Text(item.title)
+                .font(.bodyMediumBold)
+                .foregroundColor(.natural90)
+                .lineLimit(1)
+            
+            Spacer()
+            
+            Text(item.date)
+                .font(.bodySmall)
+                .foregroundColor(.natural60)
+        }
+        .padding(.horizontal, ResponsiveSize.width(15))
+        .padding(.top, ResponsiveSize.height(12))
+    }
+
+    // 주소 영역
+    var addressSection: some View {
+        Text(item.address)
+            .font(.bodyXSmall)
+            .foregroundColor(.natural60)
+            .padding(.horizontal, ResponsiveSize.width(15))
+            .padding(.top, ResponsiveSize.height(6))
+    }
+
+    // 좋아요 및 공유하기 버튼 영역
+    var actionButtonSection: some View {
+        HStack {
+            // 좋아요 섹션
+            Button(action: { onLike?() }) {
+                HStack(spacing: 6) {
+                    Image(systemName: item.mylikes ? "heart.fill" : "heart")
+                        .font(.system(size: 18))
+                        .foregroundColor(item.mylikes ? .error : .natural60)
+                    
+                    Text("\(item.likes)명이 좋아해요")
+                        .font(.bodyXSmall)
+                        .foregroundColor(.natural80)
+                }
+            }
+            .buttonStyle(PlainButtonStyle())
+
+            Spacer()
+
+            // 공유하기 텍스트 버튼
+            Button(action: { onShare?() }) {
+                HStack(spacing: 4) {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 14))
+                    Text("공유하기")
+                        .font(.bodySmall)
+                }
+                .foregroundColor(.primary900)
+            }
+            .buttonStyle(PlainButtonStyle())
+        }
+        .padding(.horizontal, ResponsiveSize.width(15))
+        .padding(.vertical, ResponsiveSize.height(18))
+    }
+}

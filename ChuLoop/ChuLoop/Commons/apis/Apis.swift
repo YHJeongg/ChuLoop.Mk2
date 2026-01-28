@@ -22,10 +22,11 @@ enum ApisV1: String {
     case edPostShare = "/ed-post/share"
     case edPostUnshare = "/ed-post/unshare"
     case edPostImage = "/ed-post/image"
-    
 
     case willPost = "/will-post"
     case willImage = "/will-post/image"
+    
+    case sharePost = "/community-post"
     
     case noticeList = "/notice"
     
