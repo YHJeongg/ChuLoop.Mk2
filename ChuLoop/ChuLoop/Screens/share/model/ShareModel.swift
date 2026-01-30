@@ -26,7 +26,7 @@ struct ShareModel: Codable, Identifiable {
     var shared: Bool
     var likes: Int
     var mylikes: Bool
-    var userName: String? // JSON 예시에는 없지만 디자인 요구사항인 사용자명을 위해 추가
+    var userName: String?
 
     enum CodingKeys: String, CodingKey {
         case id = "_id"

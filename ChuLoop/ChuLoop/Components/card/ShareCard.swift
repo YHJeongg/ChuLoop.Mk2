@@ -9,30 +9,34 @@ struct ShareCard: View {
     @Binding var item: ShareModel
     @Binding var showSheet: Bool
     
-    // 액션 클로저
+    // 닉네임 표시용
+    var userNickname: String {
+        return item.userName ?? "익명 사용자"
+    }
+    
     var onLike: (() -> Void)? = nil
     var onShare: (() -> Void)? = nil
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // 상단 사용자 정보
-            HStack(spacing: 8) {
+            // 이미지 섹션
+            imageSection
+
+            // 사용자 정보 섹션
+            HStack(spacing: 6) {
                 Image(systemName: "person.circle.fill")
                     .resizable()
-                    .frame(width: 24, height: 24)
-                    .foregroundColor(.natural40)
+                    .frame(width: ResponsiveSize.width(24), height: ResponsiveSize.height(24))
+                    .foregroundColor(.natural60)
                 
-                Text(item.userName ?? "익명 사용자")
-                    .font(.bodySmallBold)
-                    .foregroundColor(.natural90)
+                Text(userNickname)
+                    .font(.bodyXSmall)
+                    .foregroundColor(.natural60)
                 
                 Spacer()
             }
             .padding(.horizontal, ResponsiveSize.width(15))
-            .padding(.vertical, ResponsiveSize.height(12))
-
-            // 이미지 섹션
-            imageSection
+            .padding(.top, ResponsiveSize.height(12))
 
             // 내용 및 액션 버튼 섹션
             VStack(alignment: .leading, spacing: 0) {
@@ -53,7 +57,6 @@ struct ShareCard: View {
 // MARK: - Subviews
 private extension ShareCard {
     
-    // 이미지 영역
     var imageSection: some View {
         Group {
             if let firstImage = item.images.first, let imageUrl = URL(string: firstImage) {
@@ -80,7 +83,6 @@ private extension ShareCard {
         }
     }
     
-    // 이미지 없을 때 표시할 플레이스홀더
     var placeholderImage: some View {
         Rectangle()
             .fill(Color.natural20)
@@ -88,11 +90,9 @@ private extension ShareCard {
             .overlay(
                 Image(systemName: "photo")
                     .foregroundColor(.natural40)
-                    .font(.largeTitle)
             )
     }
 
-    // 제목 및 날짜 영역
     var titleAndDateSection: some View {
         HStack {
             Text(item.title)
@@ -107,44 +107,42 @@ private extension ShareCard {
                 .foregroundColor(.natural60)
         }
         .padding(.horizontal, ResponsiveSize.width(15))
-        .padding(.top, ResponsiveSize.height(12))
+        .padding(.top, ResponsiveSize.height(8))
     }
 
-    // 주소 영역
     var addressSection: some View {
         Text(item.address)
             .font(.bodyXSmall)
             .foregroundColor(.natural60)
             .padding(.horizontal, ResponsiveSize.width(15))
-            .padding(.top, ResponsiveSize.height(6))
+            .padding(.top, ResponsiveSize.height(4))
     }
 
-    // 좋아요 및 공유하기 버튼 영역
     var actionButtonSection: some View {
         HStack {
-            // 좋아요 섹션
             Button(action: { onLike?() }) {
                 HStack(spacing: 6) {
                     Image(systemName: item.mylikes ? "heart.fill" : "heart")
-                        .font(.system(size: 18))
-                        .foregroundColor(item.mylikes ? .error : .natural60)
+                        .font(.system(size: 16))
+                        .foregroundColor(.error)
                     
                     Text("\(item.likes)명이 좋아해요")
                         .font(.bodyXSmall)
-                        .foregroundColor(.natural80)
+                        .foregroundColor(.natural90)
                 }
             }
             .buttonStyle(PlainButtonStyle())
 
             Spacer()
 
-            // 공유하기 텍스트 버튼
             Button(action: { onShare?() }) {
                 HStack(spacing: 4) {
                     Image(systemName: "square.and.arrow.up")
-                        .font(.system(size: 14))
+                        .font(.system(size: 16))
+                        .foregroundColor(.darkBlack)
                     Text("공유하기")
-                        .font(.bodySmall)
+                        .font(.bodyXSmall)
+                        .foregroundColor(.natural90)
                 }
                 .foregroundColor(.primary900)
             }
