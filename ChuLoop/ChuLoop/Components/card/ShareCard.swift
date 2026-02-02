@@ -9,11 +9,6 @@ struct ShareCard: View {
     @Binding var item: ShareModel
     @Binding var showSheet: Bool
     
-    // 닉네임 표시용
-    var userNickname: String {
-        return item.userName ?? "익명 사용자"
-    }
-    
     var onLike: (() -> Void)? = nil
     var onShare: (() -> Void)? = nil
     
@@ -23,15 +18,16 @@ struct ShareCard: View {
             imageSection
 
             // 사용자 정보 섹션
-            HStack(spacing: 6) {
+            HStack(spacing: 8) {
                 Image(systemName: "person.circle.fill")
                     .resizable()
-                    .frame(width: ResponsiveSize.width(24), height: ResponsiveSize.height(24))
-                    .foregroundColor(.natural60)
+                    .frame(width: ResponsiveSize.width(22), height: ResponsiveSize.height(22))
+                    .foregroundColor(.natural40)
                 
-                Text(userNickname)
-                    .font(.bodyXSmall)
-                    .foregroundColor(.natural60)
+                // 닉네임
+                Text(item.nickname)
+                    .font(.bodyXSmallBold)
+                    .foregroundColor(.natural80)
                 
                 Spacer()
             }
@@ -107,7 +103,7 @@ private extension ShareCard {
                 .foregroundColor(.natural60)
         }
         .padding(.horizontal, ResponsiveSize.width(15))
-        .padding(.top, ResponsiveSize.height(8))
+        .padding(.top, ResponsiveSize.height(10))
     }
 
     var addressSection: some View {
@@ -120,11 +116,12 @@ private extension ShareCard {
 
     var actionButtonSection: some View {
         HStack {
+            // 좋아요 버튼
             Button(action: { onLike?() }) {
                 HStack(spacing: 6) {
                     Image(systemName: item.mylikes ? "heart.fill" : "heart")
                         .font(.system(size: 16))
-                        .foregroundColor(.error)
+                        .foregroundColor(item.mylikes ? .error : .natural60)
                     
                     Text("\(item.likes)명이 좋아해요")
                         .font(.bodyXSmall)
@@ -135,6 +132,7 @@ private extension ShareCard {
 
             Spacer()
 
+            // 공유하기 버튼
             Button(action: { onShare?() }) {
                 HStack(spacing: 4) {
                     Image(systemName: "square.and.arrow.up")
@@ -144,7 +142,6 @@ private extension ShareCard {
                         .font(.bodyXSmall)
                         .foregroundColor(.natural90)
                 }
-                .foregroundColor(.primary900)
             }
             .buttonStyle(PlainButtonStyle())
         }

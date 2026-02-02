@@ -16,8 +16,9 @@ class ShareScreenController: ObservableObject {
     private var hasMorePages: Bool = true
 
     func getSharePost(searchText: String = "", isRefreshing: Bool = false) {
-        // 중복 호출 방지 및 페이지네이션 체크
-        guard !isLoading, hasMorePages || isRefreshing else { return }
+        // 중복 호출 방지 및 페이지네이션 가능 여부 체크
+        guard !isLoading else { return }
+        if !isRefreshing && !hasMorePages { return }
 
         if isRefreshing {
             page = 1
@@ -46,20 +47,25 @@ class ShareScreenController: ObservableObject {
                 let shareResponse = try JSONDecoder().decode(ShareResponseModel.self, from: jsonData)
 
                 if isRefreshing {
+                    // 새로고침 시 전체 교체
                     self.contents = shareResponse.contents
                 } else {
+                    // 무한 스크롤 시 중복 ID 필터링 후 추가
                     let newItems = shareResponse.contents.filter { newItem in
                         !self.contents.contains(where: { $0.id == newItem.id })
                     }
                     self.contents.append(contentsOf: newItems)
                 }
 
-                // 다음 페이지 여부 확인
+                // 서버에서 온 데이터 개수가 limit보다 적으면 더 이상 페이지가 없는 것으로 판단
                 self.hasMorePages = shareResponse.contents.count == self.limit
-                if self.hasMorePages { self.page += 1 }
+                
+                if self.hasMorePages {
+                    self.page += 1
+                }
                 
             } catch {
-                print("디코딩 에러: \(error)")
+                print("Share 디코딩 에러 (nickname 포함 여부 확인): \(error)")
             }
             
             self.isLoading = false

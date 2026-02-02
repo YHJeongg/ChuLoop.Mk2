@@ -16,7 +16,6 @@ struct ShareResponseModel: Codable {
 
 struct ShareModel: Codable, Identifiable {
     let id: String
-    let seq: Int
     let title: String
     let category: String
     let address: String
@@ -26,10 +25,10 @@ struct ShareModel: Codable, Identifiable {
     var shared: Bool
     var likes: Int
     var mylikes: Bool
-    var userName: String?
+    let nickname: String
 
     enum CodingKeys: String, CodingKey {
         case id = "_id"
-        case seq, title, category, address, date, images, rating, shared, likes, mylikes, userName
+        case title, category, address, date, images, rating, shared, likes, mylikes, nickname
     }
 }
