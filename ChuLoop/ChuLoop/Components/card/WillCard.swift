@@ -12,6 +12,17 @@ struct WillCard: View {
     var onGetDirections: (() -> Void)? = nil
     var onCopyAddress: (() -> Void)? = nil
 
+    // GPlace 카테고리를 한국어로 변환
+    private var translatedCategory: String {
+        switch place.category.lowercased() {
+        case "restaurant": return "음식점"
+        case "cafe":       return "카페"
+        case "bakery":     return "빵집"
+        case "bar":        return "주점"
+        default:           return place.category
+        }
+    }
+
     var body: some View {
         HStack(spacing: 10) {
             imageSection
@@ -29,7 +40,7 @@ struct WillCard: View {
         )
     }
 
-    // MARK: - 이미지
+    // MARK: - 이미지 (기존과 동일)
     private var imageSection: some View {
         Group {
             if let imageUrl = URL(string: place.images.first ?? "") {
@@ -37,31 +48,19 @@ struct WillCard: View {
                     switch phase {
                     case .empty:
                         ProgressView()
-                            .frame(
-                                width: ResponsiveSize.width(140),
-                                height: ResponsiveSize.height(140)
-                            )
+                            .frame(width: ResponsiveSize.width(140), height: ResponsiveSize.height(140))
                             .background(Color.gray.opacity(0.1))
-
                     case .success(let image):
                         image.resizable()
                             .scaledToFill()
-                            .frame(
-                                width: ResponsiveSize.width(140),
-                                height: ResponsiveSize.height(140)
-                            )
+                            .frame(width: ResponsiveSize.width(140), height: ResponsiveSize.height(140))
                             .clipped()
-
                     case .failure:
                         Image(systemName: "photo")
                             .resizable()
                             .scaledToFit()
-                            .frame(
-                                width: ResponsiveSize.width(140),
-                                height: ResponsiveSize.height(140)
-                            )
+                            .frame(width: ResponsiveSize.width(140), height: ResponsiveSize.height(140))
                             .foregroundColor(.gray)
-
                     @unknown default:
                         EmptyView()
                     }
@@ -89,7 +88,8 @@ struct WillCard: View {
 
             Spacer()
 
-            Text(place.category)
+            // 변환된 카테고리 적용
+            Text(translatedCategory)
                 .font(.bodyXXSmall)
                 .foregroundColor(.black)
         }
@@ -104,7 +104,7 @@ struct WillCard: View {
             .padding(.vertical, ResponsiveSize.height(15))
     }
 
-    // MARK: - 버튼 영역
+    // MARK: - 버튼 영역 (기존과 동일)
     private var actionSection: some View {
         HStack {
             Button {
@@ -113,10 +113,7 @@ struct WillCard: View {
                 Text("리뷰쓰기")
                     .font(.bodySmall)
                     .foregroundColor(.black)
-                    .frame(
-                        width: ResponsiveSize.width(70),
-                        height: ResponsiveSize.height(30)
-                    )
+                    .frame(width: ResponsiveSize.width(70), height: ResponsiveSize.height(30))
                     .background(Color.secondary50)
                     .cornerRadius(8)
             }
@@ -125,7 +122,7 @@ struct WillCard: View {
 
             Button {
                 UIPasteboard.general.string = place.address
-                onCopyAddress?()   // 토스트 요청
+                onCopyAddress?()
             } label: {
                 Text("주소복사")
                     .font(.bodyXXSmall)
