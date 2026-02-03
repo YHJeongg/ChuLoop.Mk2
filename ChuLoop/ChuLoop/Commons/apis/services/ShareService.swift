@@ -12,4 +12,11 @@ class ShareService {
             queryParameters: queryParameters
         )
     }
+    
+    func likedPost(postId: String) async -> ResponseVO {
+        return await HTTP.shared.post(
+            endpoint: ApisV1.likedPost.rawValue + "/\(postId)",
+            body: nil
+        )
+    }
 }

@@ -34,8 +34,7 @@ struct ShareScreen: View {
                                 item: $item,
                                 showSheet: $showSheet,
                                 onLike: {
-                                    // 하트 클릭 시 로직
-                                    print("하트 클릭됨: \(item.id)")
+                                    controller.likedPost(postId: item.id)
                                 },
                                 onShare: {
                                     print("공유 버튼 클릭됨")

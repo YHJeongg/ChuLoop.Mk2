@@ -71,4 +71,20 @@ class ShareScreenController: ObservableObject {
             self.isLoading = false
         }
     }
+    
+    // 좋아요 버튼
+    func likedPost(postId: String) {
+        Task {
+            let response = await shareService.likedPost(postId: postId)
+            
+            if response.success {
+                // 메인 스레드에서 UI 업데이트
+                if let index = self.contents.firstIndex(where: { $0.id == postId }) {
+                    let isNowLiked = !self.contents[index].mylikes
+                    self.contents[index].mylikes = isNowLiked
+                    self.contents[index].likes += isNowLiked ? 1 : -1
+                }
+            }
+        }
+    }
 }
