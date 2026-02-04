@@ -74,16 +74,20 @@ class ShareScreenController: ObservableObject {
     
     // 좋아요 버튼
     func likedPost(postId: String) {
+        guard let index = self.contents.firstIndex(where: { $0.id == postId }) else { return }
+        
+        let isCurrentlyLiked = self.contents[index].mylikes
+        
         Task {
-            let response = await shareService.likedPost(postId: postId)
+            // 이미 좋아요 상태면 취소, 아니면 등록
+            let response = isCurrentlyLiked
+                ? await shareService.unlikedPost(postId: postId)
+                : await shareService.likedPost(postId: postId)
             
             if response.success {
-                // 메인 스레드에서 UI 업데이트
-                if let index = self.contents.firstIndex(where: { $0.id == postId }) {
-                    let isNowLiked = !self.contents[index].mylikes
-                    self.contents[index].mylikes = isNowLiked
-                    self.contents[index].likes += isNowLiked ? 1 : -1
-                }
+                // UI 상태 업데이트
+                self.contents[index].mylikes.toggle()
+                self.contents[index].likes += isCurrentlyLiked ? -1 : 1
             }
         }
     }
