@@ -16,58 +16,62 @@ class WillScreenController: ObservableObject {
     private let willService = WillService()
 
     func getWillPosts(searchText: String = "", isRefreshing: Bool = false) {
-        // 중복 호출 방지 + 데이터가 더 없으면 요청 중단
-        guard !isLoading, hasMorePages || isRefreshing else { return }
-
+        // 중복 호출 방지
+        guard !isLoading else { return }
+        
+        // 새로고침 시 초기화
         if isRefreshing {
             page = 1
             hasMorePages = true
-            contents.removeAll()
         }
+        
+        // 더 가져올 데이터가 없으면 중단 (새로고침이 아닐 때)
+        guard hasMorePages else { return }
 
         isLoading = true
 
-        Task { @MainActor in
+        Task {
             let queryParameters: [String: String] = [
                 "searchWord": searchText,
                 "page": "\(page)",
                 "limit": "\(limit)"
             ]
 
-            // WillService에서 데이터를 가져옴
             let response = await willService.fetchWillPosts(queryParameters: queryParameters)
 
-            // 실패시 처리
-            guard response.success else {
+            guard response.success, let data = response.data else {
                 print("데이터 요청 실패: \(response.message ?? "알 수 없는 오류")")
                 isLoading = false
                 return
             }
 
-            if let data = response.data {
-                do {
-                    let jsonData = try JSONSerialization.data(withJSONObject: data)
+            do {
+                let jsonData = try JSONSerialization.data(withJSONObject: data)
+                let willResponse = try JSONDecoder().decode(WillResponseModel.self, from: jsonData)
 
-                    let willResponse = try JSONDecoder().decode(WillResponseModel.self, from: jsonData)
-
-                    DispatchQueue.main.async {
-                        if isRefreshing {
-                            self.contents = willResponse.contents
-                        } else {
-                            self.contents.append(contentsOf: willResponse.contents)
-                        }
-                        
-                        // 더 이상 데이터가 없으면 페이징 중지
-                        self.hasMorePages = willResponse.contents.count == self.limit
-                        if self.hasMorePages { self.page += 1 }
-                        self.isLoading = false
+                // 데이터 업데이트 시 중복 ID 필터링
+                let newPosts = willResponse.contents
+                
+                if isRefreshing {
+                    self.contents = newPosts
+                } else {
+                    // 기존에 없는 ID만 골라서 추가
+                    let uniqueNewPosts = newPosts.filter { newPost in
+                        !self.contents.contains(where: { $0.id == newPost.id })
                     }
-                } catch {
-                    print("디코딩 오류: \(error)")
-                    isLoading = false
+                    self.contents.append(contentsOf: uniqueNewPosts)
                 }
-            } else {
-                isLoading = false
+                
+                // 다음 페이지 준비
+                self.hasMorePages = newPosts.count == self.limit
+                if self.hasMorePages {
+                    self.page += 1
+                }
+                self.isLoading = false
+                
+            } catch {
+                print("디코딩 오류: \(error)")
+                self.isLoading = false
             }
         }
     }
@@ -232,10 +236,7 @@ class WillScreenController: ObservableObject {
             
             await MainActor.run {
                 if response.success {
-                    print("DB 삭제 성공: \(id)")
                     self.contents.removeAll { $0.id == id }
-                } else {
-                    print("DB 삭제 실패: \(response.message ?? "")")
                 }
             }
         }

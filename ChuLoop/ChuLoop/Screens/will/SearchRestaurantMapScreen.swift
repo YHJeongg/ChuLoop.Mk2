@@ -37,41 +37,57 @@ struct SearchRestaurantMapScreen: View {
     var body: some View {
         SubPageNavigationView(title: "맛집 검색", showTabView: .constant(false)) {
             ZStack(alignment: .bottom) {
+                // 지도 영역
                 Map(position: $position) {
                     Marker(place.name,
-                           coordinate:
-                            CLLocationCoordinate2D(
-                                latitude: place.latitude,
-                                longitude: place.longitude
-                            ))
+                           coordinate: CLLocationCoordinate2D(
+                               latitude: place.latitude,
+                               longitude: place.longitude
+                           ))
                 }
 
+                // 하단 장소 정보 카드
                 SearchRestaurantMapBottomSheet(
                     place: place,
                     googleApiKey: Bundle.main.infoDictionary?["GOOGLE_PLACE"] as? String ?? "",
-                    onAddressTap: { model in selectedPlaceForMap = model },
+                    onAddressTap: { model in
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            self.selectedPlaceForMap = model
+                        }
+                    },
                     onSaveSuccess: {
-                        // 저장 성공 시 이 값을 false로 바꿔 모든 검색 스택을 닫음
                         self.isShowingSearchScreen = false
                     }
                 )
                 .padding(.bottom, 12)
-                
-                // 중앙 커스텀 시트 (화면 정중앙 기준)
+
+                // 커스텀 중앙 팝업
                 if let selected = selectedPlaceForMap {
                     ZStack {
+                        // 배경 어둡게
                         Color.black.opacity(0.3)
                             .ignoresSafeArea()
                             .onTapGesture {
-                                selectedPlaceForMap = nil
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    selectedPlaceForMap = nil
+                                }
                             }
-                        
-                        WillDirectionsSheetScreen(place: selected)
-                            .frame(width: 300)
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .shadow(color: .black.opacity(0.2), radius: 20)
-                            .transition(.scale.combined(with: .opacity))
+
+                        MapDirectionSheet(
+                            title: selected.title,
+                            address: selected.address,
+                            onCopy: {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    selectedPlaceForMap = nil
+                                }
+                            }
+                        )
+                        .frame(width: 300)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .shadow(color: .black.opacity(0.2), radius: 20)
+                        .transition(.scale.combined(with: .opacity))
+                        .zIndex(1)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .zIndex(1000)
@@ -82,7 +98,6 @@ struct SearchRestaurantMapScreen: View {
             }
             .ignoresSafeArea(edges: .bottom)
             .navigationBarTitleDisplayMode(.inline)
-            .animation(.easeInOut(duration: 0.2), value: selectedPlaceForMap != nil)
         }
     }
 }
