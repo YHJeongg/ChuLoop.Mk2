@@ -15,9 +15,10 @@ struct WillCard: View {
     // GPlace 카테고리를 한국어로 변환
     private var translatedCategory: String {
         switch place.category.lowercased() {
-        case "restaurant": return "음식점"
-        case "cafe":       return "카페"
-        case "bakery":     return "빵집"
+        case "restaurant":      return "음식점"
+        case "establishment":   return "음식점"
+        case "cafe":           return "카페"
+        case "bakery":         return "빵집"
         case "bar":        return "주점"
         default:           return place.category
         }

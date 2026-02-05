@@ -15,6 +15,7 @@ class WillScreenController: ObservableObject {
     private let limit: Int = 5
     private let willService = WillService()
 
+    @MainActor
     func getWillPosts(searchText: String = "", isRefreshing: Bool = false) {
         // 중복 호출 방지
         guard !isLoading else { return }
@@ -23,9 +24,11 @@ class WillScreenController: ObservableObject {
         if isRefreshing {
             page = 1
             hasMorePages = true
+            // UI 관련 변수(contents) 수정은 이제 메인 스레드에서 안전하게 일어납니다.
+            self.contents.removeAll()
         }
         
-        // 더 가져올 데이터가 없으면 중단 (새로고침이 아닐 때)
+        // 더 가져올 데이터가 없으면 중단
         guard hasMorePages else { return }
 
         isLoading = true
@@ -41,7 +44,7 @@ class WillScreenController: ObservableObject {
 
             guard response.success, let data = response.data else {
                 print("데이터 요청 실패: \(response.message ?? "알 수 없는 오류")")
-                isLoading = false
+                self.isLoading = false
                 return
             }
 
@@ -49,20 +52,19 @@ class WillScreenController: ObservableObject {
                 let jsonData = try JSONSerialization.data(withJSONObject: data)
                 let willResponse = try JSONDecoder().decode(WillResponseModel.self, from: jsonData)
 
-                // 데이터 업데이트 시 중복 ID 필터링
                 let newPosts = willResponse.contents
                 
                 if isRefreshing {
                     self.contents = newPosts
                 } else {
-                    // 기존에 없는 ID만 골라서 추가
+                    // 중복 ID 필터링
                     let uniqueNewPosts = newPosts.filter { newPost in
                         !self.contents.contains(where: { $0.id == newPost.id })
                     }
                     self.contents.append(contentsOf: uniqueNewPosts)
                 }
                 
-                // 다음 페이지 준비
+                // 페이지 상태 업데이트
                 self.hasMorePages = newPosts.count == self.limit
                 if self.hasMorePages {
                     self.page += 1
