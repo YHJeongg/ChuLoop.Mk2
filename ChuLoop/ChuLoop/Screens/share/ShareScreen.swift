@@ -81,7 +81,6 @@ struct ShareScreen: View {
                         title: item.title,
                         address: item.address,
                         onCopy: {
-                            // 주소 복사 시 팝업 닫고 토스트 띄우기
                             selectedItem = nil
                             showTopToast = true
                         }
@@ -91,12 +90,11 @@ struct ShareScreen: View {
                     .cornerRadius(12)
                     .shadow(radius: 10)
                 }
-                .transition(.scale.combined(with: .opacity))
                 .zIndex(100)
             }
         }
         .showSaveToast(isShowing: $showTopToast, message: "주소가 복사되었습니다.")
-        .animation(.easeInOut(duration: 0.2), value: selectedItem != nil)
+        .animation(nil, value: selectedItem == nil)
     }
 
     private func setupDebounce() {

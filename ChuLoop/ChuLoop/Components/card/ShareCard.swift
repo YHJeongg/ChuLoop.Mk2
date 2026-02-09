@@ -88,7 +88,7 @@ private extension ShareCard {
                     .foregroundColor(.natural40)
             )
     }
-
+    
     var titleAndDateSection: some View {
         HStack {
             Text(item.title)
@@ -106,14 +106,6 @@ private extension ShareCard {
         .padding(.top, ResponsiveSize.height(10))
     }
 
-    var addressSection: some View {
-        Text(item.address)
-            .font(.bodyXSmall)
-            .foregroundColor(.natural60)
-            .padding(.horizontal, ResponsiveSize.width(15))
-            .padding(.top, ResponsiveSize.height(4))
-    }
-
     var actionButtonSection: some View {
         HStack {
             // 좋아요 버튼
@@ -122,7 +114,6 @@ private extension ShareCard {
                     Image(systemName: item.mylikes ? "heart.fill" : "heart")
                         .font(.system(size: 16))
                         .foregroundColor(item.mylikes ? .error : .natural60)
-                    
                     Text("\(item.likes)명이 좋아해요")
                         .font(.bodyXSmall)
                         .foregroundColor(.natural90)
@@ -132,8 +123,7 @@ private extension ShareCard {
 
             Spacer()
 
-            // 공유하기 버튼
-            Button(action: { onShare?() }) {
+            Button(action: { shareToSystem(text: "[\(item.title)]\n주소: \(item.address)") }) {
                 HStack(spacing: 4) {
                     Image(systemName: "square.and.arrow.up")
                         .font(.system(size: 16))
@@ -147,5 +137,27 @@ private extension ShareCard {
         }
         .padding(.horizontal, ResponsiveSize.width(15))
         .padding(.vertical, ResponsiveSize.height(18))
+    }
+
+    // 주소 섹션
+    var addressSection: some View {
+        Text(item.address)
+            .font(.bodyXSmall)
+            .foregroundColor(.natural60)
+            .padding(.horizontal, ResponsiveSize.width(15))
+            .padding(.top, ResponsiveSize.height(4))
+            .onTapGesture {
+                onShare?()
+            }
+    }
+    
+    // iOS 시스템 공유 호출
+    private func shareToSystem(text: String) {
+        let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let rootVC = windowScene.windows.first?.rootViewController {
+            rootVC.present(activityVC, animated: true, completion: nil)
+        }
     }
 }
