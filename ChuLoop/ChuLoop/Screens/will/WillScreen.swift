@@ -10,7 +10,7 @@ struct WillScreen: View {
     @StateObject private var controller = WillScreenController()
     @State private var searchText: String = ""
     @State private var isShowingSearchScreen = false
-    @State private var selectedPlace: WillModel? = nil // 중앙 팝업 제어용
+    @State private var selectedPlace: WillModel? = nil 
     @State private var showTopToast = false
 
     @Binding var showTabView: Bool
@@ -62,25 +62,23 @@ struct WillScreen: View {
                 }
             )
 
-            // 커스텀 중앙 팝업
+            // 중앙 팝업 레이어
             if let selected = selectedPlace {
                 ZStack {
                     Color.black.opacity(0.3)
                         .ignoresSafeArea()
                         .onTapGesture {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                selectedPlace = nil
-                            }
+                            selectedPlace = nil
                         }
 
                     MapDirectionSheet(
                         title: selected.title,
                         address: selected.address,
                         onCopy: {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                selectedPlace = nil
-                            }
-                            showToast()
+                            // 팝업 즉시 닫기
+                            selectedPlace = nil
+                            // 토스트 및 햅틱 알림 실행
+                            triggerToast()
                         }
                     )
                     .frame(width: 300)
@@ -93,16 +91,13 @@ struct WillScreen: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .zIndex(100)
             }
-
-            // 토스트 메시지
-            if showTopToast {
-                toastView
-            }
         }
+        .showSaveToast(isShowing: $showTopToast, message: "주소가 복사되었습니다.")
         .animation(.easeInOut(duration: 0.2), value: selectedPlace != nil)
     }
 
     // MARK: - Subviews
+    
     private var emptyListView: some View {
         VStack {
             Spacer()
@@ -127,15 +122,17 @@ struct WillScreen: View {
                     Spacer()
                     WillCard(
                         place: .constant(place),
-                        onWriteReview: { /* 리뷰 작성 로직 */ },
+                        onWriteReview: {
+                            // 리뷰 작성 페이지
+                        },
                         onGetDirections: {
-                            withAnimation(.easeInOut(duration: 0.2)) {
-                                selectedPlace = place
-                            }
+                            // 길찾기 버튼 클릭 시 팝업 띄우기
+                            selectedPlace = place
                         },
                         onCopyAddress: {
+                            // 카드에서 바로 주소 복사 시
                             UIPasteboard.general.string = place.address
-                            showToast()
+                            triggerToast()
                         }
                     )
                     .buttonStyle(.plain)
@@ -157,42 +154,12 @@ struct WillScreen: View {
         .scrollIndicators(.hidden)
     }
 
-    private var toastView: some View {
-        VStack {
-            HStack(spacing: 0) {
-                Image(systemName: "info.circle")
-                    .font(.system(size: 24))
-                    .foregroundColor(.primary500)
-                    .padding(.horizontal, ResponsiveSize.width(15))
-
-                Text("주소가 복사되었습니다.")
-                    .font(.bodyNormal)
-                    .foregroundColor(.natural80)
-                
-                Spacer()
-            }
-            .frame(width: ResponsiveSize.width(362), height: ResponsiveSize.height(60))
-            .background(Color.white)
-            .overlay(RoundedRectangle(cornerRadius: 45).stroke(Color.primary500, lineWidth: 1))
-            .cornerRadius(45)
-            .shadow(color: Color.black.opacity(0.1), radius: 6, y: 4)
-
-            Spacer()
-        }
-        .padding(.top, ResponsiveSize.height(10))
-        .transition(.move(edge: .top).combined(with: .opacity))
-        .zIndex(1000)
-    }
-
-    // MARK: - Actions
-    private func showToast() {
+    // MARK: - Helper Actions
+    private func triggerToast() {
+        // 성공 햅틱 피드백
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
-
-        withAnimation { showTopToast = true }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            withAnimation { showTopToast = false }
-        }
+        showTopToast = true
     }
 
     private func deleteItems(at offsets: IndexSet) {
