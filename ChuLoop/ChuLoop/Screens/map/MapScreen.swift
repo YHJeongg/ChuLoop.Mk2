@@ -59,13 +59,15 @@ struct MapScreen: View {
                         }) {
                             Text("전체보기")
                                 .font(.bodyLarge)
-                                .padding()
-                                .background(Color.white)
-                                .foregroundColor(.black)
+                                .foregroundColor(.natural80)
+                                .padding(.horizontal, ResponsiveSize.width(10))
+                                .padding(.vertical, ResponsiveSize.height(12))
+                                .background(Color.primary50)
                                 .cornerRadius(8)
                         }
-                        .padding(.bottom)
-                        .padding(.trailing)
+                        .frame(width: ResponsiveSize.width(100), height: ResponsiveSize.height(50))
+                        .padding(.bottom, ResponsiveSize.height(24))
+                        .padding(.trailing, ResponsiveSize.width(24))
                     }
                 }
 
@@ -74,30 +76,38 @@ struct MapScreen: View {
                         Spacer()
                         HStack {
                             Spacer()
-                            VStack(alignment: .trailing, spacing: 10) {
+                            VStack(alignment: .trailing, spacing: ResponsiveSize.height(10)) {
+                                
+                                // 가보고 싶은 맛집 버튼
                                 Button(action: {
                                     print("가보고 싶은 맛집")
+                                    withAnimation { showOptions = false }
                                 }) {
                                     Text("가보고 싶은 맛집")
                                         .font(.bodyLarge)
-                                        .padding()
-                                        .background(Color.red)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(.natural10)
+                                        .padding(.horizontal, ResponsiveSize.width(10))
+                                        .padding(.vertical, ResponsiveSize.height(12))
+                                        .background(Color.error)
                                         .cornerRadius(8)
                                 }
+
+                                // 방문한 맛집 버튼
                                 Button(action: {
                                     print("방문한 맛집")
+                                    withAnimation { showOptions = false }
                                 }) {
                                     Text("방문한 맛집")
                                         .font(.bodyLarge)
-                                        .padding()
+                                        .foregroundColor(.natural10)
+                                        .padding(.horizontal, ResponsiveSize.width(10))
+                                        .padding(.vertical, ResponsiveSize.height(12))
                                         .background(Color.blue)
-                                        .foregroundColor(.white)
                                         .cornerRadius(8)
                                 }
                             }
-                            .padding(.trailing)
-                            .padding(.bottom, 70)
+                            .padding(.bottom, ResponsiveSize.height(89))
+                            .padding(.trailing, ResponsiveSize.width(24))
                         }
                     }
                 }
@@ -107,9 +117,3 @@ struct MapScreen: View {
         })
     }
 }
-//
-//struct MapScreen_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MapScreen()
-//    }
-//}
