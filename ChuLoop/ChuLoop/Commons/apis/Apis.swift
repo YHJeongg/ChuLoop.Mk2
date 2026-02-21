@@ -28,6 +28,8 @@ enum ApisV1: String {
     
     case sharePost = "/community-post"
     
+    case mapPost = "/map"
+    
     case noticeList = "/notice"
     
 }

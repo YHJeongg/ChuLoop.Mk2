@@ -20,6 +20,7 @@ struct MapScreen: View {
     var body: some View {
         MainNavigationView(title: "맛집지도", showTabView: $showTabView, content: {
             ZStack {
+                // ✅ controller.contents 연동
                 Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: controller.contents) { item in
                     MapAnnotation(coordinate: item.coordinate) {
                         VStack(spacing: 4) {
@@ -31,9 +32,9 @@ struct MapScreen: View {
                             Text(item.title)
                                 .font(.bodyXSmall)
                                 .foregroundColor(.natural90)
-                                .lineLimit(2)
-                                .truncationMode(.tail)
-                                .frame(maxWidth: 120)
+                                .lineLimit(1)           // ✅ 최대 10글자 대응 (1줄 제한)
+                                .truncationMode(.tail)  // ✅ 길면 ... 처리
+                                .frame(maxWidth: 100)   // ✅ 10글자 너비에 맞춤
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 4)
                                 .background(Color.white.opacity(0.9))
@@ -41,20 +42,20 @@ struct MapScreen: View {
                                 .shadow(radius: 1)
                         }
                         .onTapGesture {
-                            print("마커 클릭 됨")
+                            print("마커 클릭 됨: \(item.title)")
                         }
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .onAppear {
-                    // 화면 진입 시 현재 지도 중심 좌표로 구글 데이터 호출
-                    controller.fetchNearbyPlaces(
-                        latitude: region.center.latitude,
-                        longitude: region.center.longitude
+                    // ✅ GET 요청: 현재 지도 중심 좌표 전송
+                    controller.getMapMarkers(
+                        lat: region.center.latitude,
+                        lng: region.center.longitude
                     )
                 }
                 
-                // 전체보기 버튼
+                // --- 전체보기 버튼 ---
                 VStack {
                     Spacer()
                     HStack {
@@ -78,7 +79,7 @@ struct MapScreen: View {
                     }
                 }
 
-                // 하단 옵션 버튼 (가보고 싶은 / 방문한 맛집)
+                // --- 하단 옵션 버튼 (기존 필터링 용도 유지) ---
                 if showOptions {
                     VStack {
                         Spacer()
@@ -118,10 +119,9 @@ struct MapScreen: View {
                             .padding(.trailing, ResponsiveSize.width(24))
                         }
                     }
-                    .transition(.opacity) // 메뉴 나타날 때 부드러운 효과
+                    .transition(.opacity)
                 }
-                
-                // 로딩 인디케이터
+
                 if controller.isLoading {
                     ProgressView()
                         .padding()
@@ -132,18 +132,5 @@ struct MapScreen: View {
         }, onAddButtonTapped: {
             print("새로운 맛집 검색 및 추가 페이지 이동")
         })
-    }
-    
-    // 외부 구글 맵 연동 함수
-    private func openGoogleMaps(placeId: String) {
-        let urlString = "comgooglemaps://?q=google_place_id:\(placeId)"
-        if let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url)
-        } else {
-            let webUrlString = "https://www.google.com/maps/search/?api=1&query=Google&query_place_id=\(placeId)"
-            if let webUrl = URL(string: webUrlString) {
-                UIApplication.shared.open(webUrl)
-            }
-        }
     }
 }

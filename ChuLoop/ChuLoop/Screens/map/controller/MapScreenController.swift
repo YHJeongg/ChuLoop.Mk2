@@ -4,72 +4,46 @@
 //
 
 import Foundation
-import Combine
-import CoreLocation
 
 class MapScreenController: ObservableObject {
     @Published var contents: [MapModel] = []
     @Published var isLoading: Bool = false
     
-    private var cancellables = Set<AnyCancellable>()
+    private let mapService = MapService()
 
-    // Google Places API를 통해 주변 맛집 검색
     @MainActor
-    func fetchNearbyPlaces(latitude: Double, longitude: Double) {
+    func getMapMarkers(lat: Double, lng: Double, radius: Double = 1000, type: Int? = nil) {
         guard !isLoading else { return }
-        
-        guard let apiKey = Bundle.main.infoDictionary?["GOOGLE_PLACE"] as? String else {
-            print("API Key가 없습니다.")
-            return
-        }
-
         isLoading = true
-        let urlStr = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
-                     "?location=\(latitude),\(longitude)" +
-                     "&radius=1000" +
-                     "&type=restaurant" +
-                     "&key=\(apiKey)"
 
-        guard let url = URL(string: urlStr) else {
-            self.isLoading = false
-            return
+        var queryParameters: [String: String] = [
+            "centerLat": String(format: "%.6f", lat),
+            "centerLng": String(format: "%.6f", lng),
+            "radius": "\(Int(radius))"
+        ]
+        
+        if let type = type {
+            queryParameters["type"] = "\(type)"
         }
 
         Task {
-            do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-                let results = json?["results"] as? [[String: Any]] ?? []
+            let response = await mapService.fetchMapMarkers(queryParameters: queryParameters)
 
-                let fetchedPlaces: [MapModel] = results.compactMap { result in
-                    guard
-                        let placeId = result["place_id"] as? String,
-                        let name = result["name"] as? String,
-                        let address = result["vicinity"] as? String,
-                        let geometry = result["geometry"] as? [String: Any],
-                        let location = geometry["location"] as? [String: Any],
-                        let lat = location["lat"] as? Double,
-                        let lng = location["lng"] as? Double
-                    else {
-                        return nil
-                    }
-
-                    return MapModel(
-                        placeId: placeId,
-                        title: name,
-                        address: address,
-                        lat: lat,
-                        lan: lng
-                    )
-                }
-
-                self.contents = fetchedPlaces
+            if !response.success {
+                print("서버 에러: \(response.message ?? "") (Code: \(response.code ?? ""))")
                 self.isLoading = false
-                
-            } catch {
-                print("Google Places API 호출 실패: \(error)")
-                self.isLoading = false
+                return
             }
+
+            if let data = response.data {
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: data)
+                    self.contents = try JSONDecoder().decode([MapModel].self, from: jsonData)
+                } catch {
+                    print("디코딩 에러: \(error)")
+                }
+            }
+            self.isLoading = false
         }
     }
 }
