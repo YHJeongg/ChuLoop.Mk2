@@ -39,10 +39,8 @@
 	<string>$(GOOGLE_CLIENT_ID)</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>naversearchapp</string>
-		<string>naversearchthirdlogin</string>
-		<string>kakaokompassauth</string>
-		<string>kakaolink</string>
+		<string>kakaomap</string>
+		<string>nmap</string>
 	</array>
 	<key>NSAppTransportSecurity</key>
 	<dict>
@@ -55,22 +53,17 @@
 		<string>CookieRun-Bold.ttf</string>
 		<string>CookieRun-Black.ttf</string>
 	</array>
-    <key>KAKAO_APP_KEY</key>
-    <string>${KAKAO_APP_KEY}</string>
-    <key>NAVER_URL_SCHEMA</key>
-    <string>${NAVER_URL_SCHEMA}</string>
-    <key>NAVER_CLIENT_ID</key>
-    <string>${NAVER_CLIENT_ID}</string>
-    <key>NAVER_CLIENT_SECRET</key>
-    <string>${NAVER_CLIENT_SECRET}</string>
-    <key>GOOGLE_PLACE</key>
-    <string>$(GOOGLE_PLACE)</string>
-    
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>kakaomap</string>
-        <string>nmap</string>
-    </array>
-
+	<key>KAKAO_APP_KEY</key>
+	<string>${KAKAO_APP_KEY}</string>
+	<key>NAVER_URL_SCHEMA</key>
+	<string>${NAVER_URL_SCHEMA}</string>
+	<key>NAVER_CLIENT_ID</key>
+	<string>${NAVER_CLIENT_ID}</string>
+	<key>NAVER_CLIENT_SECRET</key>
+	<string>${NAVER_CLIENT_SECRET}</string>
+	<key>GOOGLE_PLACE</key>
+	<string>$(GOOGLE_PLACE)</string>
+	<key>UIDesignRequiresCompatibility</key>
+	<true/>
 </dict>
 </plist>

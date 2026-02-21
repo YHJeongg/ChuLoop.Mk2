@@ -38,6 +38,7 @@ struct MainNavigationView<Content: View>: View {
                         .font(.bodyLargeBold)
                         .foregroundColor(.black)
                 }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     if let onAddButtonTapped = onAddButtonTapped {
                         Button(action: onAddButtonTapped) {
