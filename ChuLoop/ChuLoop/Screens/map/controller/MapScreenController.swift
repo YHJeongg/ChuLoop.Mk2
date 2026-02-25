@@ -28,13 +28,6 @@ class MapScreenController: ObservableObject {
 
         Task {
             let response = await mapService.fetchMapMarkers(queryParameters: queryParameters)
-
-            if !response.success {
-                print("서버 에러: \(response.message ?? "") (Code: \(response.code ?? ""))")
-                self.isLoading = false
-                return
-            }
-
             if let data = response.data {
                 do {
                     let jsonData = try JSONSerialization.data(withJSONObject: data)
