@@ -14,11 +14,14 @@ struct MapScreen: View {
     )
     
     @State private var showOptions = false
+    @State private var selectedPlace: MapModel? = nil // 클릭된 마커 저장
+    @State private var showSheet = false             // 시트 표시 상태
     @Binding var showTabView: Bool
 
     var body: some View {
         MainNavigationView(title: "맛집지도", showTabView: $showTabView, content: {
             ZStack {
+                // 지도 영역
                 Map(coordinateRegion: $region, showsUserLocation: true, annotationItems: controller.contents) { item in
                     MapAnnotation(coordinate: item.coordinate) {
                         VStack(spacing: 4) {
@@ -34,32 +37,30 @@ struct MapScreen: View {
                                 .background(Color.white.opacity(0.9))
                                 .cornerRadius(4).shadow(radius: 1)
                         }
+                        .onTapGesture {
+                            withAnimation(.spring()) {
+                                selectedPlace = item
+                                showSheet = true
+                            }
+                        }
                     }
                 }
-                .onAppear { fetch(type: nil) } // 처음엔 전체보기
+                .onAppear { fetch(type: nil) }
 
-                // 버튼 레이어
+                // 우측 하단 필터 버튼 레이어
                 VStack {
                     Spacer()
                     HStack {
                         Spacer()
                         VStack(alignment: .trailing, spacing: 12) {
                             if showOptions {
-                                // 가보고 싶은 맛집 (Type 1 -> Red)
-                                subFilterButton(title: "가보고 싶은 맛집", color: .error) {
-                                    fetch(type: 1)
-                                }
-                                
-                                // 방문한 맛집 (Type 0 -> Blue)
-                                subFilterButton(title: "방문한 맛집", color: .blue) {
-                                    fetch(type: 0)
-                                }
+                                subFilterButton(title: "가보고 싶은 맛집") { fetch(type: 1) }
+                                subFilterButton(title: "방문한 맛집") { fetch(type: 0) }
                             }
 
-                            // 메인 버튼 (전체보기)
                             Button(action: {
                                 if showOptions {
-                                    fetch(type: nil) // 옵션 열려있을 때 누르면 전체 데이터 요청
+                                    fetch(type: nil)
                                     withAnimation { showOptions = false }
                                 } else {
                                     withAnimation { showOptions.toggle() }
@@ -67,9 +68,9 @@ struct MapScreen: View {
                             }) {
                                 Text("전체보기")
                                     .font(.bodyLarge)
-                                    .foregroundColor(.natural80)
+                                    .foregroundColor(.white)
                                     .frame(width: ResponsiveSize.width(100), height: ResponsiveSize.height(50))
-                                    .background(Color.primary50)
+                                    .background(Color.blue)
                                     .cornerRadius(8)
                                     .shadow(radius: 2)
                             }
@@ -77,6 +78,26 @@ struct MapScreen: View {
                         .padding(.bottom, ResponsiveSize.height(24))
                         .padding(.trailing, ResponsiveSize.width(24))
                     }
+                }
+
+                // 바텀 시트
+                if showSheet, let place = selectedPlace {
+                    VStack {
+                        Spacer()
+                        MapBottomSheet(
+                            item: place,
+                            onAddressTap: { item in
+                                print("주소 클릭: \(item.address)")
+                            },
+                            onReviewTap: { item in
+                                print("\(item.title) 리뷰 작성 이동")
+                                withAnimation { showSheet = false }
+                            }
+                        )
+                        .transition(.move(edge: .bottom))
+                    }
+                    .zIndex(2.0)
+                    .ignoresSafeArea(edges: .bottom)
                 }
 
                 if controller.isLoading {
@@ -88,7 +109,6 @@ struct MapScreen: View {
         })
     }
 
-    // 서버 데이터 요청 함수
     private func fetch(type: Int?) {
         controller.getMapMarkers(
             lat: region.center.latitude,
@@ -97,9 +117,8 @@ struct MapScreen: View {
         )
     }
 
-    // 보조 필터 버튼 디자인
     @ViewBuilder
-    private func subFilterButton(title: String, color: Color, action: @escaping () -> Void) -> some View {
+    private func subFilterButton(title: String, action: @escaping () -> Void) -> some View {
         Button(action: {
             action()
             withAnimation { showOptions = false }
@@ -109,7 +128,7 @@ struct MapScreen: View {
                 .foregroundColor(.white)
                 .padding(.horizontal, 15)
                 .padding(.vertical, 12)
-                .background(color)
+                .background(Color.blue)
                 .cornerRadius(8)
                 .shadow(radius: 2)
         }
