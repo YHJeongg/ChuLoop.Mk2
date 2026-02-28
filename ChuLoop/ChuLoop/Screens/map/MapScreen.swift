@@ -8,7 +8,6 @@ import MapKit
 
 struct MapScreen: View {
     @StateObject private var controller = MapScreenController()
-    
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 37.5665, longitude: 126.9780),
         span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
@@ -17,7 +16,6 @@ struct MapScreen: View {
     @State private var showOptions = false
     @State private var selectedPlace: MapModel? = nil
     @State private var showSheet = false
-    
     @Binding var showTabView: Bool
 
     var body: some View {
@@ -56,9 +54,7 @@ struct MapScreen: View {
                     Color.black.opacity(0.001)
                         .ignoresSafeArea()
                         .onTapGesture {
-                            withAnimation(.smooth()) {
-                                showSheet = false
-                            }
+                            withAnimation(.smooth()) { showSheet = false }
                         }
                 }
 
@@ -69,25 +65,28 @@ struct MapScreen: View {
                         Spacer()
                         VStack(alignment: .trailing, spacing: 12) {
                             if showOptions {
+                                // 가보고 싶은 맛집
                                 subFilterButton(title: "가보고 싶은 맛집", color: .error) { fetch(type: 1) }
+                                
+                                // 방문한 맛집
                                 subFilterButton(title: "방문한 맛집", color: .blue) { fetch(type: 0) }
+                                
+                                // 전체보기
+                                subFilterButton(title: "전체보기", color: .primary50, isMainOption: true) { fetch(type: nil) }
                             }
 
                             Button(action: {
-                                if showOptions {
-                                    fetch(type: nil)
-                                    withAnimation { showOptions = false }
-                                } else {
-                                    withAnimation { showOptions.toggle() }
+                                withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+                                    showOptions.toggle()
                                 }
                             }) {
-                                Text("전체보기")
-                                    .font(.bodyLarge)
-                                    .foregroundColor(.natural80)
-                                    .frame(width: ResponsiveSize.width(100), height: ResponsiveSize.height(50))
-                                    .background(Color.primary50)
-                                    .cornerRadius(8)
-                                    .shadow(radius: 2)
+                                Image(systemName: showOptions ? "xmark" : "line.3.horizontal.decrease.circle.fill")
+                                    .font(.system(size: 28))
+                                    .foregroundColor(.natural90)
+                                    .frame(width: ResponsiveSize.width(56), height: ResponsiveSize.height(56))
+                                    .background(Color.white)
+                                    .clipShape(Circle())
+                                    .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
                             }
                         }
                         .padding(.bottom, ResponsiveSize.height(24))
@@ -96,7 +95,7 @@ struct MapScreen: View {
                 }
                 .zIndex(1.0)
 
-                // 바텀 시트 레이어
+                // 바텀 시트
                 if showSheet, let place = selectedPlace {
                     VStack {
                         Spacer()
@@ -104,7 +103,7 @@ struct MapScreen: View {
                             item: place,
                             onAddressTap: { _ in },
                             onReviewTap: { item in
-                                print("\(item.title) 리뷰 작성 페이지 이동")
+                                print("\(item.title) 리뷰 작성 화면 이동")
                                 withAnimation { showSheet = false }
                             }
                         )
@@ -128,20 +127,23 @@ struct MapScreen: View {
     }
 
     @ViewBuilder
-    private func subFilterButton(title: String, color: Color, action: @escaping () -> Void) -> some View {
+    private func subFilterButton(title: String, color: Color, isMainOption: Bool = false, action: @escaping () -> Void) -> some View {
         Button(action: {
             action()
             withAnimation { showOptions = false }
         }) {
             Text(title)
-                .font(.bodyLarge)
-                .foregroundColor(.white)
-                .padding(.horizontal, 15)
+                .font(.bodyMediumBold)
+                .foregroundColor(isMainOption ? .natural80 : .white)
+                .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .background(color)
-                .cornerRadius(8)
+                .cornerRadius(25)
                 .shadow(radius: 2)
         }
-        .transition(.move(edge: .bottom).combined(with: .opacity))
+        .transition(.asymmetric(
+            insertion: .move(edge: .bottom).combined(with: .opacity),
+            removal: .opacity
+        ))
     }
 }
