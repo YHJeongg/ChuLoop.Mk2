@@ -13,19 +13,21 @@ struct MapBottomSheet: View {
     var body: some View {
         VStack(spacing: ResponsiveSize.height(20)) {
             // 맛집 이름
-            Text(item.title)
-                .font(.bodyMediumBold)
-                .foregroundColor(.natural90)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(spacing: 8) {
+                ImageView(imageName: "red-marker", width: 20, height: 20)
+                
+                Text(item.title)
+                    .font(.bodyMediumBold)
+                    .foregroundColor(.natural90)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
 
             // 주소
             Button(action: {
                 onAddressTap(item)
             }) {
                 HStack(alignment: .top, spacing: 8) {
-                    Image(systemName: "mappin.and.ellipse")
-                        .font(.system(size: 14))
-                        .foregroundColor(.gray)
+                    ImageView(imageName: "copy", width: 16, height: 16)
                         .padding(.top, 2)
                     
                     Text(item.address)
