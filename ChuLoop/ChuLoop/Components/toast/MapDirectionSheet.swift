@@ -69,12 +69,10 @@ struct MapDirectionSheet: View {
             }
         }) {
             VStack(spacing: 8) {
-                ImageView(
-                    imageName: imageName,
-                    width: ResponsiveSize.width(50),
-                    height: ResponsiveSize.height(50)
-                )
-                .cornerRadius(12)
+                Image(imageName)
+                    .resizable()
+                    .frame(width: ResponsiveSize.width(50), height: ResponsiveSize.height(50))
+                    .cornerRadius(12)
 
                 Text(title)
                     .foregroundColor(.black)
